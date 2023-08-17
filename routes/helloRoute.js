@@ -2,6 +2,6 @@ const express = require('express');
 const router = express.Router();
 const helloController = require('../controllers/helloController');
 
-router.get('/', helloController.hello);
+router.get('/', helloController.getHello);
 
 module.exports = router;
