@@ -1,46 +1,46 @@
 module.exports = (sequelize, DataTypes) => {
-  const Product = sequelize.define('Products', {
-    ProductID: {
+  const Products = sequelize.define('Products', {
+    product_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
-      autoIncrement: true, // Assuming this is an auto-incrementing ID
+      autoIncrement: true,
     },
-    ProductName: {
+    product_name: {
       type: DataTypes.STRING(40),
       allowNull: false,
     },
-    ProductDescription: {
-      type: DataTypes.TEXT,
+    product_desc: {
+      type: DataTypes.STRING(40),
     },
-    SellerID: {
+    seller_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    CategoryID: {
+    category_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    ProductVolume: {
+    product_volume: {
       type: DataTypes.DOUBLE,
     },
-    Price: {
+    price: {
       type: DataTypes.DOUBLE,
       allowNull: false,
     },
-    Quantity: {
+    quantity: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    UnitsInStock: {
+    units_in_stock: {
       type: DataTypes.INTEGER,
     },
-    UnitsOnOrder: {
+    units_on_order: {
       type: DataTypes.INTEGER,
     },
   });
-  Product.associate = function (models) {
+  Products.associate = function (models) {
     // associations can be defined here
   };
-  return Product;
+  return Products;
 };

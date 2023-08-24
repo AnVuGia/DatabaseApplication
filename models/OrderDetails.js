@@ -1,24 +1,24 @@
 module.exports = (sequelize, DataTypes) => {
   const OrderDetail = sequelize.define('OrderDetails', {
-    OrderDetailID: {
+    order_detail_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true, // Assuming this is an auto-incrementing ID
     },
-    OrderID: {
+    order_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    ProductID: {
+    product_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    Price: {
+    price: {
       type: DataTypes.DOUBLE,
       allowNull: false,
     },
-    Quantity: {
+    quantity: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },

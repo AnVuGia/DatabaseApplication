@@ -1,12 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
   const Shipper = sequelize.define('Shippers', {
-    ShipperID: {
+    shipper_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true, // Assuming this is an auto-incrementing ID
     },
-    Phone: {
+    phone: {
       type: DataTypes.STRING(24),
       allowNull: false,
     },

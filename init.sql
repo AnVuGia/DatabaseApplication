@@ -4,50 +4,61 @@ FLUSH PRIVILEGES;
 CREATE DATABASE IF NOT EXISTS `test`;
 USE `test`;
 CREATE TABLE IF NOT EXISTS Customers (
-    CustomerID VARCHAR(5),
+    customer_id VARCHAR(5),
     username VARCHAR(15),
     password VARCHAR(15),
-    Address VARCHAR(50),
-    City VARCHAR(50),
+    address VARCHAR(50),
+    city VARCHAR(50),
     province VARCHAR(50),
     street VARCHAR(50),
-    Phone VARCHAR(20)
+    phone VARCHAR(20),
+    createdAt datetime,
+    updatedAt datetime
 );
 CREATE TABLE IF NOT EXISTS Orders (
-    OrderID INT,
-    CustomerID VARCHAR(5),
-    ShipperID INT,
-    WareHouseOrSellerID INT,
-    Phone VARCHAR(20)
+    order_id INT,
+    customer_id VARCHAR(5),
+    shipper_id INT,
+    seller_id INT,
+    phone VARCHAR(20),
+	createdAt datetime,
+    updatedAt datetime
 );
 CREATE TABLE IF NOT EXISTS OrderDetails(
-    OrderID INT,
-    ProductID INT,
-    Price DOUBLE,
-    Quantity INT
+    order_id INT,
+    product_id INT,
+    price DOUBLE,
+    quantity INT,
+	createdAt datetime,
+    updatedAt datetime
 );
 CREATE TABLE IF NOT EXISTS Products (
-    ProductID INT,
-    ProductName VARCHAR(40),
-    ProductDescription TEXT,
-    SellerID INT,
-    CategoryID INT,
-    ProductVolume DOUBLE,
-    Price DOUBLE,
-    Quantity INT,
-    UnitsInStock INT,
-    UnitsOnOrder INT
+    product_id INT,
+    product_name VARCHAR(40),
+    product_desc TEXT,
+    seller_id INT,
+    category_id INT,
+    product_volume DOUBLE,
+    price DOUBLE,
+    quantity INT,
+    units_in_stock INT,
+    units_on_order INT,
+	createdAt datetime,
+    updatedAt datetime
 );
 CREATE TABLE IF NOT EXISTS Shippers (
-    ShipperID INT,
-    Phone VARCHAR(24)
+    shipper_id INT,
+    phone VARCHAR(24)
 );
 CREATE TABLE IF NOT EXISTS Sellers (
-    SellerID INT,
-    Address VARCHAR(50),
-    City VARCHAR(50),
-    Province VARCHAR(50),
-    Street VARCHAR(50),
-    Number VARCHAR(50),
-    TotalVolume DOUBLE
+    seller_id INT,
+    address VARCHAR(50),
+    city VARCHAR(50),
+    province VARCHAR(50),
+    street VARCHAR(50),
+    number VARCHAR(50),
+    total_volume DOUBLE,
+	createdAt datetime,
+    updatedAt datetime
 );
+

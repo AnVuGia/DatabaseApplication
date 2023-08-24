@@ -1,24 +1,24 @@
 module.exports = (sequelize, DataTypes) => {
   const Order = sequelize.define('Orders', {
-    OrderID: {
+    order_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true, // Assuming this is an auto-incrementing ID
     },
-    CustomerID: {
+    customer_id: {
       type: DataTypes.STRING(5),
       allowNull: false,
     },
-    ShipperID: {
+    shipper_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    WareHouseOrSellerID: {
+    seller_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    Phone: {
+    phone: {
       type: DataTypes.STRING(20),
     },
   });

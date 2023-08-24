@@ -1,28 +1,28 @@
 module.exports = (sequelize, DataTypes) => {
   // Define the Sellers model
   const Seller = sequelize.define('Sellers', {
-    SellerID: {
+    seller_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true, // Assuming this is an auto-incrementing ID
     },
-    Address: {
+    address: {
       type: DataTypes.STRING(50),
     },
-    City: {
+    city: {
       type: DataTypes.STRING(50),
     },
-    Province: {
+    province: {
       type: DataTypes.STRING(50),
     },
-    Street: {
+    street: {
       type: DataTypes.STRING(50),
     },
-    Number: {
+    number: {
       type: DataTypes.STRING(50),
     },
-    TotalVolume: {
+    total_value: {
       type: DataTypes.DOUBLE,
     },
   });
