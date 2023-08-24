@@ -17,7 +17,11 @@ app.use(express.static(path.join(__dirname, 'views')));
 app.use('/hello', helloRoute);
 app.use('/user', userRoute);
 db.sequelize.sync().then((req) => {
-  app.listen(port, () => {
+  const server = app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
+    const io = require('socket.io')(server);
+    io.on('connection', (socket) => {
+      console.log('a user connected');
+    });
   });
 });
