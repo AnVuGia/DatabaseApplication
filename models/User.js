@@ -1,3 +1,4 @@
+//This is a test model for the User table
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
     'User',
