@@ -6,7 +6,7 @@
   <body>
     <h1>Product List</h1>
 
-    <table id="product-list" border="1">
+    <table border="1">
       <thead>
         <tr>
           <th>Product ID</th>
@@ -18,7 +18,7 @@
           <th>Units on Order</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="product-list">
         <!-- Product Data Goes Here -->
         <tr>
           <td>1</td>
@@ -41,5 +41,7 @@
         <!-- Add more product rows as needed -->
       </tbody>
     </table>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+    <script src="/javascript/customer-view.js"></script>
   </body>
 </html>
