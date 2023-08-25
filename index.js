@@ -14,7 +14,7 @@ const fs = require('fs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'views')));
-
+app.use(express.static(path.join(__dirname, 'public')));
 app.use('/hello', helloRoute);
 app.use('/user', userRoute);
 app.use('/shop', shopRoute);
