@@ -1,0 +1,40 @@
+:root{
+    --primary-color: #697184; /*106,112,132 */
+    --text-color: #F2F1EF; /*242,241,239 */
+    --dark-color: #413F3D; /*65,63,61 */
+    --light-brown-color: #B1A6A4; /*177,166,164 */
+    --background: #EFF0F5;
+    --red: #FE0000;
+    --green: #06AA6D;
+    --orange: #F57324;
+    --light-blue: #1C9CB7;
+    --header-height: 75px;
+    
+
+  --font: "Poppins", sans-serif;
+  --fw-1: 400;
+  --fw-2: 500;
+  --fw-3: 600;
+  --fw-4: 700;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,body {
+    height: 100%;
+    font-size: 62.5%;
+    font-family: 'Roboto', sans-serif;
+}
+.search-price__button{
+    width: 35px;
+    border-radius: 3px; 
+    height: 35px; 
+    background-color: var(--orange);
+    cursor: pointer;
+}
+.search-price__button:hover{
+    background-color: #2D9CF9;
+}
