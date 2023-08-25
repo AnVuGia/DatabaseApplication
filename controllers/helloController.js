@@ -7,3 +7,6 @@ exports.getSeller = (req, res) => {
 exports.getCustomers = (req, res) => {
   res.sendFile('customer-view.html', { root: 'views' });
 };
+exports.getProductDetail = (req, res) => {
+  res.sendFile('product-details-view.html', { root: 'views' });
+};
