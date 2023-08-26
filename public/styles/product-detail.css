@@ -1,0 +1,21 @@
+.product-details-price {
+  font-size: 1.875rem;
+  font-weight: 500;
+  color: #ee4d2d;
+}
+.product-details-title h1 {
+  font-weight: 500;
+  line-height: 1.5 rem;
+  font-size: 1.25rem;
+  overflow-wrap: break-word;
+}
+.category-title {
+  color: #757575;
+  width: 110px;
+  text-transform: capitalize;
+  flex-shrink: 0;
+  align-items: center;
+}
+.category-details {
+  align-items: center;
+}
