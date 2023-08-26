@@ -1,3 +1,7 @@
+.root {
+  --brand-primary-color: #ee4d2d;
+  --brand-primary-light-color: rgba(255, 86, 34, 0.253);
+}
 .product-details-price {
   font-size: 1.875rem;
   font-weight: 500;
@@ -19,3 +23,48 @@
 .category-details {
   align-items: center;
 }
+.button-row-container {
+  align-items: center;
+  margin-top: 1.25rem;
+}
+.button-row-container button {
+  margin-right: 0.625rem;
+  width: 20rem;
+}
+.button-row-container .buy-now {
+  background-color: #ee4d2d;
+  color: #fff;
+}
+.button-row-container .buy-now:hover {
+  background-color: #ff5722;
+}
+.button-row-container .buy-now:disabled {
+  background-color: #bdbdbd;
+}
+.button-row-container .buy-now:disabled:hover {
+  background-color: #bdbdbd;
+}
+.button-row-container .add-cart {
+  background-color: #fff;
+  color: #ee4d2d;
+  border: 1px solid #ee4d2d;
+}
+.button-row-container .add-cart:hover {
+  background-color: #ffffffc6;
+  color: #fa6749f4;
+}
+.button-row-container .add-cart:disabled {
+  background-color: #fff;
+  color: #bdbdbd;
+  border: 1px solid #bdbdbd;
+}
+.container-background {
+  background-color: #fff;
+  padding: 1.25rem;
+  border-radius: 0.3125rem;
+  box-shadow: 0 0.125rem 0.25rem 0 rgba(0, 0, 0, 0.1);
+}
+.container-background .product-details-title {
+  margin-bottom: 1.25rem;
+}
+
