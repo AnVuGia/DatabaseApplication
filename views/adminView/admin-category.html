@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/0c16ccb70e.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="/styles/sidebar.css">
+    <link rel="stylesheet" href="/styles/modal.css">
+    <link rel="stylesheet" href="/styles/inventory.css">
+    <link rel="stylesheet" href="/styles/category.css">
+    <title>Inventory | Storeal</title>
+
+    <!-- <script src="./assets/functions/index.js"></script> -->
+
+</head>
+
+<body>
+    <div class="root">
+        <div class="sidebar">
+        </div>
+
+        <div class="main-content">
+            <div class="table">
+                <div class="table__header">
+                    <p>Category details</p>
+                </div>
+
+                <div class="table__body" style="padding: 10px;">
+                    <!-- <select id="manage-inventory__dropdown" >
+                        <option value="option1">Browse Category</option>
+                        <option value="option2">Add Category</option>
+                    </select> -->
+                    <h2 style="margin: 20px 0px;">Browse Cateogory</h2>
+                    <div class="main-inventory__update">
+                        
+                        <div class="main-inventory__container-header" style="">
+                            <h3 style="margin-top: 20px;">Current Parrent Category: ....</h2>
+                            <input class="product-input" type="text" placeholder="Please enter category's name...">
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    
+                                    <th name="inventory-name">Description Name</th>
+                                    <th name="inventory-actions">Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td>Electronic</td>
+                                    <td>
+                                        <button class="add-category-button"><i class="fa-solid fa-plus"></i></button>
+                                        <button class="delete-button"><i class="fa-solid fa-trash"></i></button>
+                                        <button class="forward-button"><i class="fa-solid fa-chevron-left"></i></button>
+                                        <button class="backward-button"><i class="fa-solid fa-chevron-right"></i></button>   
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <button class="add-category-button"><i class="fa-solid fa-plus"></i></button>
+                                    </td>
+                                </tr>
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="backdrop" id="backdrop"></div>
+            <div class="modal" id="modal">
+                <div class="modal-content-update">
+                    <h2 style="text-align: center;">Add New Category</h2>
+                    <div class="modal__main-content">
+                        <div class="modal__update-item" style="margin-bottom: 10px;">
+                            <label class="product__item-info product__name">Name</label>
+                            <input class="product__input-modal inventory__name-input" id="product__name--update"
+                                type="text">
+                        </div>
+                    </div>
+                    <div class="modal__footer"
+                        style="display: flex; margin-top: auto;padding: 10px; justify-content: flex-end;">
+                        <button class="modal__button modal__button--cancel closeModalButton">Cancel</button>
+                        <button class="modal__button modal__button--save ">Save</button>
+                    </div>
+
+                </div>
+            </div>
+            <div class="confirmation-backdrop" id="backdrop"></div>
+            <div class="confirmation-modal" id="modal">
+                <div class="modal-confirmation">
+                    <h2 style="text-align: center;">Confirmation</h2>
+                    <div class="modal__main-content confirmation-message">
+                        <p>Are you sure you want to delete this product?</p>
+                    </div>
+                    <div class="modal__footer"
+                        style="display: flex; margin-top: auto;padding: 10px; justify-content: flex-end;">
+                        <button class="modal__button modal__button--cancel"
+                            id="button__cancel-confirmation">Cancel</button>
+                        <button class="modal__button modal__button--save" id="delete-button">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="/javascript/helper.js"></script>
+    <script src="/javascript/category.js"></script>
+    
+</body>
+
+</html>

@@ -1,0 +1,97 @@
+body{
+    background-color: var(--background);
+    min-height: 100%;
+    font-size: 1.5rem;
+}
+main {
+    max-width: 65rem;
+    flex-direction: column;
+    margin: 2rem 2rem;
+    height: 100%;
+}
+.top{
+    justify-content:center;
+    align-items: center;
+}
+.top-image{
+    width: 300px;
+    margin-left: auto;
+}
+.form{
+    background-color: white;
+    width: 500px;
+    border-radius: 5px;
+}
+
+.form .form-form-elemment{
+    outline: none;
+    width: 480px;
+    margin: 0px auto;
+    padding: 10px;
+}
+.controller{
+    margin: 30px 0;
+    display: flex;
+    justify-content: space-evenly;
+}
+.button__controller{
+    height: 30px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+}
+.button__controller:hover{
+    cursor: pointer;
+}
+.button__controller:nth-child(1){
+    background-color: var(--red);
+}
+.button__controller:nth-child(1):hover{
+    background-color: rgb(255, 0, 0,0.75);
+}
+.button__controller:nth-child(2){
+    background-color: var(--light-brown-color);
+}
+.button__controller:nth-child(2):hover{
+    background-color: rgb( 216, 207, 208,0.75);
+}
+
+.error__icon {
+    position: absolute;
+    display: none;
+    right: 5%;
+    bottom: 44%;
+    pointer-events: none;
+}
+  
+input.invalid {
+    border: 2px solid var(--red);
+    color: var(--red);
+  }
+  
+  input:focus.invalid {
+    outline: none;
+  }
+  
+.invalid + .error__icon {
+    display: block;
+}
+.error,
+.form__reminder span {
+  color: var(--red);
+  height: 1.5rem;
+}
+.error {
+    text-align: right;
+    font-size: 1.1rem;
+    font-style: italic;
+    font-weight: var(--fw-1);
+    opacity: 0.8;
+}
+.sign-up-element{
+    margin: 15px auto;
+    position: relative;
+
+}

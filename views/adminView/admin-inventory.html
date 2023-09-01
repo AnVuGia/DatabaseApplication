@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/0c16ccb70e.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="/styles/sidebar.css">
+    <link rel="stylesheet" href="/styles/modal.css">
+    <link rel="stylesheet" href="/styles/inventory.css">
+
+    <title>Inventory | Storeal</title>
+
+    <!-- <script src="./assets/functions/index.js"></script> -->
+
+</head>
+<body>
+    <div class="root">
+        <div class="sidebar">
+        </div>
+
+        <div class="main-content">
+            <div class="table">
+                <div class="table__header">
+                    <p>Inventory details</p>
+                </div>
+
+                <div class="fullpath">
+                    <div class="fullpath__items">
+                        <a href="../index.html">
+                            <i class="fa-solid fa-house"></i>
+                            <span>Home</span>
+                        </a>
+
+                        <span>></span>
+
+                        <a href="inventory.html">
+                            <i class="fa-solid fa-warehouse"></i>
+                            <span>Inventory</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="table__body" style="padding: 0px 10px;">
+                    <select id="manage-inventory__dropdown" >
+                        <option value="option1">Update Inventory</option>
+                        <option value="option2">Add Inventory</option>
+                    </select>
+                    <div class="main-inventory__update">
+                        <div class="main-inventory__container-header" style="">
+                            <input class="product-input" type="text" placeholder="Please enter inventory'sname...">
+                            <select id="filter-product__dropdown">
+                                <option value="all">All</option>
+                                <option value="">Availabilty Ascending</option>
+                                <option value="">Availabilty Decreasing</option>
+                                <option value="">Volume Ascending</option>
+                                <option value="">Volume Decreasing</option>
+                            </select>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th name="inventory-no" width="5%">ID</th>
+                                    <th name="inventory-name">Name</th>
+                                    <th name="inventory-address" width="50%">Address</th>
+                                    <th name="inventory-volume">Volume</th>
+                                    <th name="inventory-available">Availability</th>
+                                    <th name="inventory-actions">Actions</th>
+                                </tr>
+                            </thead>
+    
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Store X</td>
+                                    <td>702 Nguyen Van Linh Blvd, Tan Hung ward, Ho Chi Minh City</td>
+                                    <td>16800</td>
+                                    <td>10000</td>
+                                    <td>
+                                        <button class="edit-button"><i class="fa-solid fa-pen"></i></button>
+                                        <button class="delete-button"><i class="fa-solid fa-trash"></i></button>
+                                    </td>
+                                </tr>
+    
+
+                            </tbody>
+                        </table>
+                        <div class="pagination">
+                            <div><i class="fa-solid fa-angles-left"></i></div>
+                            <div><i class="fa-solid fa-angle-left"></i></div>
+                            <div><i class="fa-solid fa-1"></i></div>
+                            <div><i class="fa-solid fa-2"></i></div>
+                            <div><i class="fa-solid fa-angle-right"></i></div>
+                            <div><i class="fa-solid fa-angles-right"></i></div>
+                        </div>
+                    </div>
+                    <div class="main-inventory__add">
+                    <h2 style="text-align: center;">Add Inventory</h2>
+                    <div class="modal__main-content">
+                        <div class="modal__update-item" style="margin-bottom: 10px;">
+                            <label class="product__item-info product__name">Name</label>
+                            <input class="product__input-modal product__name-input" id = "inventory__name--add" type="text">
+                        </div>
+                        <div class="modal__update-item" style="margin-bottom: 10px;">
+                            <label class="product__item-info product__name">Address</label>
+                            <input class="product__input-modal product__name-input" id = "inventory__address--add" type="text">
+                        </div>
+                        <div class="modal__update-item" style="margin-bottom: 10px;">
+                            <label class="product__item-info product__price">Availability</label>
+                            <input class="product__input-modal product__height-input"  id = "product__height--add" type="number">
+                        </div>
+                    </div>
+                    <div class="modal__footer"
+                        style="display: flex; margin-top: auto;padding: 10px; justify-content: flex-end;">
+                        <button class="modal__button modal__button--save button_inventory--add">Add</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+        <div class="backdrop" id="backdrop"></div>
+        <div class="modal" id="modal">
+            <div class="modal-content-update">
+                <h2 style="text-align: center;">Inbound Order</h2>
+                <div class="modal__main-content">
+                    <div class="modal__update-item" style="margin-bottom: 10px;">
+                        <label class="product__item-info product__name">Name</label>
+                        <input class="product__input-modal inventory__name-input" id = "product__name--update" type="text">
+                    </div>
+                    <div class="modal__update-item" style="margin-bottom: 10px;">
+                        <label class="product__item-info product__description">Address</label>
+                        <textarea class="product__input-modal inventory__description-input"
+                            style="flex: 1; height: 60px;" id = "inventory__description--update" type="text"></textarea>
+                    </div>
+                    <div class="modal__update-item" style="margin-bottom: 10px;">
+                        <label class="product__item-info product__price">Volume</label>
+                        <input class="product__input-modal inventory__price-input" id = "inventory__price--update" type="number">
+                    </div>
+                </div>
+                <div class="modal__footer"
+                    style="display: flex; margin-top: auto;padding: 10px; justify-content: flex-end;">
+                    <button class="modal__button modal__button--cancel closeModalButton">Cancel</button>
+                    <button class="modal__button modal__button--save ">Save</button>
+                </div>
+
+            </div>
+        </div>
+        <div class="confirmation-backdrop" id="backdrop"></div>
+        <div class="confirmation-modal" id="modal">
+            <div class="modal-confirmation">
+                <h2 style="text-align: center;">Confirmation</h2>
+                <div class="modal__main-content confirmation-message">
+                    <p>Are you sure you want to delete this product?</p>
+                </div>
+                <div class="modal__footer"
+                    style="display: flex; margin-top: auto;padding: 10px; justify-content: flex-end;">
+                    <button class="modal__button modal__button--cancel"
+                        id="button__cancel-confirmation">Cancel</button>
+                    <button class="modal__button modal__button--save" id="delete-button">Yes</button>
+                </div>
+            </div>
+        </div>
+        </div>
+        
+    </div>
+    <script src="/javascript/helper.js"></script>
+    <script src="/javascript/inventory.js"></script>
+</body>
+</html>

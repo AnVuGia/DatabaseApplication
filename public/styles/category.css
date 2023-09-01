@@ -1,0 +1,8 @@
+.modal-content-update {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    margin: 0px 20px;
+    width: 500px;
+    height: auto; 
+}
