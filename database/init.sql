@@ -6,6 +6,7 @@ USE `test`;
 CREATE TABLE IF NOT EXISTS Customers (
     customer_id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     cart_id VARCHAR(24) NOT NULL,
+    customer_name VARCHAR(15),
     username VARCHAR(15),
     password VARCHAR(15),
     address VARCHAR(50),
