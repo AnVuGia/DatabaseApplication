@@ -6,6 +6,7 @@ const port = 3000;
 const helloRoute = require('./routes/helloRoute');
 const userRoute = require('./routes/userRoute');
 const shopRoute = require('./routes/shopRoute');
+const warehouse = require('./routes/warehouseRoute');
 const db = require('./models');
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/hello', helloRoute);
 app.use('/user', userRoute);
 app.use('/shop', shopRoute);
+app.use('/warehouse', warehouse);
 db.sequelize.sync().then((req) => {
   const server = app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);

@@ -24,23 +24,6 @@
                 <div class="table__header">
                     <p>Inventory details</p>
                 </div>
-
-                <div class="fullpath">
-                    <div class="fullpath__items">
-                        <a href="../index.html">
-                            <i class="fa-solid fa-house"></i>
-                            <span>Home</span>
-                        </a>
-
-                        <span>></span>
-
-                        <a href="inventory.html">
-                            <i class="fa-solid fa-warehouse"></i>
-                            <span>Inventory</span>
-                        </a>
-                    </div>
-                </div>
-
                 <div class="table__body" style="padding: 0px 10px;">
                     <select id="manage-inventory__dropdown" >
                         <option value="option1">Update Inventory</option>
@@ -69,7 +52,7 @@
                                 </tr>
                             </thead>
     
-                            <tbody>
+                            <tbody class="inventory-list">
                                 <tr>
                                     <td>1</td>
                                     <td>Store X</td>
@@ -81,8 +64,6 @@
                                         <button class="delete-button"><i class="fa-solid fa-trash"></i></button>
                                     </td>
                                 </tr>
-    
-
                             </tbody>
                         </table>
                         <div class="pagination">
@@ -106,8 +87,8 @@
                             <input class="product__input-modal product__name-input" id = "inventory__address--add" type="text">
                         </div>
                         <div class="modal__update-item" style="margin-bottom: 10px;">
-                            <label class="product__item-info product__price">Availability</label>
-                            <input class="product__input-modal product__height-input"  id = "product__height--add" type="number">
+                            <label class="product__item-info product__price">Volume</label>
+                            <input class="product__input-modal product__height-input"  id = "inventory__volume--add" type="number">
                         </div>
                     </div>
                     <div class="modal__footer"
@@ -124,16 +105,15 @@
                 <div class="modal__main-content">
                     <div class="modal__update-item" style="margin-bottom: 10px;">
                         <label class="product__item-info product__name">Name</label>
-                        <input class="product__input-modal inventory__name-input" id = "product__name--update" type="text">
+                        <input class="product__input-modal inventory__name-input" id = "inventory__name--update" type="text">
                     </div>
                     <div class="modal__update-item" style="margin-bottom: 10px;">
-                        <label class="product__item-info product__description">Address</label>
-                        <textarea class="product__input-modal inventory__description-input"
-                            style="flex: 1; height: 60px;" id = "inventory__description--update" type="text"></textarea>
+                        <label class="product__item-info product__name">Name</label>
+                        <input class="product__input-modal inventory__name-input" id = "inventory__address--update" type="text">
                     </div>
                     <div class="modal__update-item" style="margin-bottom: 10px;">
                         <label class="product__item-info product__price">Volume</label>
-                        <input class="product__input-modal inventory__price-input" id = "inventory__price--update" type="number">
+                        <input class="product__input-modal inventory__volume-input" id = "inventory__volume--update" type="number">
                     </div>
                 </div>
                 <div class="modal__footer"
@@ -155,7 +135,7 @@
                     style="display: flex; margin-top: auto;padding: 10px; justify-content: flex-end;">
                     <button class="modal__button modal__button--cancel"
                         id="button__cancel-confirmation">Cancel</button>
-                    <button class="modal__button modal__button--save" id="delete-button">Yes</button>
+                    <button class="modal__button modal__button--save modal__button--yes" id="delete-button">Yes</button>
                 </div>
             </div>
         </div>

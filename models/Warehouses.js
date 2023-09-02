@@ -1,7 +1,7 @@
 //This is a test model for the User table
 module.exports = (sequelize, DataTypes) => {
-  const Warehouse = sequelize.define(
-    'Warehouse',
+  const Warehouses = sequelize.define(
+    'Warehouses',
     {
       warehouse_id: {
         type: DataTypes.BIGINT(10),
@@ -16,17 +16,20 @@ module.exports = (sequelize, DataTypes) => {
       address: {
         type: DataTypes.STRING(50),
       },
-      total_volume: {
+      volume: {
+        type: DataTypes.INTEGER,
+      },
+      available_volume: {
         type: DataTypes.INTEGER,
       }
     },
   );
-  Warehouse.associate = function (models) {
+  Warehouses.associate = function (models) {
     // associations can be defined here
-    Warehouse.hasMany(models.ProductWarehouse, {
+    Warehouses.hasMany(models.ProductWarehouse, {
       foreignKey: 'warehouse_id',
       as: 'productWarehouse',
     });
   };
-  return Warehouse;
+  return Warehouses;
 };

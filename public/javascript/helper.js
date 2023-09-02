@@ -13,7 +13,8 @@ closeModalButton.addEventListener("click", () => {
 function displayConfirmationModal(message, callback) {
     const confirmationMessage = document.querySelector(".confirmation-message");
     confirmationMessage.innerHTML = `<p>${message}</p>`;
-    document.querySelector(".modal__button--save").addEventListener("click", () => {
+    console.log(document.querySelector(".modal__button--save"));
+    document.querySelector(".modal__button--yes").addEventListener("click", () => {
         callback();
     });
     cofirmationBackdrop.style.display = "block";
@@ -42,11 +43,13 @@ function selectDetector(selectClassName, updateClassName, createClassName){
 }
 
 function addSideBarHtmlForAdmin(){
+    // <img src="/image/icon/storeal-website-favicon-color.png" alt="icon" width="30px"></img>
     sideBarContainer.innerHTML ="";
     sideBarContainer.innerHTML += `
     <div class="top">
     <div class="logo">
-        <img src="/image/icon/storeal-website-favicon-color.png" alt="icon" width="30px">
+        
+
         <span> Storeal</span>
     </div>
     <i class="fa-solid fa-bars" id="menu_btn"></i>
