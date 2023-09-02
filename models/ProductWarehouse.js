@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const ProductWarehouse = sequelize.define('ProductWarehouse', {
-    pwID: {
+    product_warehouse_id: {
       type: DataTypes.BIGINT(10),
       allowNull: false,
       primaryKey: true,

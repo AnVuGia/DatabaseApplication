@@ -9,12 +9,17 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true, // Assuming this is an auto-incrementing ID
       },
-      password: {
-        type: DataTypes.STRING,
+      warehouse_name: {
+        type: DataTypes.STRING(15),
         allowNull: false,
       },
+      address: {
+        type: DataTypes.STRING(50),
+      },
+      total_volume: {
+        type: DataTypes.INTEGER,
+      }
     },
-    {}
   );
   Warehouse.associate = function (models) {
     // associations can be defined here

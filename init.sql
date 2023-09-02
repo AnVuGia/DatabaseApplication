@@ -4,61 +4,63 @@ FLUSH PRIVILEGES;
 CREATE DATABASE IF NOT EXISTS `test`;
 USE `test`;
 CREATE TABLE IF NOT EXISTS Customers (
-    customer_id VARCHAR(5),
+    customer_id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    cart_id VARCHAR(24) NOT NULL,
     username VARCHAR(15),
     password VARCHAR(15),
     address VARCHAR(50),
-    city VARCHAR(50),
-    province VARCHAR(50),
-    street VARCHAR(50),
-    phone VARCHAR(20),
     createdAt datetime,
     updatedAt datetime
 );
 CREATE TABLE IF NOT EXISTS Orders (
-    order_id INT,
-    customer_id VARCHAR(5),
-    shipper_id INT,
-    seller_id INT,
-    phone VARCHAR(20),
-	createdAt datetime,
-    updatedAt datetime
-);
-CREATE TABLE IF NOT EXISTS OrderDetails(
-    order_id INT,
-    product_id INT,
-    price DOUBLE,
-    quantity INT,
+    order_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    customer_id bigint(10) NOT NULL,
+    seller_id bigint(10) NOT NULL,
+    product_id bigint(10) NOT NULL,
+    product_quantity INT NOT NULL,
+    product_price DOUBLE NOT NULL,
 	createdAt datetime,
     updatedAt datetime
 );
 CREATE TABLE IF NOT EXISTS Products (
-    product_id INT,
-    product_name VARCHAR(40),
-    product_desc TEXT,
-    seller_id INT,
-    category_id INT,
-    product_volume DOUBLE,
+    product_id bigint(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    product_name VARCHAR(40) NOT NULL,
+    product_desc VARCHAR(300),
+    seller_id bigint(10) NOT NULL,
+    category_id VARCHAR(24) NOT NULL,
+    image VARCHAR(250),
+    width INT,
+    height INT,
+    length INT,
     price DOUBLE,
     quantity INT,
-    units_in_stock INT,
-    units_on_order INT,
+    unit_in_stock INT,
+    unit_on_order INT,
 	createdAt datetime,
     updatedAt datetime
-);
-CREATE TABLE IF NOT EXISTS Shippers (
-    shipper_id INT,
-    phone VARCHAR(24)
 );
 CREATE TABLE IF NOT EXISTS Sellers (
-    seller_id INT,
+    seller_id bigint(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(15),
+    password VARCHAR(15),
+    seller_name VARCHAR(15),
     address VARCHAR(50),
-    city VARCHAR(50),
-    province VARCHAR(50),
-    street VARCHAR(50),
-    number VARCHAR(50),
-    total_volume DOUBLE,
 	createdAt datetime,
     updatedAt datetime
 );
-
+CREATE TABLE IF NOT EXISTS Warehouses (
+    warehouse_id bigint(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    warehouse_name VARCHAR(15),
+    address VARCHAR(50),
+    total_volume INT,
+    createdAt datetime,
+    updatedAt datetime
+);
+CREATE TABLE IF NOT EXISTS ProductWarehouse (
+    product_warehouse_id bigint(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    product_id bigint(10) NOT NULL,
+    warehouse_id bigint(10) NOT NULL,
+    quantity INT,
+    createdAt datetime,
+    updatedAt datetime
+);
