@@ -7,17 +7,17 @@ CREATE ROLE  'customer','seller','auth';
 
 
 -- Grant Permission for Role
-GRANT ALL ON test.* TO 'lazada_admin'@'localhost';
-GRANT SELECT, INSERT, UPDATE, DELETE ON test.Products TO 'seller';
-GRANT SELECT, INSERT ON test.ProductWarhouse TO 'seller';
-GRANT SELECT, INSERT ON test.Warhouse TO 'seller';
-GRANT SELECT ON test.Products TO 'customer';
-GRANT SELECT, INSERT, DELETE ON test.Orders TO 'customer';
-GRANT SELECT, ON test.Warhouse TO 'customer';
-GRANT SELECT, UPDATE ON test.ProductWarhouse TO 'customer';
-GRANT SELECT ON test.Customers TO 'auth';
-GRANT SELECT ON test.Admin TO 'auth';
-GRANT SELECT ON test.Sellers TO 'auth';
+GRANT ALL ON lazada_database.* TO 'lazada_admin'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE ON lazada_database.Products TO 'seller';
+GRANT SELECT, INSERT ON lazada_database.ProductWarehouses TO 'seller';
+GRANT SELECT, INSERT ON lazada_database.Warehouses TO 'seller';
+GRANT SELECT ON lazada_database.Products TO 'customer';
+GRANT SELECT, INSERT, DELETE ON lazada_database.Orders TO 'customer';
+GRANT SELECT ON lazada_database.Warehouses TO 'customer';
+GRANT SELECT, UPDATE ON lazada_database.ProductWarehouses TO 'customer';
+GRANT SELECT ON lazada_database.Customers TO 'auth';
+GRANT SELECT ON lazada_database.Admins TO 'auth';
+GRANT SELECT ON lazada_database.Sellers TO 'auth';
 
 
 -- Grant Role to User
@@ -26,6 +26,8 @@ GRANT 'seller' TO 'lazada_seller'@'localhost';
 GRANT 'auth' TO 'lazada_auth'@'localhost';
 
 
-
-
-
+-- Activitate Role
+SET DEFAULT ROLE ALL TO
+'lazada_customer'@'localhost',
+'lazada_seller'@'localhost',
+'lazada_auth'@'localhost';
