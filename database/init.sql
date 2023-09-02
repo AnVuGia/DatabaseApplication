@@ -2,7 +2,7 @@ CREATE USER IF NOT EXISTS 'user-lazada'@'localhost' identified with mysql_native
 GRANT ALL PRIVILEGES ON *.* TO 'user-lazada'@'localhost';
 FLUSH PRIVILEGES;
 CREATE DATABASE IF NOT EXISTS `lazada_database`;
-USE `test`;
+USE `lazada_database`;
 CREATE TABLE IF NOT EXISTS Customers (
     customer_id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     cart_id VARCHAR(24) NOT NULL,
