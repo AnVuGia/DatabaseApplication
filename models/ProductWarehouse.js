@@ -1,38 +1,30 @@
 module.exports = (sequelize, DataTypes) => {
-  const Order = sequelize.define('Orders', {
-    order_id: {
+  const ProductWarehouse = sequelize.define('ProductWarehouse', {
+    pwID: {
       type: DataTypes.BIGINT(10),
       allowNull: false,
       primaryKey: true,
       autoIncrement: true, // Assuming this is an auto-incrementing ID
     },
-    customer_id: {
-      type: DataTypes.BIGINT(10),
-      allowNull: false,
-    },
-    seller_id: {
-      type: DataTypes.BIGINT(10),
-      allowNull: false,
-    },
     product_id: {
       type: DataTypes.BIGINT(10),
       allowNull: false,
     },
-    product_quantity: {
+    warehouse_id: {
+      type: DataTypes.BIGINT(10),
+      allowNull: false,
+    },
+    quantity: {
       type: DataTypes.INTEGER(10),
       allowNull: false,
     },
-    price: {
-      type: DataTypes.DECIMAL(10,2),
-      allowNull: false,
-    }
   });
-  Order.associate = function (models) {
+  ProductWarehouse.associate = function (models) {
     // associations can be defined here
-    Order.belongsTo(models.Customers, {
-      foreignKey: 'customer_id',
+    ProductWarehouse.belongsTo(models.Products, {
+      foreignKey: 'product_id',
       onDelete: 'CASCADE',
     });
   };
-  return Order;
+  return ProductWarehouse;
 };

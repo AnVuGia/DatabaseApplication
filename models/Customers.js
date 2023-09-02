@@ -1,9 +1,16 @@
+const { Sequelize } = require(".");
+const models = require(".");
 module.exports = (sequelize, DataTypes) => {
   const Customers = sequelize.define('Customers', {
     customer_id: {
-      type: DataTypes.STRING(5),
+      type: DataTypes.BIGINT(10),
+      autoIncrement: true,
       allowNull: false,
       primaryKey: true,
+    },
+    cart_id: {
+      type: DataTypes.STRING(24),
+      allowNull: false,
     },
     username: {
       type: DataTypes.STRING(15),
@@ -15,22 +22,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     address: {
       type: DataTypes.STRING(50),
-    },
-    city: {
-      type: DataTypes.STRING(50),
-    },
-    province: {
-      type: DataTypes.STRING(50),
-    },
-    street: {
-      type: DataTypes.STRING(50),
-    },
-    phone: {
-      type: DataTypes.STRING(20),
-    },
+    }
   });
   Customers.associate = function (models) {
     // associations can be defined here
+    Customers.hasMany(models.Orders, {
+      foreignKey: 'customer_id',
+      as: 'orders',
+    });
   };
   return Customers;
 };

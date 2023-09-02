@@ -1,46 +1,60 @@
+const { Sequelize } = require(".");
+
 module.exports = (sequelize, DataTypes) => {
   const Products = sequelize.define('Products', {
     product_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT(10),
+      autoIncrement: true,
       allowNull: false,
       primaryKey: true,
-      autoIncrement: true,
     },
     product_name: {
       type: DataTypes.STRING(40),
       allowNull: false,
     },
     product_desc: {
-      type: DataTypes.STRING(40),
+      type: DataTypes.STRING(300),
     },
     seller_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT(10),
       allowNull: false,
     },
     category_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(24),
       allowNull: false,
     },
-    product_volume: {
-      type: DataTypes.DOUBLE,
+    width: {
+      type: DataTypes.INTEGER,
+    },
+    length: {
+      type: DataTypes.INTEGER,
+    },
+    height: {
+      type: DataTypes.INTEGER,
     },
     price: {
-      type: DataTypes.DOUBLE,
+      type: DataTypes.DECIMAL(10,2),
       allowNull: false,
     },
-    quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    units_in_stock: {
-      type: DataTypes.INTEGER,
-    },
-    units_on_order: {
-      type: DataTypes.INTEGER,
+    image: {
+      type: DataTypes.STRING(250),
     },
   });
   Products.associate = function (models) {
     // associations can be defined here
+    Products.belongsTo(models.Sellers, {
+      foreignKey: 'seller_id',
+      onDelete: 'CASCADE',
+    });
+    Products.hasMany(models.Orders, {
+      foreignKey: 'product_id',
+      as: 'orders',
+    });
+    Products.hasMany(models.ProductWarehouse, {
+      foreignKey: 'product_id',
+      as: 'productWarehouse',
+    });
+    
   };
   return Products;
 };
