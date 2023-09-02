@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 
 const port = 3000;
-const helloRoute = require('./routes/helloRoute');
+const appRoute = require('./routes/appRoute');
 const userRoute = require('./routes/userRoute');
 const shopRoute = require('./routes/shopRoute');
 const db = require('./models');
@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(express.static(path.join(__dirname, 'views')));
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/hello', helloRoute);
+app.use('/app', appRoute);
 app.use('/user', userRoute);
 app.use('/shop', shopRoute);
 db.sequelize.sync().then((req) => {

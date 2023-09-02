@@ -41,7 +41,7 @@ submit.addEventListener("click", (event) => {
     event.preventDefault();
     passwordError();
   }
- 
+  
 });
 
 // FORM VALIDATION FORMULAS //
