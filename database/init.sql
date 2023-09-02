@@ -65,5 +65,11 @@ CREATE TABLE IF NOT EXISTS ProductWarehouse (
     createdAt datetime,
     updatedAt datetime
 );
-
+CREATE TABLE IF NOT EXISTS Admin (
+    admin_id bigint(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(15),
+    password VARCHAR(15),
+    createdAt datetime,
+    updatedAt datetime
+);
 
