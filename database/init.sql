@@ -1,7 +1,7 @@
-CREATE USER IF NOT EXISTS 'user-test'@'localhost' identified with mysql_native_password by '12345';
-GRANT ALL PRIVILEGES ON *.* TO 'user-test'@'localhost';
+CREATE USER IF NOT EXISTS 'user-lazada'@'localhost' identified with mysql_native_password by '12345';
+GRANT ALL PRIVILEGES ON *.* TO 'user-lazada'@'localhost';
 FLUSH PRIVILEGES;
-CREATE DATABASE IF NOT EXISTS `test`;
+CREATE DATABASE IF NOT EXISTS `lazada_database`;
 USE `test`;
 CREATE TABLE IF NOT EXISTS Customers (
     customer_id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -64,3 +64,5 @@ CREATE TABLE IF NOT EXISTS ProductWarehouse (
     createdAt datetime,
     updatedAt datetime
 );
+
+

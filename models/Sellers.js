@@ -7,15 +7,15 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       primaryKey: true,
     },
+    seller_name: {
+      type: DataTypes.STRING(15),
+      allowNull: false,
+    },
     username: {
       type: DataTypes.STRING(15),
       allowNull: false,
     },
     password: {
-      type: DataTypes.STRING(15),
-      allowNull: false,
-    },
-    seller_name: {
       type: DataTypes.STRING(15),
       allowNull: false,
     },

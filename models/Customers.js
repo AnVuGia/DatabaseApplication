@@ -8,6 +8,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       primaryKey: true,
     },
+    customer_name: {
+      type: DataTypes.STRING(15),
+    },
     cart_id: {
       type: DataTypes.STRING(24),
       allowNull: false,

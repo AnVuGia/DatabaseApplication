@@ -2,7 +2,7 @@
   "development": {
     "username": "user-test",
     "password": "12345",
-    "database": "test",
+    "database": "lazada_database",
     "host": "localhost",
     "dialect": "mysql"
   },
