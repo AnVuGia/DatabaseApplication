@@ -53,34 +53,40 @@ exports.signupAccount = async (req, res) => {
       );
 };
 exports.loginAccount = async (req, res) => {
-  let body = req.body
-  console.log(body)
-  let model = [require('../models/Admins'),require('../models/Sellers'),require('../models/Customers')] 
-  for (let i = 0; i < model.length; i++) { 
-    let Table = await connectDB(body.user_credential,model[i])
-    Table.findOne({
-      where: {
-        username: body.info.username,
-        password: body.info.password,
-      },
-    })
-      .then((user) => {
-        if (user) {
-          if (Table.name === 'Admins') {
-            res.send({role: 'admin', account: user});
-          } else if (Table.name === 'Sellers') {
-            res.send({role: 'seller', account: user});
-          } else {
-            res.send({role: 'customer', account: user});
-          }
-          return;
-        }
-      })
-      .catch((err) => {
-        res.json(err);
+  const body = req.body;
+  console.log(body);
+  const model = [require('../models/Admins'), require('../models/Sellers'), require('../models/Customers')];
+
+  try {
+    let found = false; // Initialize a flag to track if a user is found
+
+    for (const Model of model) {
+      const Table = await connectDB(body.user_credential, Model);
+      const user = await Table.findOne({
+        where: {
+          username: body.info.username,
+          password: body.info.password,
+        },
       });
+      if (user) {
+        found = true; // Set the flag to true when a user is found
+        if (Table.name === 'Admins') {
+          res.json({ role: 'admin', account: user });
+        } else if (Table.name === 'Sellers') {
+          res.json({ role: 'seller', account: user });
+        } else {
+          res.json({ role: 'customer', account: user });
+        }
+        break; // Exit the loop when a user is found
+      }
+    }
+
+    if (!found) {
+      res.json("Your username or password is invalid.");
+    }
+  } catch (err) {
+    res.json(err); // Handle errors and send an error response
   }
-  res.json("Your username or password is invalid.");
 };
 exports.getSellerInbound = (req, res) => {
   res.sendFile('seller-inbound.html', { root: 'views/sellerView' });
@@ -95,7 +101,7 @@ exports.getAdminCategory = (req, res) => {
   res.sendFile('admin-category.html', { root: 'views/adminView' });
 };
 exports.getCustomers = (req, res) => {
-  res.sendFile('customer-view.html', { root: 'views' });
+  res.sendFile('customer.html', { root: 'views' });
 };
 exports.getProductDetail = (req, res) => {
   res.sendFile('product-details-view.html', { root: 'views' });

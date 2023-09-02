@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-const Admin = sequelize.define('Admins', {
+const Admins = sequelize.define('Admins', {
     admin_id: {
     type: DataTypes.BIGINT(10),
     autoIncrement: true,
@@ -15,5 +15,5 @@ const Admin = sequelize.define('Admins', {
     allowNull: false,
     }
 });
-return Admin;
+return Admins;
 };

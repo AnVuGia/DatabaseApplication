@@ -1,5 +1,10 @@
 const deleteInventory = document.querySelector(".delete-button");
 const addInventoryButton = document.querySelector(".button_inventory--add");
+const credential ={
+    username: "lazada_auth",
+    password: "password"
+}
+sessionStorage.setItem("sqlUser", JSON.stringify(credential));
 
 deleteInventory.addEventListener("click", () => {
     displayConfirmationModal("Are you sure you want to delete this inventory?", () => {});
