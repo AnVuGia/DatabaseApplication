@@ -4,7 +4,9 @@ const helloController = require('../controllers/helloController');
 
 router.get('/', helloController.getHello);
 router.get('/login', helloController.getLogin);
+router.post('/login', helloController.loginAccount);
 router.get('/signup', helloController.getSignup);
+router.post('/signup', helloController.signupAccount);
 router.get('/seller-product', helloController.getSellerProduct);
 router.get('/seller-inbound', helloController.getSellerInbound);
 router.get('/admin-inventory', helloController.getAdminVentory);

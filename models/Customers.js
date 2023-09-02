@@ -13,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     cart_id: {
       type: DataTypes.STRING(24),
-      allowNull: false,
     },
     username: {
       type: DataTypes.STRING(15),
@@ -22,6 +21,9 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING(15),
       allowNull: false,
+    },
+    image: {
+      type: DataTypes.STRING(250),
     },
     address: {
       type: DataTypes.STRING(50),
