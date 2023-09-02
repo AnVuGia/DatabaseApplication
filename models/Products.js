@@ -39,6 +39,12 @@ module.exports = (sequelize, DataTypes) => {
     image: {
       type: DataTypes.STRING(250),
     },
+    unit_in_stock: {
+      type: DataTypes.INTEGER,
+    },
+    unit_on_order: {
+      type: DataTypes.INTEGER,
+    },
   });
   Products.associate = function (models) {
     // associations can be defined here
