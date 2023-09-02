@@ -50,12 +50,13 @@ submit.addEventListener("click", (event) => {
   }
 
   const data = {
-    "user_credential": JSON.parse(sessionStorage.getItem("sqlUser")),
-    "info": {
-      "user_name": userName.value,
-      "password": password.value
+    user_credential: JSON.parse(sessionStorage.getItem("sqlUser")),
+    info: {
+      username: userName.value,
+      password: password.value
     }
   }
+  console.log(JSON.stringify(data));
   let url = "/hello/login"
   fetch(url, {
     method: "POST",
@@ -66,7 +67,7 @@ submit.addEventListener("click", (event) => {
     })
     .then((res) => res.json())
     .then((data) => {
-      console.log("hjhj");
+      console.log(data); 
       if (data.msg ===  "Your username or password is invalid.") {
         userNameEl.textContent = data;
         userName.classList.add("invalid");
