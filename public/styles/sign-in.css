@@ -1,0 +1,14 @@
+
+.button__controller:nth-child(1){
+    background-color: var(--green);
+}
+.button__controller:nth-child(2){
+    background-color: var(--red);
+}
+
+.button__controller:nth-child(1):hover{
+    background-color: rgba(6, 170, 109, 0.5);
+}
+.button__controller:nth-child(2):hover{
+    background-color: rgba(254, 0, 0, 0.5);
+}

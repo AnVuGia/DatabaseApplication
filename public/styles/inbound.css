@@ -1,0 +1,10 @@
+.main-product__update{
+    display: block;
+}
+.inbound-button-order{
+    background-color: #0298cf;
+}
+.inbound-button-order:hover{
+    background-color: rgba(2, 128, 207, 0.8);
+}
+  
