@@ -1,5 +1,5 @@
-const { Sequelize } = require(".");
-const models = require(".");
+const { Sequelize } = require('.');
+const models = require('.');
 module.exports = (sequelize, DataTypes) => {
   const Customers = sequelize.define('Customers', {
     customer_id: {
@@ -22,12 +22,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(15),
       allowNull: false,
     },
-    image: {
-      type: DataTypes.STRING(250),
-    },
     address: {
       type: DataTypes.STRING(50),
-    }
+    },
   });
   Customers.associate = function (models) {
     // associations can be defined here
