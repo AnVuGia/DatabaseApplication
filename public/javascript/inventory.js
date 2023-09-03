@@ -108,11 +108,11 @@ function createInventoryCard(inventory){
     return card;
 }
 function prepareEditInventoryModal(inventory){
-    document.querySelector("#inventory__name--update").value = inventory.inventory_name;
+    document.querySelector("#inventory__name--update").value = inventory.warehouse_name;
     document.querySelector("#inventory__address--update").value = inventory.address;  
     document.querySelector("#inventory__volume--update").value = inventory.volume;
     
-    document.querySelector(".modal__button modal__button--save").onclick = () => {
+    document.querySelector("#submit-update-button").onclick = () => {
         inventory.product_name = document.querySelector("#product__name--update").value;
         inventory.address = document.querySelector("#product__address--update").value;
         inventory.volume = document.querySelector("#product__volume--update").value;
