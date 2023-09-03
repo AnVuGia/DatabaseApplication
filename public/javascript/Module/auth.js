@@ -3,9 +3,17 @@ const port = 3000;
 const API_URL = `http://localhost:${port}`;
 const auth = {
   async login(username, password) {
-    const response = await axios.post(`${API_URL}/login`, {
+    const user_credential = {
+      username: 'lazada_auth',
+      password: 'password',
+    };
+    const info = {
       username: username,
       password: password,
+    };
+    const response = await axios.post(`${API_URL}/login`, {
+      user_credential: user_credential,
+      info: info,
     });
     return response.data;
   },
