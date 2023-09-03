@@ -1,18 +1,34 @@
 const deleteInventory = document.querySelector(".delete-button");
 const addInventoryButton = document.querySelector(".button_inventory--add");
 const inventoryContainer = document.querySelector(".inventory-list");
+import warehouse from './Module/warehouse.js';
+
 const credential ={
     username: "lazada_admin",
     password: "password"
 }
 sessionStorage.setItem("sqlUser", JSON.stringify(credential)); 
 
-deleteInventory.addEventListener("click", () => {
-    displayConfirmationModal("Are you sure you want to delete this inventory?", () => {});
-});
+
 addInventoryButton.addEventListener("click", () => {
-    displayConfirmationModal("Are you sure you want to add this inventory?", () => {
-        createInventory()
+    displayConfirmationModal("Are you sure you want to add this inventory?", async() => {
+        closeConfirmationButton.click();
+        displayLoadingModel();
+        const body = {
+            user_credential: JSON.parse(sessionStorage.getItem("sqlUser")),
+            query: {
+                warehouse_name: document.querySelector("#inventory__name--add").value,
+                address: document.querySelector("#inventory__address--add").value,
+                volume: document.querySelector("#inventory__volume--add").value
+            }
+        }
+        let res = await warehouse.create(body.user_credential, body.query);
+        closeLoadingModel();
+        if (res.status == 200) {
+            displayStatusModal("Create Successfully", true);
+        }else{
+            displayStatusModal(res.data.message, false);
+        }
     });
 });
 async function createInventory(){
@@ -21,8 +37,8 @@ async function createInventory(){
         user_credential: JSON.parse(sessionStorage.getItem("sqlUser")),
         query: {
             warehouse_name: document.querySelector("#inventory__name--add").value,
-            warehouse_address: document.querySelector("#inventory__address--add").value,
-            total_volume: document.querySelector("#inventory__volume--add").value
+            address: document.querySelector("#inventory__address--add").value,
+            volume: document.querySelector("#inventory__volume--add").value
         }
     }
     fetch("/warehouse/create", {
@@ -86,7 +102,22 @@ function displayAll(inventoryList){
         });
         console.log(inventoryContainer);
         document.querySelector(`#delete-${inventoryList[i].warehouse_id}`).addEventListener("click", () => {
-            displayConfirmationModal("Are you sure you want to delete this inventory?", () => {});
+            displayConfirmationModal("Are you sure you want to delete this inventory?", async () => {  
+                closeConfirmationButton.click()
+                displayLoadingModel();
+                const body = {
+                    user_credential: JSON.parse(sessionStorage.getItem("sqlUser")),
+                    query: inventoryList[i]
+                }
+                let res = await warehouse.delete(body.user_credential, body.query);
+                closeLoadingModel();
+                console.log(res);
+                if (res.message === "Delete Warehouse successfully!") {
+                    displayStatusModal(res.message, true);
+                }else{
+                    displayStatusModal(res.message, false);
+                }
+            });
         }
         );
 
@@ -97,9 +128,9 @@ function createInventoryCard(inventory){
     card.innerHTML = `
         <td>${inventory.warehouse_id}</td>
         <td>${inventory.warehouse_name}</td>
-        <td>${inventory.warehouse_address}</td>
-        <td>${inventory.total_volume}</td>
-        <td>${inventory.availability}</td>
+        <td>${inventory.address}</td>
+        <td>${inventory.volume}</td>
+        <td>${inventory.available_volume}</td>
         <td>
             <button class="edit-button" id="edit-${inventory.warehouse_id}"><i class="fa-solid fa-pen"></i></button>
             <button class="delete-button" id="delete-${inventory.warehouse_id}"><i class="fa-solid fa-trash"></i></button>
@@ -113,11 +144,11 @@ function prepareEditInventoryModal(inventory){
     document.querySelector("#inventory__volume--update").value = inventory.volume;
     
     document.querySelector("#submit-update-button").onclick = () => {
-        inventory.product_name = document.querySelector("#product__name--update").value;
-        inventory.address = document.querySelector("#product__address--update").value;
-        inventory.volume = document.querySelector("#product__volume--update").value;
+        inventory.warehouse_name = document.querySelector("#inventory__name--update").value;
+        inventory.address = document.querySelector("#inventory__address--update").value;
+        inventory.volume = document.querySelector("#inventory__volume--update").value;
         const body = {
-            credential: JSON.parse(sessionStorage.getItem("sqlUser")),
+            user_credential: JSON.parse(sessionStorage.getItem("sqlUser")),
             query: inventory
         }
         fetch("/warehouse/update", {

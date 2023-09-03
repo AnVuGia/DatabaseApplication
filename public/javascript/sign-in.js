@@ -73,6 +73,8 @@ submit.addEventListener('click', async (event) => {
       sessionStorage.setItem('user', JSON.stringify(responseData.account));
     }
   }
+
+
 });
 
 // FORM VALIDATION FORMULAS //
