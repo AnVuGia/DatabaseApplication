@@ -7,11 +7,17 @@ const nameEl = document.querySelector('.product__name-input');
 const widthEl = document.querySelector('.product__width-input');
 const heightEl = document.querySelector('.product__height-input');
 const lengthEl = document.querySelector('.product__length-input');
+const tableBody = document.querySelector('#table-body');
 import product from './Module/product-helper.js';
 let products = [];
 window.onload = async () => {
   addSideBarHtmlForSeller();
-  products = await product.getProducts();
+  const temp = await product.getProducts();
+  products = [...temp];
+  console.log(temp);
+  products.forEach((product) => {
+    tableBody.innerHTML += productRow(product);
+  });
 };
 deleteProductButton.addEventListener('click', () => {
   displayConfirmationModal(
@@ -43,8 +49,18 @@ selectDetector(
   'main-product__update',
   'main-product__add'
 );
-const productRow = () => {
-  const productRow = document.createElement('tr');
-  productRow.classList.add('product__row');
-  return productRow;
+const productRow = (product) => {
+  return `
+    <tr>
+        <td>${product.name}</td>
+        <td>${product.description}</td>
+        <td>${product.price}</td>
+        <td>${product.quantity}</td>
+        <td>${product.width}</td>
+        <td>${product.height}</td>
+        <td>${product.length}</td>
+        <td><button class="edit-button">Edit</button></td>
+        <td><button class="delete-button">Delete</button></td>
+    </tr>
+    `;
 };

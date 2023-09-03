@@ -106,7 +106,7 @@ exports.loginAccount = async (req, res) => {
             username: model.credentials.username,
             password: model.credentials.password,
           },
-          { maxAge: 900000, httpOnly: true, secure: true }
+          { maxAge: 900000 }
         );
 
         await res.json({

@@ -1,4 +1,4 @@
-const { get } = require('mongoose');
+
 
 const sideBarContainer = document.querySelector('.sidebar');
 const cofirmationBackdrop = document.querySelector('.confirmation-backdrop');
@@ -163,7 +163,7 @@ function addSideBarHtmlForSeller() {
 }
 
 
-}
+
 
 
 function displayLoadingModel(){
