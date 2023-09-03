@@ -17,12 +17,12 @@ const auth = {
     });
     return response.data;
   },
-  async register(username, password, name, address) {
+  async register(username, password, name, address, role) {
     const user_credential = {
       username: 'lazada_guest',
       password: 'password',
     };
-    const role = 'customer';
+
     const info = {
       username: username,
       password: password,

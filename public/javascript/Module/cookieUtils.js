@@ -21,17 +21,38 @@ function getCookieValue(cookieName) {
 }
 // Function to get the value of the session cookie
 function getSessionCookie() {
-  const cookies = document.cookie.split('; ');
-
-  for (const cookie of cookies) {
-    const [name, value] = cookie.split('=');
-    if (name === 'session') {
-      return decodeURIComponent(value);
+  try {
+    const cookies = document.cookie.split('; ');
+    for (const cookie of cookies) {
+      const [name, value] = cookie.split('=');
+      if (name === 'session') {
+        return decodeURIComponent(value);
+      }
     }
-  }
 
-  return null; // Return null if the session cookie is not found
+    return null;
+  } catch (error) {
+    console.error('Error retrieving session cookie:', error);
+    return null;
+  }
+}
+function parseJSONCookie(cookieValue) {
+  try {
+    // Remove the leading 'j:' prefix if it exists
+    const jsonStr = cookieValue.startsWith('j:')
+      ? cookieValue.substring(2)
+      : cookieValue;
+
+    // Parse the JSON string into a JavaScript object
+    const jsonObject = JSON.parse(jsonStr);
+
+    return jsonObject;
+  } catch (error) {
+    // Handle any parsing errors (e.g., invalid JSON)
+    console.error('Error parsing JSON cookie:', error);
+    return null;
+  }
 }
 
 // Export the functions as part of a module
-export { getCookieValue, getSessionCookie };
+export { getCookieValue, getSessionCookie, parseJSONCookie };

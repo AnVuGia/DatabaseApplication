@@ -14,3 +14,7 @@ exports.guest_credentials = {
   username: 'lazada_guest',
   password: 'password',
 };
+exports.auth_credentials = {
+  username: 'lazada_auth',
+  password: 'password',
+};

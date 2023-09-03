@@ -1,51 +1,59 @@
+const { get } = require('mongoose');
 
-const sideBarContainer = document.querySelector(".sidebar");
-const cofirmationBackdrop = document.querySelector(".confirmation-backdrop");
-const confirmationModal = document.querySelector(".confirmation-modal");
-const closeModalButton = document.querySelector(".closeModalButton");
-const backdrop = document.querySelector(".backdrop");
-const modal = document.querySelector(".modal");
-closeModalButton.addEventListener("click", () => {
-  backdrop.style.display = "none";
-  modal.style.display = "none";
+const sideBarContainer = document.querySelector('.sidebar');
+const cofirmationBackdrop = document.querySelector('.confirmation-backdrop');
+const confirmationModal = document.querySelector('.confirmation-modal');
+const closeModalButton = document.querySelector('.closeModalButton');
+const backdrop = document.querySelector('.backdrop');
+const modal = document.querySelector('.modal');
+closeModalButton.addEventListener('click', () => {
+  backdrop.style.display = 'none';
+  modal.style.display = 'none';
 });
 
 function displayConfirmationModal(message, callback) {
-    const confirmationMessage = document.querySelector(".confirmation-message");
-    confirmationMessage.innerHTML = `<p>${message}</p>`;
-    console.log(document.querySelector(".modal__button--save"));
-    document.querySelector(".modal__button--yes").addEventListener("click", () => {
-        callback();
+  const confirmationMessage = document.querySelector('.confirmation-message');
+  confirmationMessage.innerHTML = `<p>${message}</p>`;
+  console.log(document.querySelector('.modal__button--save'));
+  document
+    .querySelector('.modal__button--yes')
+    .addEventListener('click', () => {
+      callback();
     });
-    cofirmationBackdrop.style.display = "block";
-    confirmationModal.style.display = "block";
+  cofirmationBackdrop.style.display = 'block';
+  confirmationModal.style.display = 'block';
 }
 
-const closeConfirmationButton = document.getElementById("button__cancel-confirmation");
-closeConfirmationButton.addEventListener("click", () => {
-    cofirmationBackdrop.style.display = "none";
-    confirmationModal.style.display = "none";
+const closeConfirmationButton = document.getElementById(
+  'button__cancel-confirmation'
+);
+console.log(closeConfirmationButton);
+closeConfirmationButton.addEventListener('click', () => {
+  cofirmationBackdrop.style.display = 'none';
+  confirmationModal.style.display = 'none';
 });
 
-function selectDetector(selectClassName, updateClassName, createClassName){
-    const selectProductDisplayMode = document.getElementById(`${selectClassName}`);
-    selectProductDisplayMode.addEventListener("change", () => {
+function selectDetector(selectClassName, updateClassName, createClassName) {
+  const selectProductDisplayMode = document.getElementById(
+    `${selectClassName}`
+  );
+  selectProductDisplayMode.addEventListener('change', () => {
     const selectedValue = selectProductDisplayMode.value;
-    if (selectedValue === "option1") {
-        document.querySelector(`.${updateClassName}`).style.display = "block";
-        document.querySelector(`.${createClassName}`).style.display = "none";
-    } else if (selectedValue === "option2"){
-        document.querySelector(`.${updateClassName}`).style.display = "none";
-        document.querySelector(`.${createClassName}`).style.display = "block";
+    if (selectedValue === 'option1') {
+      document.querySelector(`.${updateClassName}`).style.display = 'block';
+      document.querySelector(`.${createClassName}`).style.display = 'none';
+    } else if (selectedValue === 'option2') {
+      document.querySelector(`.${updateClassName}`).style.display = 'none';
+      document.querySelector(`.${createClassName}`).style.display = 'block';
     }
-    });
-    selectProductDisplayMode.dispatchEvent(new Event("change"));
+  });
+  selectProductDisplayMode.dispatchEvent(new Event('change'));
 }
 
-function addSideBarHtmlForAdmin(){
-    // <img src="/image/icon/storeal-website-favicon-color.png" alt="icon" width="30px"></img>
-    sideBarContainer.innerHTML ="";
-    sideBarContainer.innerHTML += `
+function addSideBarHtmlForAdmin() {
+  // <img src="/image/icon/storeal-website-favicon-color.png" alt="icon" width="30px"></img>
+  sideBarContainer.innerHTML = '';
+  sideBarContainer.innerHTML += `
     <div class="top">
     <div class="logo">
         
@@ -93,17 +101,17 @@ function addSideBarHtmlForAdmin(){
         <span class="tooltip">Logout</span>
     </li>
 </ul>
-    `
-    let btn = document.querySelector("#menu_btn");
-    let sidebar = document.querySelector(".sidebar");
+    `;
+  let btn = document.querySelector('#menu_btn');
+  let sidebar = document.querySelector('.sidebar');
 
-    btn.onclick = function() {
+  btn.onclick = function () {
     sidebar.classList.toggle('active');
+  };
 }
-}
-function addSideBarHtmlForSeller(){
-    sideBarContainer.innerHTML ="";
-    sideBarContainer.innerHTML += `
+function addSideBarHtmlForSeller() {
+  sideBarContainer.innerHTML = '';
+  sideBarContainer.innerHTML += `
     <div class="top">
     <div class="logo">
         <img src="/image/icon/storeal-website-favicon-color.png" alt="icon" width="30px">
@@ -145,13 +153,16 @@ function addSideBarHtmlForSeller(){
         <span class="tooltip">Logout</span>
     </li>
 </ul>
-    `
-    let btn = document.querySelector("#menu_btn");
-let sidebar = document.querySelector(".sidebar");
+    `;
+  let btn = document.querySelector('#menu_btn');
+  let sidebar = document.querySelector('.sidebar');
 
-btn.onclick = function() {
+  btn.onclick = function () {
     sidebar.classList.toggle('active');
+  };
 }
+
+
 }
 
 
@@ -186,3 +197,4 @@ function displayStatusModal(msg, success){
     modal.style.display = 'block';
 
 }
+

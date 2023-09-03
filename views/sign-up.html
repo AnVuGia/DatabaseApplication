@@ -17,7 +17,11 @@
     <title>Sign up Page</title>
 </head>
 <body>
+    
+    
+    
     <div class="container-fluid">
+        
         <div class="row align-items-center vh-100 gx-0">
             <div class="row vh-100 mb-5">
                 <div class="form col-lg-6 col-md-12 m-auto">
@@ -28,9 +32,9 @@
                         <p class="error error-uname" aria-live="polite"></p>
                     </div>
                     <div class="sign-up-element">
-                        <input class="form-form-elemment user-name" type="text" placeholder="Your Name" name="yourName"  required/>
+                        <input class="form-form-elemment user-normal-name" type="text" placeholder="Your Name" name="yourName"  required/>
                         <img src="/image/icon/icon-error.svg" alt="" class="error__icon" />
-                        <p class="error error-uname" aria-live="polite"></p>
+                        <p class="error error-normal-name" aria-live="polite"></p>
                     </div>
                     <div class="sign-up-element">
                         <input class="form-form-elemment password" type="password" placeholder="Password" name="pass"  required minlength="8"/>
@@ -42,6 +46,20 @@
                         <img src="/image/icon/icon-error.svg" alt="" class="error__icon" />
                         <p class="error error-re-password" aria-live="polite"></p>
                     </div>
+                     <div class="sign-up-element">
+                        <input class="form-form-elemment address" type="text" placeholder="Address" name="address"  required/>
+                        <img src="/image/icon/icon-error.svg" alt="" class="error__icon" />
+                        <p class="error error-address" aria-live="polite"></p>
+                    </div>
+                     <div class="sign-up-element">
+                    <select class="form-form-elemment account-type" id="accountType" name="accountType" required>
+                        <option value="" disabled selected>Select Account Type</option>
+                        <option value="customer">Customer</option>
+                        <option value="seller">Seller</option>
+                    </select>
+                    <img src="/image/icon/icon-error.svg" alt="" class="error__icon" />
+                    <p class="error error-account-type" aria-live="polite"></p>
+                </div>
                     <div class="controller">
                         <div id ="btn-sign-up" class ="button__controller">Sign up</div>
                         <div id = "btn-back" class="button__controller">Back</div>

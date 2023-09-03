@@ -2,7 +2,6 @@ const socket = io();
 document.getElementById('product-form').addEventListener('submit', (e) => {
   e.preventDefault();
   const product = {
-
     product_name: document.getElementById('product_name').value,
     product_desc: document.getElementById('product_desc').value,
     price: document.getElementById('price').value,
