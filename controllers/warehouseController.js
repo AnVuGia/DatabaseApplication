@@ -26,13 +26,12 @@ exports.create = async (req, res) => {
 exports.findAll = async (req, res) => {
     const userCredential = req.body.user_credential;
     const body = req.body;
-    console.log(req.body);
-    // await connectDB(userCredential.username, userCredential.password)
+    console.log(body)
     warehouseTable = await connectDB(body.user_credential, require("../models/Warehouses.js"));
     warehouseTable.findAll(
         {
-            offset: body.offset,
-            limit: body.limit
+            offset: body.query.offset,
+            limit: body.query.limit
         }
     )
         .then(result => {
@@ -48,33 +47,44 @@ exports.findAll = async (req, res) => {
 
 // Find all data has attribute search_att contains searchStr
 exports.search = async function (req, res) {
-    const userCredential = req.body.user_credential;
-
+    const body = req.body;
+  
     warehouseTable = await connectDB(body.user_credential, require("../models/Warehouses.js"));
-
-    let searchAtt = req.body.query.search_attribute;
-    let searchStr = req.body.query.search_string;
-
-    var searchParams = {};
-
-    searchParams[searchAtt] = {
-        [Op.like]: '%' + searchStr + '%'
-    };
-
-    warehouseTable.findAll({
-        limit: 10,
-        where: searchParams
-    })
-    .then(result => {
+  
+    let searchConditions = body.query;
+  
+    let searchParams = {};
+  
+    if (searchConditions.hasOwnProperty("search")) {
+      searchParams['where'] = {
+        [searchConditions.search.search_attribute]: {
+          [Op.like]: '%' + searchConditions.search.search_string + '%'
+        }
+      };
+    }
+  
+    if (searchConditions.hasOwnProperty("order")) {
+      searchParams['order'] = [searchConditions.order];
+    }
+    console.log(searchConditions)   
+    warehouseTable
+      .findAll({
+        offset: searchConditions.offset,
+        limit: searchConditions.limit,
+        // Only include 'where' and 'order' in the searchParams object if they exist
+        ...(searchParams.where && { where: searchParams.where }),
+        ...(searchParams.order && { order: searchParams.order }),
+      })
+      .then((result) => {
         res.send(result);
-    })
-    .catch(err => {
+      })
+      .catch((err) => {
         res.status(500).send({
-          message:
-            err.message || "Some error occurred while retrieving data."
+          message: err.message || "Some error occurred while retrieving data.",
         });
       });
-};
+  };
+  
 
 // Update a Tutorial by the id in the request
 exports.update = async (req, res) => {
@@ -119,7 +129,7 @@ exports.update = async (req, res) => {
             filter
         )
         .then(result => {
-            res.send(result);
+            res.status(200).send(result);
         })
         .catch(err => {
             res.status(500).send({

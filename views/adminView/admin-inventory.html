@@ -31,13 +31,18 @@
                     </select>
                     <div class="main-inventory__update">
                         <div class="main-inventory__container-header" style="">
-                            <input class="product-input" type="text" placeholder="Please enter inventory'sname...">
-                            <select id="filter-product__dropdown">
+                            <div>
+                                <select name="" id="" class="attribute-filter-select">
+                                    <option value="all">All</option>
+                                    <option value="name">Search By Name</option>
+                                    <option value="address">Search By Address</option>
+                                </select>
+                            </div>
+                            <input class="inventory-search-input" type="text" placeholder="Please enter value in...">
+                            <select class="sort-selector">
                                 <option value="all">All</option>
-                                <option value="">Availabilty Ascending</option>
-                                <option value="">Availabilty Decreasing</option>
-                                <option value="">Volume Ascending</option>
-                                <option value="">Volume Decreasing</option>
+                                <option value="asc">Volume Ascending</option>
+                                <option value="desc">Volume Decreasing</option>
                             </select>
                         </div>
                         <table>
@@ -67,12 +72,12 @@
                             </tbody>
                         </table>
                         <div class="pagination">
-                            <div><i class="fa-solid fa-angles-left"></i></div>
+                            <!-- <div><i class="fa-solid fa-angles-left"></i></div>
                             <div><i class="fa-solid fa-angle-left"></i></div>
                             <div><i class="fa-solid fa-1"></i></div>
                             <div><i class="fa-solid fa-2"></i></div>
                             <div><i class="fa-solid fa-angle-right"></i></div>
-                            <div><i class="fa-solid fa-angles-right"></i></div>
+                            <div><i class="fa-solid fa-angles-right"></i></div> -->
                         </div>
                     </div>
                     <div class="main-inventory__add">

@@ -3,6 +3,7 @@ const router = express.Router();
 const warehouseController = require('../controllers/warehouseController');
 
 router.post('/create', warehouseController.create);
+router.post('/search', warehouseController.search);
 router.post('/findAll', warehouseController.findAll);
 router.post('/delete', warehouseController.delete);
 router.post('/update', warehouseController.update);
