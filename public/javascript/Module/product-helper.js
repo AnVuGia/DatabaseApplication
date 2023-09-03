@@ -19,6 +19,7 @@ const product = {
         password: session.password,
       },
     });
+    console.log(response.data);
     return response.data;
   },
   async createProduct(product) {
@@ -33,6 +34,7 @@ const product = {
       username: session.username,
       password: session.password,
     };
+    console.log(product);
     const response = await axios.post(`${API_URL}/create`, {
       user_credential: user_credential,
       query: product,

@@ -29,16 +29,19 @@ async function connectDB(username, password) {
 // Create and Save a new Tutorial
 exports.create = async (req, res) => {
   const userCredential = req.body.user_credential;
-
+  console.log(req.body.query);
   await connectDB(userCredential.username, userCredential.password);
 
-  req.body.query['units_in_stock'] = req.body.query.quantity;
-  req.body.query['units_on_order'] = 0;
-
+  req.body.query['unit_in_stock'] = req.body.query.quantity;
+  req.body.query['unit_on_order'] = "0";
+  console.log(req.body.query);
   // Save Tutorial in the database
+    console.log(productTable)
   productTable
     .create(req.body.query)
     .then((newProduct) => {
+      console.log('New product created:');
+      console.log(newProduct);
       res.send(newProduct);
     })
     .catch((err) => {
