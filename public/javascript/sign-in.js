@@ -4,6 +4,7 @@ const password = document.querySelector('.password');
 const passwordEl = document.querySelector('.error-password');
 const signUp = document.querySelector('#btn-sign-up');
 const submit = document.querySelector('#btn-sign-in');
+import { getSessionCookie } from './Module/cookieUtils.js';
 import auth from './Module/auth.js';
 const credential = {
   username: 'lazada_auth',
@@ -47,9 +48,14 @@ submit.addEventListener('click', async (event) => {
     event.preventDefault();
     passwordError();
   }
-
+  const sessionData = getSessionCookie();
+  if (!sessionData) {
+    window.location.href = '/login';
+  }
+  const session = await JSON.parse(sessionData);
+  console.log(session);
   const data = {
-    user_credential: JSON.parse(sessionStorage.getItem('sqlUser')),
+    user_credential: session,
     info: {
       username: userName.value,
       password: password.value,
@@ -57,18 +63,20 @@ submit.addEventListener('click', async (event) => {
   };
   const responseData = await auth.login(data.info.username, data.info.password);
   console.log(responseData);
-  if (responseData.msg === 'Your username or password is invalid.') {
-    userNameEl.textContent = responseData;
+  if (responseData === 'User does not exist.') {
+    userNameEl.textContent = 'User does not exist.';
     userName.classList.add('invalid');
-    userName.placeholder = '';
+  } else if (responseData === 'Incorrect password.') {
+    passwordEl.textContent = 'Incorrect password.';
+    password.classList.add('invalid');
   } else {
-    if (responseData.role === 'admin') {
+    if (responseData.role === 'admins') {
       window.location.href = './admin-inventory';
       sessionStorage.setItem('user', JSON.stringify(responseData.account));
-    } else if (responseData.role === 'seller') {
+    } else if (responseData.role === 'sellers') {
       window.location.href = './seller-product';
       sessionStorage.setItem('user', JSON.stringify(responseData.account));
-    } else if (responseData.role === 'customer') {
+    } else if (responseData.role === 'customers') {
       window.location.href = './customers';
       sessionStorage.setItem('user', JSON.stringify(responseData.account));
     }
