@@ -57,7 +57,7 @@ submit.addEventListener("click", (event) => {
     }
   }
   console.log(JSON.stringify(data));
-  let url = "/hello/login"
+  let url = "/login"
   fetch(url, {
     method: "POST",
     headers: {

@@ -98,6 +98,12 @@
                 </div>
                 </div>
             </div>
+        <div id="loading-modal" class="loading-modal">
+            <div class="modal-content">
+                <div class="loader"></div>
+                <p style="margin: auto;">Loading...</p>
+            </div>
+        </div>
         <div class="backdrop" id="backdrop"></div>
         <div class="modal" id="modal">
             <div class="modal-content-update">
@@ -140,9 +146,15 @@
             </div>
         </div>
         </div>
+        <div id="status-modal" class="modal-status">
+            <div class="modal-status-content success">
+                <p class = "status-msg">Operation Successful</p>
+                <button class ="error-btn" id="close-status-modal-btn">Close</button>
+            </div>
+        </div>
         
     </div>
     <script src="/javascript/helper.js"></script>
-    <script src="/javascript/inventory.js"></script>
+    <script type="module" src="/javascript/inventory.js"></script>
 </body>
 </html>
