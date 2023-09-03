@@ -15,6 +15,18 @@ const db = require('./models');
 const app = express();
 
 const fs = require('fs');
+const { default: mongoose } = require('mongoose');
+
+const mongodb_uri = 'mongodb://127.0.0.1:27017';
+const dbName = '/group_asm2';
+const connectString = mongodb_uri + dbName;
+
+mongoose.connect(connectString);
+
+const mongodb = mongoose.connection;
+
+mongodb.on('error', (error) => console.log(error));
+mongodb.once('open', () => console.log('Connected to Database'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -26,6 +38,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', appRoute);
 app.use('/user', userRoute);
 app.use('/shop', shopRoute);
+app.use('/product', productRoute);
 app.use('/warehouse', warehouse);
 db.sequelize.sync().then((req) => {
   const server = app.listen(port, () => {
