@@ -71,3 +71,93 @@
 .modal__button--save:hover{
     background-color: rgba(2, 152, 207, 0.8);
 }
+
+
+
+
+/* Styles for the loading modal */
+.loading-modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    margin: auto;
+    display: flex;
+    width: 300px;
+    background-color: #fff;
+    text-align: center;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.loader {
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+
+/* Styles for the success modal */
+.modal-status {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-status-content {
+    background-color: #fff;
+    text-align: center;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.modal-status-content.success {
+    background-color: #4CAF50; /* Green background color for success */
+    color: #fff; /* White text color for success */
+}
+.modal-status-content.error {
+    background-color: #9b3030; /* Green background color for success */
+    color: #fff; /* White text color for success */
+}
+#close-status-modal-btn.success {
+    background-color: #4CAF50; /* Green button color for success */
+    color: #fff; /* White text color for success */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.sucess-btn:hover {
+    background-color: #45a049; /* Darker green color on hover */
+}
+.error-btn:hover{
+    background-color: #8c2f2f; 
+}

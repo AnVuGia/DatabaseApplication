@@ -161,3 +161,40 @@ function addSideBarHtmlForSeller() {
     sidebar.classList.toggle('active');
   };
 }
+
+
+}
+
+
+function displayLoadingModel(){
+    const modal = document.getElementById('loading-modal');
+    modal.style.display = 'block';
+
+}
+function closeLoadingModel(){
+    const modal = document.getElementById('loading-modal');
+    modal.style.display = 'none';
+}
+function displayStatusModal(msg, success){
+    const modal = document.querySelector('.modal-status');
+    if(success){
+        console.log("success");
+        document.querySelector(".modal-status-content").classList.add("success");
+        document.querySelector(".modal-status-content").classList.remove("error");
+        document.querySelector("#close-status-modal-btn").classList.remove("error-btn");
+        document.querySelector("#close-status-modal-btn").classList.add("success-btn");
+    }else{
+        console.log("fail");
+        document.querySelector(".modal-status-content").classList.remove("success");
+        document.querySelector(".modal-status-content").classList.add("error");
+        document.querySelector("#close-status-modal-btn").classList.add("error-btn");
+        document.querySelector("#close-status-modal-btn").classList.remove("success-btn");
+    }
+    document.querySelector(".status-msg").innerHTML = msg;   
+    document.querySelector("#close-status-modal-btn").addEventListener("click", () => { 
+        window.location.reload();
+    });
+    modal.style.display = 'block';
+
+}
+

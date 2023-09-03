@@ -1,30 +1,5 @@
 const {Sequelize, Op} = require('sequelize');
 const {connectDB} = require('./helperController')
-// var db = {}
-// var warehouseTable = db.warehouses;
-
-// async function connectDB(username, password) {
-//     const sequelize = new Sequelize("test", username, password, {
-//         host: "127.0.0.1",
-//         dialect: "mysql"
-//     });
-
-//     db.Sequelize = Sequelize;
-//     db.sequelize = sequelize;
-
-//     db.warehouses = require("../models/Warehouses.js")(sequelize, Sequelize);
-
-//     warehouseTable = db.warehouses;
-
-//     await db.sequelize.sync()
-//     .then(() => {
-//             console.log("Synced db.");
-//           })
-//     .catch((err) => {
-//         console.log("Failed to sync db: " + err.message);
-//     });
-// }
-
 // Create and Save a new Tutorial
 exports.create = async (req, res) => {
     
@@ -37,7 +12,7 @@ exports.create = async (req, res) => {
     // Save Tutorial in the database
     warehouseTable.create(req.body.query)
         .then( (result) => {
-            res.send(result);
+            res.status(200).send(result);
         })
         .catch(err => {
             res.status(500).send({
@@ -51,13 +26,12 @@ exports.create = async (req, res) => {
 exports.findAll = async (req, res) => {
     const userCredential = req.body.user_credential;
     const body = req.body;
-    console.log(req.body);
-    // await connectDB(userCredential.username, userCredential.password)
+    console.log(body)
     warehouseTable = await connectDB(body.user_credential, require("../models/Warehouses.js"));
     warehouseTable.findAll(
         {
-            offset: body.offset,
-            limit: body.limit
+            offset: body.query.offset,
+            limit: body.query.limit
         }
     )
         .then(result => {
@@ -73,72 +47,101 @@ exports.findAll = async (req, res) => {
 
 // Find all data has attribute search_att contains searchStr
 exports.search = async function (req, res) {
-    const userCredential = req.body.user_credential;
-
+    const body = req.body;
+  
     warehouseTable = await connectDB(body.user_credential, require("../models/Warehouses.js"));
-
-    let searchAtt = req.body.query.search_attribute;
-    let searchStr = req.body.query.search_string;
-
-    var searchParams = {};
-
-    searchParams[searchAtt] = {
-        [Op.like]: '%' + searchStr + '%'
-    };
-
-    warehouseTable.findAll({
-        limit: 10,
-        where: searchParams
-    })
-    .then(result => {
+  
+    let searchConditions = body.query;
+  
+    let searchParams = {};
+  
+    if (searchConditions.hasOwnProperty("search")) {
+      searchParams['where'] = {
+        [searchConditions.search.search_attribute]: {
+          [Op.like]: '%' + searchConditions.search.search_string + '%'
+        }
+      };
+    }
+  
+    if (searchConditions.hasOwnProperty("order")) {
+      searchParams['order'] = [searchConditions.order];
+    }
+    console.log(searchConditions)   
+    warehouseTable
+      .findAll({
+        offset: searchConditions.offset,
+        limit: searchConditions.limit,
+        // Only include 'where' and 'order' in the searchParams object if they exist
+        ...(searchParams.where && { where: searchParams.where }),
+        ...(searchParams.order && { order: searchParams.order }),
+      })
+      .then((result) => {
         res.send(result);
-    })
-    .catch(err => {
+      })
+      .catch((err) => {
         res.status(500).send({
-          message:
-            err.message || "Some error occurred while retrieving data."
+          message: err.message || "Some error occurred while retrieving data.",
         });
       });
-};
+  };
+  
 
 // Update a Tutorial by the id in the request
 exports.update = async (req, res) => {
-    const userCredential = req.body.user_credential;
-
+    const body = req.body;
+    console.log(body)
     warehouseTable = await connectDB(body.user_credential, require("../models/Warehouses.js"));
 
-    let object = req.body.query;
+    let newObject = req.body.query;
 
     let filter = { where: {
-        warehouse_id : object.warehouse_id
+        warehouse_id : newObject.warehouse_id
     }};
 
     // Delete the id attribute from update data
-    delete object.warehouse_id;
+    delete newObject.warehouse_id;
 
-    let update = object
+    let update = newObject;
 
     // Handle when updated volume smaller than the occupying
-    // if (object.volume < )
+    const oldData = await warehouseTable.findOne(filter);
+
+    // If new total volume smaller than the volume occupied by product(s)
+    if (newObject.volume < (oldData.volume - oldData.available_volume) ) {
+        res.send({
+            message: "ERROR: New volume value smaller than current occupied volume."
+        });
+
+        return;
+    }
+
+    // Deny update the available_volume
+    if (newObject.available_volume != oldData.available_volume) {
+        res.send({
+            message: "ERROR: Cannot manually update available volume."
+        });
+
+        return;
+    }
 
     warehouseTable.update(
-        update,
-        filter
-    )
-    .then(result => {
-        res.send(result);
-    })
-    .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while updating data."
+            update,
+            filter
+        )
+        .then(result => {
+            res.status(200).send(result);
+        })
+        .catch(err => {
+            res.status(500).send({
+            message:
+                err.message || "Some error occurred while updating data."
+            });
         });
-      });
 };
 
 // Delete a Tutorial with the specified id in the request
 exports.delete = async (req, res) => {
-    const userCredential = req.body.user_credential;
+    const body = req.body;
 
     warehouseTable = await connectDB(body.user_credential, require("../models/Warehouses.js"));
 
@@ -190,3 +193,4 @@ exports.delete = async (req, res) => {
         });
       });
 };
+
