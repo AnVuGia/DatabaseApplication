@@ -19,4 +19,5 @@ const product = {
     return response.data;
   },
 };
+
 export default product;
