@@ -1,11 +1,15 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
-
+const cors = require('cors');
 const port = 3000;
+
 const appRoute = require('./routes/appRoute');
 const userRoute = require('./routes/userRoute');
 const shopRoute = require('./routes/shopRoute');
+const productRoute = require('./routes/productRoute');
+const categoryRoute = require('./routes/categoryRoute');
+const warehouseRoute = require('./routes/warehouseRoute');
 const warehouse = require('./routes/warehouseRoute');
 const db = require('./models');
 const app = express();
