@@ -4,10 +4,9 @@ const admin_credentials = require('../config/credentials').admin_credentials;
 const seller_credentials = require('../config/credentials').seller_credentials;
 const customer_credentials =
   require('../config/credentials').customer_credentials;
-const guest_credentials = require('../config/credentials').guest_credentials;
+const auth_credentials = require('../config/credentials').auth_credentials;
 const bcrypt = require('bcrypt');
 
-const cookieParser = require('cookie-parser');
 exports.getHello = (req, res) => {
   res.sendFile('index.html', { root: 'views' });
 };
@@ -16,10 +15,10 @@ exports.getLogin = async (req, res) => {
   await res.cookie(
     'session',
     {
-      username: guest_credentials.username,
-      password: guest_credentials.password,
+      username: auth_credentials.username,
+      password: auth_credentials.password,
     },
-    { maxAge: 900000, httpOnly: true, secure: true, sameSite: true }
+    { maxAge: 900000, path: '/login' }
   );
 };
 exports.getSignup = (req, res) => {
@@ -107,7 +106,7 @@ exports.loginAccount = async (req, res) => {
             username: model.credentials.username,
             password: model.credentials.password,
           },
-          { maxAge: 900000, httpOnly: true, secure: true, sameSite: true }
+          { maxAge: 900000, httpOnly: true, secure: true }
         );
 
         await res.json({

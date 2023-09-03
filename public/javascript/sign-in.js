@@ -4,7 +4,11 @@ const password = document.querySelector('.password');
 const passwordEl = document.querySelector('.error-password');
 const signUp = document.querySelector('#btn-sign-up');
 const submit = document.querySelector('#btn-sign-in');
-import { getSessionCookie } from './Module/cookieUtils.js';
+import {
+  getSessionCookie,
+  getCookieValue,
+  parseJSONCookie,
+} from './Module/cookieUtils.js';
 import auth from './Module/auth.js';
 const credential = {
   username: 'lazada_auth',
@@ -48,11 +52,14 @@ submit.addEventListener('click', async (event) => {
     event.preventDefault();
     passwordError();
   }
-  const sessionData = getSessionCookie();
+
+  const sessionData = getCookieValue('session');
+  console.log(sessionData);
   if (!sessionData) {
-    window.location.href = '/login';
+    console.log('No session data found.');
+    return;
   }
-  const session = await JSON.parse(sessionData);
+  const session = await parseJSONCookie(sessionData);
   console.log(session);
   const data = {
     user_credential: session,
