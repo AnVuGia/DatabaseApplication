@@ -12,6 +12,7 @@ const warehouseRoute = require('./routes/warehouseRoute');
 const categoryRoute = require('./routes/categoryRoute');
 const db = require('./models');
 const app = express();
+const session = require('express-session');
 
 const fs = require('fs');
 const { default: mongoose } = require('mongoose');
@@ -30,10 +31,18 @@ mongodb.once('open', () => console.log('Connected to Database'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// middle ware below may not be needed
-// app.use(express.static(path.join(__dirname, 'views')));
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  secret: 'secret',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { 
+    domain: '.localhost',
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+    path: '/',
+   }
+}))
 app.use('/', appRoute);
 app.use('/user', userRoute);
 app.use('/shop', shopRoute);

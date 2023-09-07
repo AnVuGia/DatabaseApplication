@@ -8,6 +8,7 @@ const widthEl = document.querySelector('.product__width-input');
 const heightEl = document.querySelector('.product__height-input');
 const lengthEl = document.querySelector('.product__length-input');
 const tableBody = document.querySelector('#tablebody');
+ 
 import product from './Module/product-helper.js';
 let products = [];
 window.onload = async () => {
@@ -71,13 +72,13 @@ const productRow = (product) => {
         <td>${product.height}</td>
         <td>${product.length}</td>
           <td>
-                        <button class="edit-button">
-                          <i class="fa-solid fa-pen"></i>
-                        </button>
-                        <button class="delete-button">
-                          <i class="fa-solid fa-trash"></i>
-                        </button>
-                      </td>
+        <button class="edit-button">
+          <i class="fa-solid fa-pen"></i>
+        </button>
+        <button class="delete-button">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+         </td>
     </tr>
     `;
 };
