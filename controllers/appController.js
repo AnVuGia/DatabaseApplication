@@ -17,6 +17,7 @@ exports.getLogin = async (req, res) => {
   await res.sendFile('sign-in.html', { root: 'views' });
 };
 exports.getSignup = (req, res) => {
+  req.session.credentials = auth_credentials;
   res.sendFile('sign-up.html', { root: 'views' });
 };
 exports.signupAccount = async (req, res) => {
@@ -32,8 +33,8 @@ exports.signupAccount = async (req, res) => {
     } else {
       return res.json('Invalid role.'); // Handle unsupported roles
     }
-
-    const Table = await connectDB(req.session.credentials, model);
+    console.log(req.body);
+    const Table = await connectDB(req.body.user_credential, model);
     const password = hashPassword(body.info.password);
 
     const existingUser = await Table.findOne({
@@ -62,7 +63,6 @@ exports.signupAccount = async (req, res) => {
 
     res.status(200).json('User Created Successfully.');
   } catch (err) {
-    console.error(err);
     res.status(500).json('An error occurred during registration.');
   }
 };
@@ -115,7 +115,6 @@ exports.loginAccount = async (req, res) => {
         });
         return;
       }
-
       console.log('User not found');
       res.status(500).json('Your username or password is invalid.');
     }

@@ -28,15 +28,15 @@ async function connectDB(username, password) {
 
 // Create and Save a new Tutorial
 exports.create = async (req, res) => {
-  const userCredential = req.body.user_credential;
+  const userCredential = req.session.credentials;
   console.log(req.body.query);
   await connectDB(userCredential.username, userCredential.password);
 
   req.body.query['unit_in_stock'] = req.body.query.quantity;
-  req.body.query['unit_on_order'] = "0";
+  req.body.query['unit_on_order'] = '0';
   console.log(req.body.query);
   // Save Tutorial in the database
-    console.log(productTable)
+  console.log(productTable);
   productTable
     .create(req.body.query)
     .then((newProduct) => {
@@ -54,7 +54,7 @@ exports.create = async (req, res) => {
 
 // Retrieve all Tutorials from the database.
 exports.findAll = async (req, res) => {
-  const userCredential = req.body.user_credential;
+  const userCredential = req.session.credentials;
 
   await connectDB(userCredential.username, userCredential.password);
 
@@ -72,7 +72,7 @@ exports.findAll = async (req, res) => {
 
 // Find all data has attribute search_att contains searchStr
 exports.search = async function (req, res) {
-  const userCredential = req.body.user_credential;
+  const userCredential = req.session.credentials;
 
   await connectDB(userCredential.username, userCredential.password);
 
@@ -102,14 +102,14 @@ exports.search = async function (req, res) {
 
 // Update a Tutorial by the id in the request
 exports.update = async (req, res) => {
-  const userCredential = req.body.user_credential;
+  const userCredential = req.session.credentials;
 
   await connectDB(userCredential.user_name, userCredential.password);
 };
 
 // Delete a Tutorial with the specified id in the request
 exports.delete = async (req, res) => {
-  const userCredential = req.body.user_credential;
+  const userCredential = req.session.credentials;
 
   await connectDB(userCredential.user_name, userCredential.password);
 };

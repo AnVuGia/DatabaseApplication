@@ -17,7 +17,6 @@ const auth = {
       username: 'lazada_guest',
       password: 'password',
     };
-
     const info = {
       username: username,
       password: password,
