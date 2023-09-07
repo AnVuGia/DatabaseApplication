@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const appController = require('../controllers/appController');
-
+const authJwt = require('../controllers/auth/roleAccess');
 router.get('/', appController.getHello);
-router.get('/login', appController.getLogin);
+router.get('/login', authJwt.isGuest, appController.getLogin);
 router.post('/login', appController.loginAccount);
 router.get('/signup', appController.getSignup);
 router.post('/signup', appController.signupAccount);
-router.get('/seller-product', appController.getSellerProduct);
-router.get('/seller-inbound', appController.getSellerInbound);
-router.get('/admin-inventory', appController.getAdminVentory);
-router.get('/admin-category', appController.getAdminCategory);
-router.get('/customers', appController.getCustomers);
+router.get('/seller-product', authJwt.isSeller, appController.getSellerProduct);
+router.get('/seller-inbound', authJwt.isSeller, appController.getSellerInbound);
+router.get('/admin-inventory', authJwt.isAdmin, appController.getAdminVentory);
+router.get('/admin-category', authJwt.isAdmin, appController.getAdminCategory);
+router.get('/customers', authJwt.isCustomer, appController.getCustomers);
 router.get('/product-detail', appController.getProductDetail);
 module.exports = router;
