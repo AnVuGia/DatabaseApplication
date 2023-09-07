@@ -78,7 +78,6 @@ exports.loginAccount = async (req, res) => {
 
   try {
     let found = false;
-
     for (const model of models) {
       const Table = await connectDB(
         auth_credentials,
@@ -109,11 +108,14 @@ exports.loginAccount = async (req, res) => {
         body.info.username === admin_account.username &&
         body.info.password === admin_account.password
       ) {
-        console.log('User found');
-        found = true;
         req.session.credentials = admin_credentials;
-        res.sendFile('admin-inventory.html', { root: 'views/adminView' });
+        await res.status(200).json({
+          role: 'admins',
+          account: admin_account,
+        });
+        return;
       }
+
       console.log('User not found');
       res.status(500).json('Your username or password is invalid.');
     }

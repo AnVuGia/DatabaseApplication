@@ -76,7 +76,7 @@ submit.addEventListener('click', async (event) => {
     } else if (responseData.role === 'customers') {
       window.location.href = './customers';
       sessionStorage.setItem('user', JSON.stringify(responseData.account));
-    }
+    } 
   }
 
 
