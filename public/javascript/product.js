@@ -8,11 +8,13 @@ const widthEl = document.querySelector('.product__width-input');
 const heightEl = document.querySelector('.product__height-input');
 const lengthEl = document.querySelector('.product__length-input');
 const tableBody = document.querySelector('#tablebody');
+
 import product from './Module/product-helper.js';
 let products = [];
 window.onload = async () => {
   addSideBarHtmlForSeller();
-  const temp = await product.getProducts();
+  const currentUser = sessionStorage.getItem('user');
+  const temp = await product.getProductBySeller(currentUser.seller_id);
   products = [...temp];
   console.log(temp);
   console.log(tableBody);
@@ -71,13 +73,13 @@ const productRow = (product) => {
         <td>${product.height}</td>
         <td>${product.length}</td>
           <td>
-                        <button class="edit-button">
-                          <i class="fa-solid fa-pen"></i>
-                        </button>
-                        <button class="delete-button">
-                          <i class="fa-solid fa-trash"></i>
-                        </button>
-                      </td>
+        <button class="edit-button">
+          <i class="fa-solid fa-pen"></i>
+        </button>
+        <button class="delete-button">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+         </td>
     </tr>
     `;
 };

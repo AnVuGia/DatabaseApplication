@@ -52,17 +52,7 @@ submit.addEventListener('click', async (event) => {
     event.preventDefault();
     passwordError();
   }
-
-  const sessionData = getCookieValue('session');
-  console.log(sessionData);
-  if (!sessionData) {
-    console.log('No session data found.');
-    return;
-  }
-  const session = await parseJSONCookie(sessionData);
-  console.log(session);
   const data = {
-    user_credential: session,
     info: {
       username: userName.value,
       password: password.value,
@@ -86,7 +76,7 @@ submit.addEventListener('click', async (event) => {
     } else if (responseData.role === 'customers') {
       window.location.href = './customers';
       sessionStorage.setItem('user', JSON.stringify(responseData.account));
-    }
+    } 
   }
 
 

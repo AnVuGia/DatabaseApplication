@@ -5,23 +5,19 @@ const seller_credentials = require('../config/credentials').seller_credentials;
 const customer_credentials =
   require('../config/credentials').customer_credentials;
 const auth_credentials = require('../config/credentials').auth_credentials;
+const admin_account = require('../config/credentials').admin_account;
 const bcrypt = require('bcrypt');
 
 exports.getHello = (req, res) => {
   res.sendFile('index.html', { root: 'views' });
 };
 exports.getLogin = async (req, res) => {
+  req.session.credentials = auth_credentials;
+  req.session.save();
   await res.sendFile('sign-in.html', { root: 'views' });
-  await res.cookie(
-    'session',
-    {
-      username: auth_credentials.username,
-      password: auth_credentials.password,
-    },
-    { maxAge: 900000, path: '/login' }
-  );
 };
 exports.getSignup = (req, res) => {
+  req.session.credentials = auth_credentials;
   res.sendFile('sign-up.html', { root: 'views' });
 };
 exports.signupAccount = async (req, res) => {
@@ -37,8 +33,8 @@ exports.signupAccount = async (req, res) => {
     } else {
       return res.json('Invalid role.'); // Handle unsupported roles
     }
-
-    const Table = await connectDB(body.user_credential, model);
+    console.log(req.body);
+    const Table = await connectDB(req.body.user_credential, model);
     const password = hashPassword(body.info.password);
 
     const existingUser = await Table.findOne({
@@ -65,9 +61,8 @@ exports.signupAccount = async (req, res) => {
 
     const newUser = await Table.create(account);
 
-    res.json('User Created Successfully.');
+    res.status(200).json('User Created Successfully.');
   } catch (err) {
-    console.error(err);
     res.status(500).json('An error occurred during registration.');
   }
 };
@@ -82,11 +77,10 @@ exports.loginAccount = async (req, res) => {
   ];
 
   try {
-    let found = false; // Initialize a flag to track if a user is found
-
+    let found = false;
     for (const model of models) {
       const Table = await connectDB(
-        body.user_credential,
+        auth_credentials,
         require(`../models/${model.name}`)
       );
       const user = await Table.findOne({
@@ -100,16 +94,8 @@ exports.loginAccount = async (req, res) => {
       if (match) {
         console.log('User found');
         found = true;
-        await res.cookie(
-          'session',
-          {
-            username: model.credentials.username,
-            password: model.credentials.password,
-          },
-          { maxAge: 900000 }
-        );
-
-        await res.json({
+        req.session.credentials = model.credentials;
+        await res.status(200).json({
           role: model.name.toLowerCase(),
           account: user,
         });
@@ -118,12 +104,23 @@ exports.loginAccount = async (req, res) => {
     }
 
     if (!found) {
+      if (
+        body.info.username === admin_account.username &&
+        body.info.password === admin_account.password
+      ) {
+        req.session.credentials = admin_credentials;
+        await res.status(200).json({
+          role: 'admins',
+          account: admin_account,
+        });
+        return;
+      }
       console.log('User not found');
-      res.json('Your username or password is invalid.');
+      res.status(500).json('Your username or password is invalid.');
     }
   } catch (err) {
     console.error('in error');
-    res.json(err); // Handle errors and send an error response
+    res.json(err);
   }
 };
 
