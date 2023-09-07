@@ -37,12 +37,25 @@ exports.search = async function (req, resp) {
         resp.status(500).json({message: err.message});
     }
 };
+exports.searchByName = async function (req, resp) {
+    let searchValue = req.body.name;
+
+    try {
+        const results = await Category.find({ name: new RegExp(searchValue, 'i') });
+        resp.json(results);
+    } catch (err) {
+        resp.status(500).json({ message: err.message });
+    }
+};
+
+
 
 // Find specify doc in collection to update
 // return the un updated version of doc
 exports.update = async function (req, resp) {
-    let category = req.body;
 
+    let category = req.body;
+    console.log( `update ${category} `  );
     let filter = {
         _id : category._id
     };
@@ -54,7 +67,6 @@ exports.update = async function (req, resp) {
 
     try {
         const results = await Category.findByIdAndUpdate(filter, update);
-        console.log(results);
         resp.json(results);
     } 
     catch (err) {
@@ -79,6 +91,8 @@ exports.delete = async function (req, resp) {
 
 // Create new Category by passing Categroy into request body
 exports.createCategory = async function (req, resp) {
+    console.log(req.body);
+
     const category = new Category({
         name: req.body.name,
         parent: req.body.parent,

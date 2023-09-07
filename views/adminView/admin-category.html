@@ -32,8 +32,8 @@
                     <div class="main-inventory__update">
                         
                         <div class="main-inventory__container-header" style="">
-                            <h3 class ="current-category" style="margin-top: 20px;">Current Parrent Category: ....</h2>
-                            <input class="product-input" type="text" placeholder="Please enter category's name...">
+                            <h3 class ="current-category" style="margin-top: 20px;">Category List</h2>
+                            <input class="category-searcg-input" type="text" placeholder="Please enter category's name...">
                         </div>
                         <table>
                             <thead>
@@ -67,22 +67,37 @@
                 </div>
             </div>
             <div class="backdrop" id="backdrop"></div>
-            <div class="modal" id="modal">
+            <div class="modal"  id="modal">
                 <div class="modal-content-update">
                     <h2 style="text-align: center;">Add New Category</h2>
                     <div class="modal__main-content">
                         <div class="modal__update-item" style="margin-bottom: 10px;">
                             <label class="product__item-info product__name">Name</label>
-                            <input class="product__input-modal inventory__name-input" id="product__name--update"
+                            <input class="product__input-modal inventory__name-input" id="category-name-form-input"
                                 type="text">
                         </div>
+                        <div class="attribute-section" style="margin-top: 30px;">
+                            <h3 style="margin: 15px 0px;">Attributes</h1>
+                            <div>
+                                <label for="">Attribute Name</label>
+                                <input class = "category-input"  type="text">
+                                <button class="add-category-input-button " id ="add-category-input"><i class="fa-solid fa-plus"></i></button>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="modal__footer"
                         style="display: flex; margin-top: auto;padding: 10px; justify-content: flex-end;">
                         <button class="modal__button modal__button--cancel closeModalButton">Cancel</button>
-                        <button class="modal__button modal__button--save ">Save</button>
+                        <button class="modal__button modal__button--save" id = "category-input-save-button">Save</button>
                     </div>
 
+                </div>
+            </div>
+            <div id="loading-modal" class="loading-modal">
+                <div class="modal-content">
+                    <div class="loader"></div>
+                    <p style="margin: auto;">Loading...</p>
                 </div>
             </div>
             <div class="confirmation-backdrop" id="backdrop"></div>
@@ -101,11 +116,11 @@
                 </div>
             </div>
             <div id="status-modal" class="modal-status">
-                <div class="modal-status-content success">
-                    <p class = "status-msg">Operation Successful</p>
-                    <button class ="error-btn" id="close-status-modal-btn">Close</button>
-                </div>
+            <div class="modal-status-content success">
+                <p class = "status-msg">Operation Successful</p>
+                <button class ="error-btn" id="close-status-modal-btn">Close</button>
             </div>
+        </div>
         </div>
 
     </div>

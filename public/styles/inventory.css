@@ -123,14 +123,25 @@ td button:nth-child(3) {
 td button:nth-child(4) {
     background-color:  #0298cf;
 }
-
+td button:nth-child(5) {
+    background-color:  #0298cf;
+}
 td button:nth-child(1):hover {
     background-color: #058bbb;
 }
-
 td button:nth-child(2):hover {
     background-color: #bb2a2a;
 }
+td button:nth-child(3):hover {
+    background-color: #058bbb;
+}
+td button:nth-child(4):hover {
+    background-color: #058bbb;
+}
+td button:nth-child(5):hover {
+    background-color: #058bbb;
+}
+
 
 /* Pagination */
 .pagination {
