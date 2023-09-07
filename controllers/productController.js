@@ -99,6 +99,26 @@ exports.search = async function (req, res) {
       });
     });
 };
+// productController.js
+exports.getAllProductBySeller = async function (req, res) {
+  const userCredential = req.session.credentials;
+  const seller_id = req.body.seller_id;
+  await connectDB(userCredential.username, userCredential.password);
+  productTable
+    .findAll({
+      where: {
+        seller_id: seller_id,
+      },
+    })
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || 'Some error occurred while retrieving data.',
+      });
+    });
+};
 
 // Update a Tutorial by the id in the request
 exports.update = async (req, res) => {

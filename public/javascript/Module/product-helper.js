@@ -7,6 +7,12 @@ const product = {
     const response = await axios.post(`${API_URL}/findAll`, {});
     return response.data;
   },
+  async getProductBySeller(id) {
+    const response = await axios.post(`${API_URL}/find`, {
+      seller_id: id,
+    });
+    return response.data;
+  },
   async createProduct(product) {
     const response = await axios.post(`${API_URL}/create`, {
       query: product,
