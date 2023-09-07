@@ -7,11 +7,18 @@ const nameEl = document.querySelector('.product__name-input');
 const widthEl = document.querySelector('.product__width-input');
 const heightEl = document.querySelector('.product__height-input');
 const lengthEl = document.querySelector('.product__length-input');
+const tableBody = document.querySelector('#tablebody');
 import product from './Module/product-helper.js';
 let products = [];
 window.onload = async () => {
   addSideBarHtmlForSeller();
-  products = await product.getProducts();
+  const temp = await product.getProducts();
+  products = [...temp];
+  console.log(temp);
+  console.log(tableBody);
+  products.forEach((product) => {
+    tableBody.innerHTML += productRow(product);
+  });
 };
 deleteProductButton.addEventListener('click', () => {
   displayConfirmationModal(
@@ -20,18 +27,27 @@ deleteProductButton.addEventListener('click', () => {
   );
 });
 addProductButton.addEventListener('click', () => {
-  displayConfirmationModal('Are you sure you want to add this product?', () => {
-    const product = {
-      name: nameEl.value,
-      description: descriptionEl.value,
-      price: priceEl.value,
-      quantity: quantityEl.value,
-      width: widthEl.value,
-      height: heightEl.value,
-      length: lengthEl.value,
-    };
-    console.log(product);
-  });
+  displayConfirmationModal(
+    'Are you sure you want to add this product?',
+    async () => {
+      const currentUser = sessionStorage.getItem('user');
+      const currentUserJSON = JSON.parse(currentUser);
+      console.log(currentUser);
+      const product_temp = {
+        product_name: nameEl.value,
+        product_desc: descriptionEl.value,
+        price: priceEl.value,
+        seller_id: currentUserJSON.seller_id,
+        quantity: quantityEl.value,
+        category_id: '1',
+        width: widthEl.value,
+        height: heightEl.value,
+        length: lengthEl.value,
+      };
+      await product.createProduct(product_temp);
+      console.log(product_temp);
+    }
+  );
 });
 const openModalButton = document.querySelector('.edit-button');
 openModalButton.addEventListener('click', () => {
@@ -43,8 +59,25 @@ selectDetector(
   'main-product__update',
   'main-product__add'
 );
-const productRow = () => {
-  const productRow = document.createElement('tr');
-  productRow.classList.add('product__row');
-  return productRow;
+const productRow = (product) => {
+  return `
+    <tr>
+        <td>${product.product_id}</td>
+        <td>${product.product_name}</td>
+        <td>${product.product_desc}</td>
+        <td>${product.price}</td>
+ 
+        <td>${product.width}</td>
+        <td>${product.height}</td>
+        <td>${product.length}</td>
+          <td>
+                        <button class="edit-button">
+                          <i class="fa-solid fa-pen"></i>
+                        </button>
+                        <button class="delete-button">
+                          <i class="fa-solid fa-trash"></i>
+                        </button>
+                      </td>
+    </tr>
+    `;
 };

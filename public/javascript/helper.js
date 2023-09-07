@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> c8ea3d468ae6fbb933f74390a03628f910354f2c
 const sideBarContainer = document.querySelector('.sidebar');
 const cofirmationBackdrop = document.querySelector('.confirmation-backdrop');
 const confirmationModal = document.querySelector('.confirmation-modal');
@@ -160,6 +165,13 @@ function addSideBarHtmlForSeller() {
   };
 }
 
+<<<<<<< HEAD
+=======
+
+
+
+
+>>>>>>> c8ea3d468ae6fbb933f74390a03628f910354f2c
 function displayLoadingModel(){
     const modal = document.getElementById('loading-modal');
     modal.style.display = 'block';
