@@ -48,7 +48,6 @@ exports.findAll = async (req, res) => {
 // Find all data has attribute search_att contains searchStr
 exports.search = async function (req, res) {
     const body = req.body;
-  
     warehouseTable = await connectDB(body.user_credential, require("../models/Warehouses.js"));
   
     let searchConditions = body.query;

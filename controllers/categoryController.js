@@ -65,11 +65,9 @@ exports.update = async function (req, resp) {
 // Delete by id
 exports.delete = async function (req, resp) {
     let category = req.body;
-
     let filter = {
         _id : category._id
     };
-
     try {
         const results = await Category.findOneAndDelete(filter);
         resp.json(results);
@@ -81,8 +79,6 @@ exports.delete = async function (req, resp) {
 
 // Create new Category by passing Categroy into request body
 exports.createCategory = async function (req, resp) {
-    console.log(req.body.parent);
-
     const category = new Category({
         name: req.body.name,
         parent: req.body.parent,

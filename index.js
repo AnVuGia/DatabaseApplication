@@ -8,9 +8,8 @@ const appRoute = require('./routes/appRoute');
 const userRoute = require('./routes/userRoute');
 const shopRoute = require('./routes/shopRoute');
 const productRoute = require('./routes/productRoute');
-const categoryRoute = require('./routes/categoryRoute');
 const warehouseRoute = require('./routes/warehouseRoute');
-const warehouse = require('./routes/warehouseRoute');
+const categoryRoute = require('./routes/categoryRoute');
 const db = require('./models');
 const app = express();
 
@@ -39,7 +38,8 @@ app.use('/', appRoute);
 app.use('/user', userRoute);
 app.use('/shop', shopRoute);
 app.use('/product', productRoute);
-app.use('/warehouse', warehouse);
+app.use('/warehouse', warehouseRoute);
+app.use('/category', categoryRoute);
 db.sequelize.sync().then((req) => {
   const server = app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);

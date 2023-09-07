@@ -1,5 +1,3 @@
-const { get } = require('mongoose');
-
 const sideBarContainer = document.querySelector('.sidebar');
 const cofirmationBackdrop = document.querySelector('.confirmation-backdrop');
 const confirmationModal = document.querySelector('.confirmation-modal');
@@ -162,10 +160,6 @@ function addSideBarHtmlForSeller() {
   };
 }
 
-
-}
-
-
 function displayLoadingModel(){
     const modal = document.getElementById('loading-modal');
     modal.style.display = 'block';
@@ -198,3 +192,10 @@ function displayStatusModal(msg, success){
 
 }
 
+function processRequest(res, msg){
+    if(res.status == 500){
+        displayStatusModal(res.data.message, false);
+    }else{
+        displayStatusModal(msg, true);
+    }
+}

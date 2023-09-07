@@ -44,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     unit_on_order: {
       type: DataTypes.INTEGER,
-    },
+    }
   });
   Products.associate = function (models) {
     // associations can be defined here

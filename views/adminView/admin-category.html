@@ -32,20 +32,19 @@
                     <div class="main-inventory__update">
                         
                         <div class="main-inventory__container-header" style="">
-                            <h3 style="margin-top: 20px;">Current Parrent Category: ....</h2>
+                            <h3 class ="current-category" style="margin-top: 20px;">Current Parrent Category: ....</h2>
                             <input class="product-input" type="text" placeholder="Please enter category's name...">
                         </div>
                         <table>
                             <thead>
                                 <tr>
-                                    
                                     <th name="inventory-name">Description Name</th>
                                     <th name="inventory-actions">Actions</th>
                                 </tr>
                             </thead>
 
-                            <tbody>
-                                <tr>
+                            <tbody class="category-list">
+                                <!-- <tr>
                                     <td>Electronic</td>
                                     <td>
                                         <button class="add-category-button"><i class="fa-solid fa-plus"></i></button>
@@ -59,7 +58,7 @@
                                     <td>
                                         <button class="add-category-button"><i class="fa-solid fa-plus"></i></button>
                                     </td>
-                                </tr>
+                                </tr> -->
 
 
                             </tbody>
@@ -97,15 +96,21 @@
                         style="display: flex; margin-top: auto;padding: 10px; justify-content: flex-end;">
                         <button class="modal__button modal__button--cancel"
                             id="button__cancel-confirmation">Cancel</button>
-                        <button class="modal__button modal__button--save" id="delete-button">Yes</button>
+                        <button class="modal__button modal__button--save modal__button--yes" id="delete-button">Yes</button>
                     </div>
+                </div>
+            </div>
+            <div id="status-modal" class="modal-status">
+                <div class="modal-status-content success">
+                    <p class = "status-msg">Operation Successful</p>
+                    <button class ="error-btn" id="close-status-modal-btn">Close</button>
                 </div>
             </div>
         </div>
 
     </div>
     <script src="/javascript/helper.js"></script>
-    <script src="/javascript/category.js"></script>
+    <script type="module" src="/javascript/category.js"></script>
     
 </body>
 
