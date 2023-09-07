@@ -9,7 +9,9 @@ const product = {
   },
   async getProductBySeller(id) {
     const response = await axios.post(`${API_URL}/find`, {
-      seller_id: id,
+      query: {
+        seller_id: id,
+      },
     });
     return response.data;
   },

@@ -102,7 +102,10 @@ exports.search = async function (req, res) {
 // productController.js
 exports.getAllProductBySeller = async function (req, res) {
   const userCredential = req.session.credentials;
-  const seller_id = req.body.seller_id;
+  const seller_id = req.body.query.seller_id;
+  console.log('request body: ');
+  console.log(req.body);
+  console.log('Seller id: ' + seller_id);
   await connectDB(userCredential.username, userCredential.password);
   productTable
     .findAll({

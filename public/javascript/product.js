@@ -14,7 +14,8 @@ let products = [];
 window.onload = async () => {
   addSideBarHtmlForSeller();
   const currentUser = sessionStorage.getItem('user');
-  const temp = await product.getProductBySeller(currentUser.seller_id);
+  const currentUserJSON = JSON.parse(currentUser);
+  const temp = await product.getProductBySeller(currentUserJSON.seller_id);
   products = [...temp];
   console.log(temp);
   console.log(tableBody);
@@ -47,6 +48,7 @@ addProductButton.addEventListener('click', () => {
         length: lengthEl.value,
       };
       await product.createProduct(product_temp);
+      window.location.reload();
       console.log(product_temp);
     }
   );
