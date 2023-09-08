@@ -18,6 +18,11 @@ const categorySchema = new Schema({
                 type: String,
                 required: true
             }
+            ,
+            "required": {
+                type: Boolean,
+                required: true
+            }
         }
     ]
     

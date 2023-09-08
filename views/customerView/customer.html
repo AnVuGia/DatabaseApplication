@@ -1,264 +1,274 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
-    <link rel="stylesheet" href="/styles/customer.css" />
-    <link rel="stylesheet" href="/styles/base.css" />
-    <link rel="stylesheet" href="/styles/item-card.css" />
-    <title>Document</title>
-  </head>
-  <body style="background-color: var(--background)">
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-      <div class="container-fluid d-flex">
-        <div class="container__logo">
-          <a class="navbar-brand" href="#">
-            <img
-              class="navbar-brand__logo"
-              src="/image/lazada.png"
-              alt="Lazada Logo"
-            />
-          </a>
-        </div>
-        <form style="flex: 1" class="d-flex" role="search">
-          <input
-            style="font-size: 1.6rem; height: 45px"
-            class="form-control me-2"
-            type="search"
-            placeholder="Search"
-            aria-label="Search"
-          />
-          <button
-            class="btn btn-outline-success"
-            type="submit"
-            style="font-size: 1.4rem; width: 100px"
-          >
-            Search
-          </button>
-          <div class="d-flex" style="width: 100px">
-            <i
-              class="fa-solid fa-cart-shopping fa-5x m-auto"
-              style="color: #000000"
-            ></i>
-          </div>
-        </form>
+`
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="/styles/customer.css" />
+  <link rel="stylesheet" href="/styles/base.css" />
+  <link rel="stylesheet" href="/styles/item-card.css" />
+  <link rel="stylesheet" href="/styles/modal.css" />
+  <title>Document</title>
+</head>
+
+<body style="background-color: var(--background)">
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid d-flex">
+      <div class="container__logo">
+        <a class="navbar-brand" href="#">
+          <img class="navbar-brand__logo" src="/image/lazada.png" alt="Lazada Logo" />
+        </a>
       </div>
-    </nav>
-    <div class="category_container d-flex">
-      <div
-        style="width: 160px; cursor: pointer"
-        class="d-flex category-container__list"
-      >
-        <div class="category-block__title">Categories</div>
-        <i class="fa-solid fa-chevron-down m-auto fa-2x"></i>
-        <div style="" class="container-bridge"></div>
-        <div class="category_container__first-order">
-          <div class="category-1st__item category-item d-flex">
-            <p class="m-auto" style="padding-right: 8px">Electronic Devices</p>
-            <i class="fa-solid fa-chevron-right m-auto"></i>
+      <form style="flex: 1" class="d-flex" role="search">
+        <input style="font-size: 1.6rem; height: 45px" class="form-control me-2" type="search" placeholder="Search"
+          aria-label="Search" />
+        <button class="btn btn-outline-success" type="submit" style="font-size: 1.4rem; width: 100px">
+          Search
+        </button>
+        <div class="d-flex" style="width: 100px">
+          <i class="fa-solid fa-cart-shopping fa-5x m-auto" style="color: #000000"></i>
+        </div>
+      </form>
+    </div>
+  </nav>
+  <div class="category_container d-flex">
+    <div style="width: 160px; cursor: pointer" class="d-flex category-container__list">
+      <div class="category-block__title">Categories</div>
+      <i class="fa-solid fa-chevron-down m-auto fa-2x"></i>
+      <div style="" class="container-bridge"></div>
+      <div class="category_container__first-order">
+        <div class="category-1st__item category-item d-flex">
+          <p class="m-auto" style="padding-right: 8px">Electronic Devices</p>
+          <i class="fa-solid fa-chevron-right m-auto"></i>
+        </div>
+        <div class="category-1st__item category-item d-flex">
+          <p class="m-auto" style="padding-right: 8px">Electronic Devices</p>
+          <i class="fa-solid fa-chevron-right m-auto"></i>
+        </div>
+        <div class="category-1st__item category-item d-flex">
+          <p class="m-auto" style="padding-right: 8px">Electronic Devices</p>
+          <i class="fa-solid fa-chevron-right m-auto"></i>
+        </div>
+        <div class="category-1st__item category-item d-flex">
+          <p class="m-auto" style="padding-right: 8px">Electronic Devices</p>
+          <i class="fa-solid fa-chevron-right m-auto"></i>
+        </div>
+        <div class="category-1st__item category-item d-flex">
+          <p class="m-auto" style="padding-right: 8px">Electronic Devices</p>
+          <i class="fa-solid fa-chevron-right m-auto"></i>
+        </div>
+      </div>
+      <div class="container-bridge-2nd"></div>
+      <div class="category_container__second-order">
+        <div class="category-item d-flex">
+          <p class="m-auto" style="padding-right: 8px">Electronic Devices</p>
+          <i class="fa-solid fa-chevron-right m-auto"></i>
+        </div>
+        <div class="category-item d-flex">
+          <p class="m-auto" style="padding-right: 8px">Electronic Devices</p>
+          <i class="fa-solid fa-chevron-right m-auto"></i>
+        </div>
+        <div class="category-item d-flex">
+          <p class="m-auto" style="padding-right: 8px">Electronic Devices</p>
+          <i class="fa-solid fa-chevron-right m-auto"></i>
+        </div>
+        <div class="category-item d-flex">
+          <p class="m-auto" style="padding-right: 8px">Electronic Devices</p>
+          <i class="fa-solid fa-chevron-right m-auto"></i>
+        </div>
+        <div class="category-item d-flex">
+          <p class="m-auto" style="padding-right: 8px">Electronic Devices</p>
+          <i class="fa-solid fa-chevron-right m-auto"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="main-block__container d-flex">
+    <div class="d-none d-sm-block main-block__filter-container">
+      <!-- category filter -->
+      <div class="filter-block__category">
+        <div class="category-block__default">
+          <p class="fw-bold" style="font-size: 1.4rem">Category</p>
+          <p class="category-block__item">Category</p>
+          <p class="category-block__item">Category</p>
+          <p class="category-block__item">Category</p>
+          <p class="category-block__item">Category</p>
+        </div>
+        <div class="category-block__addition">
+          <p class="category-block__item">Category</p>
+          <p class="category-block__item">Category</p>
+          <p class="category-block__item">Category</p>
+          <p class="category-block__item">Category</p>
+          <p class="category-block__item">Category</p>
+        </div>
+      </div>
+      <div class="divider" style="width: 100%; margin: 10px 0px"></div>
+
+      <div class="filter-block__brand">
+        <p class="fw-bold" style="font-size: 1.4rem">Brand</p>
+        <div class="brand-block__default">
+          <div class="filter-block__brand-item">
+            <input type="checkbox" name="" id="" />
+            <label for="">Apple</label>
           </div>
-          <div class="category-1st__item category-item d-flex">
-            <p class="m-auto" style="padding-right: 8px">Electronic Devices</p>
-            <i class="fa-solid fa-chevron-right m-auto"></i>
+          <div class="filter-block__brand-item">
+            <input type="checkbox" name="" id="" />
+            <label for="">Samsung</label>
           </div>
-          <div class="category-1st__item category-item d-flex">
-            <p class="m-auto" style="padding-right: 8px">Electronic Devices</p>
-            <i class="fa-solid fa-chevron-right m-auto"></i>
+          <div class="filter-block__brand-item">
+            <input type="checkbox" name="" id="" />
+            <label for="">Oppo</label>
           </div>
-          <div class="category-1st__item category-item d-flex">
-            <p class="m-auto" style="padding-right: 8px">Electronic Devices</p>
-            <i class="fa-solid fa-chevron-right m-auto"></i>
-          </div>
-          <div class="category-1st__item category-item d-flex">
-            <p class="m-auto" style="padding-right: 8px">Electronic Devices</p>
-            <i class="fa-solid fa-chevron-right m-auto"></i>
+          <div class="filter-block__brand-item">
+            <input type="checkbox" name="" id="" />
+            <label for="">Apple</label>
           </div>
         </div>
-        <div class="container-bridge-2nd"></div>
-        <div class="category_container__second-order">
-          <div class="category-item d-flex">
-            <p class="m-auto" style="padding-right: 8px">Electronic Devices</p>
-            <i class="fa-solid fa-chevron-right m-auto"></i>
+        <div class="brand-block__addition">
+          <div class="filter-block__brand-item">
+            <input type="checkbox" name="" id="" />
+            <label for="">Apple</label>
           </div>
-          <div class="category-item d-flex">
-            <p class="m-auto" style="padding-right: 8px">Electronic Devices</p>
-            <i class="fa-solid fa-chevron-right m-auto"></i>
+          <div class="filter-block__brand-item">
+            <input type="checkbox" name="" id="" />
+            <label for="">Samsung</label>
           </div>
-          <div class="category-item d-flex">
-            <p class="m-auto" style="padding-right: 8px">Electronic Devices</p>
-            <i class="fa-solid fa-chevron-right m-auto"></i>
+          <div class="filter-block__brand-item">
+            <input type="checkbox" name="" id="" />
+            <label for="">Oppo</label>
           </div>
-          <div class="category-item d-flex">
-            <p class="m-auto" style="padding-right: 8px">Electronic Devices</p>
-            <i class="fa-solid fa-chevron-right m-auto"></i>
+        </div>
+      </div>
+
+      <div class="divider" style="width: 100%; margin: 10px 0px"></div>
+
+      <!-- location filter  -->
+      <div class="filter-block__location">
+        <p class="fw-bold" style="font-size: 1.4rem">Location</p>
+        <div class="location-block__default">
+          <div class="filter-block__brand-item">
+            <input type="checkbox" name="" id="" />
+            <label for="">Ho Chi Minh</label>
           </div>
-          <div class="category-item d-flex">
-            <p class="m-auto" style="padding-right: 8px">Electronic Devices</p>
-            <i class="fa-solid fa-chevron-right m-auto"></i>
+          <div class="filter-block__brand-item">
+            <input type="checkbox" name="" id="" />
+            <label for="">Ha Noi</label>
+          </div>
+          <div class="filter-block__brand-item">
+            <input type="checkbox" name="" id="" />
+            <label for="">Ninh Thuan</label>
+          </div>
+          <div class="filter-block__brand-item">
+            <input type="checkbox" name="" id="" />
+            <label for="">Ca Mau</label>
+          </div>
+        </div>
+        <div class="location-block__addition">
+          <div class="filter-block__brand-item">
+            <input type="checkbox" name="" id="" />
+            <label for="">Binh Thuan</label>
+          </div>
+          <div class="filter-block__brand-item">
+            <input type="checkbox" name="" id="" />
+            <label for="">Tay Nguyen</label>
+          </div>
+          <div class="filter-block__brand-item">
+            <input type="checkbox" name="" id="" />
+            <label for="">Oppo</label>
+          </div>
+        </div>
+      </div>
+      <div class="divider" style="width: 100%; margin: 10px 0px"></div>
+
+      <div class="filter-block__price">
+        <p class="fw-bold" style="font-size: 1.4rem">Price</p>
+        <div class="price-block__container d-flex w-100">
+          <input class="price-input__" type="number" name="" id="" placeholder="MIN" min="0" />
+          <div class="m-auto px-1" style="width: 5px; height: 1px; background-color: gray"></div>
+          <input class="price-input__ me-1" type="number" name="" id="" placeholder="MAX" />
+          <div class="d-flex search-price__button" style="">
+            <i class="fa-solid fa-play m-auto" style="font-size: 20px; color: #ffffff"></i>
           </div>
         </div>
       </div>
     </div>
-    <div class="divider"></div>
-    <div class="main-block__container d-flex">
-      <div class="d-none d-sm-block main-block__filter-container">
-        <!-- category filter -->
-        <div class="filter-block__category">
-          <div class="category-block__default">
-            <p class="fw-bold" style="font-size: 1.4rem">Category</p>
-            <p class="category-block__item">Category</p>
-            <p class="category-block__item">Category</p>
-            <p class="category-block__item">Category</p>
-            <p class="category-block__item">Category</p>
-          </div>
-          <div class="category-block__addition">
-            <p class="category-block__item">Category</p>
-            <p class="category-block__item">Category</p>
-            <p class="category-block__item">Category</p>
-            <p class="category-block__item">Category</p>
-            <p class="category-block__item">Category</p>
-          </div>
-        </div>
-        <div class="divider" style="width: 100%; margin: 10px 0px"></div>
-
-        <div class="filter-block__brand">
-          <p class="fw-bold" style="font-size: 1.4rem">Brand</p>
-          <div class="brand-block__default">
-            <div class="filter-block__brand-item">
-              <input type="checkbox" name="" id="" />
-              <label for="">Apple</label>
+    <div class="main-block__product_list d-flex">
+      <div class="container-list">
+        <div class="card__item">
+          <img class="img-item" src="https://down-vn.img.susercontent.com/file/6db97a22ffdf63960cdb0fe349877cc9" alt=""
+            srcset="" />
+          <div class="card-info__container">
+            <div class="card-info__item-name">
+              Sim 4G Ốp Điện Thoại Nhựa Dẻo In Logo Thương Hiệu Cho iPhone 11
+              / 12 / 13 Promax 6 / 7 / 8 Plus / X / XR / Xs Max
             </div>
-            <div class="filter-block__brand-item">
-              <input type="checkbox" name="" id="" />
-              <label for="">Samsung</label>
-            </div>
-            <div class="filter-block__brand-item">
-              <input type="checkbox" name="" id="" />
-              <label for="">Oppo</label>
-            </div>
-            <div class="filter-block__brand-item">
-              <input type="checkbox" name="" id="" />
-              <label for="">Apple</label>
-            </div>
-          </div>
-          <div class="brand-block__addition">
-            <div class="filter-block__brand-item">
-              <input type="checkbox" name="" id="" />
-              <label for="">Apple</label>
-            </div>
-            <div class="filter-block__brand-item">
-              <input type="checkbox" name="" id="" />
-              <label for="">Samsung</label>
-            </div>
-            <div class="filter-block__brand-item">
-              <input type="checkbox" name="" id="" />
-              <label for="">Oppo</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="divider" style="width: 100%; margin: 10px 0px"></div>
-
-        <!-- location filter  -->
-        <div class="filter-block__location">
-          <p class="fw-bold" style="font-size: 1.4rem">Location</p>
-          <div class="location-block__default">
-            <div class="filter-block__brand-item">
-              <input type="checkbox" name="" id="" />
-              <label for="">Ho Chi Minh</label>
-            </div>
-            <div class="filter-block__brand-item">
-              <input type="checkbox" name="" id="" />
-              <label for="">Ha Noi</label>
-            </div>
-            <div class="filter-block__brand-item">
-              <input type="checkbox" name="" id="" />
-              <label for="">Ninh Thuan</label>
-            </div>
-            <div class="filter-block__brand-item">
-              <input type="checkbox" name="" id="" />
-              <label for="">Ca Mau</label>
-            </div>
-          </div>
-          <div class="location-block__addition">
-            <div class="filter-block__brand-item">
-              <input type="checkbox" name="" id="" />
-              <label for="">Binh Thuan</label>
-            </div>
-            <div class="filter-block__brand-item">
-              <input type="checkbox" name="" id="" />
-              <label for="">Tay Nguyen</label>
-            </div>
-            <div class="filter-block__brand-item">
-              <input type="checkbox" name="" id="" />
-              <label for="">Oppo</label>
-            </div>
-          </div>
-        </div>
-        <div class="divider" style="width: 100%; margin: 10px 0px"></div>
-
-        <div class="filter-block__price">
-          <p class="fw-bold" style="font-size: 1.4rem">Price</p>
-          <div class="price-block__container d-flex w-100">
-            <input
-              class="price-input__"
-              type="number"
-              name=""
-              id=""
-              placeholder="MIN"
-              min="0"
-            />
-            <div
-              class="m-auto px-1"
-              style="width: 5px; height: 1px; background-color: gray"
-            ></div>
-            <input
-              class="price-input__ me-1"
-              type="number"
-              name=""
-              id=""
-              placeholder="MAX"
-            />
-            <div class="d-flex search-price__button" style="">
-              <i
-                class="fa-solid fa-play m-auto"
-                style="font-size: 20px; color: #ffffff"
-              ></i>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="main-block__product_list d-flex">
-        <div class="container-list">
-          <div class="card__item">
-            <img
-              class="img-item"
-              src="https://down-vn.img.susercontent.com/file/6db97a22ffdf63960cdb0fe349877cc9"
-              alt=""
-              srcset=""
-            />
-            <div class="card-info__container">
-              <div class="card-info__item-name">
-                Sim 4G Ốp Điện Thoại Nhựa Dẻo In Logo Thương Hiệu Cho iPhone 11
-                / 12 / 13 Promax 6 / 7 / 8 Plus / X / XR / Xs Max
-              </div>
-              <div class="card-info__price">đ17.000 - đ35.000</div>
-              <div class="card-info__location">Hà Nội</div>
-            </div>
+            <div class="card-info__price">đ17.000 - đ35.000</div>
+            <div class="card-info__location">Hà Nội</div>
           </div>
         </div>
       </div>
     </div>
-    <script src="/javascript/customer.js"></script>
-  </body>
+  </div>
+  <div id="loading-modal" class="loading-modal">
+    <div class="modal-content">
+        <div class="loader"></div>
+        <p style="margin: auto;">Loading...</p>
+    </div>
+</div>
+<div class="confirmation-backdrop" id="backdrop"></div>
+<div class="confirmation-modal" id="modal">
+    <div class="modal-confirmation">
+        <h2 style="text-align: center;">Confirmation</h2>
+        <div class="modal__main-content confirmation-message">
+            <p>Are you sure you want to delete this product?</p>
+        </div>
+        <div class="modal__footer"
+            style="display: flex; margin-top: auto;padding: 10px; justify-content: flex-end;">
+            <button class="modal__button modal__button--cancel"
+                id="button__cancel-confirmation">Cancel</button>
+            <button class="modal__button modal__button--save modal__button--yes" id="delete-button">Yes</button>
+        </div>
+    </div>
+</div>
+<div id="status-modal" class="modal-status">
+<div class="modal-status-content success">
+    <p class = "status-msg">Operation Successful</p>
+    <button class ="error-btn" id="close-status-modal-btn">Close</button>
+</div>
+<div class="backdrop" id="backdrop"></div>
+            <div class="modal"  id="modal">
+                <div class="modal-content-update">
+                    <h2 style="text-align: center;">Add New Category</h2>
+                    <div class="modal__main-content">
+                        <div class="modal__update-item" style="margin-bottom: 10px;">
+                            <label class="product__item-info product__name">Name</label>
+                            <input class="product__input-modal inventory__name-input" id="category-name-form-input"
+                                type="text">
+                        </div>
+                        <div class="attribute-section" style="margin-top: 30px;">
+                            <h3 style="margin: 15px 0px;">Attributes</h1>
+                            <div>
+                                <label for="">Attribute Name</label>
+                                <input class = "category-input"  type="text">
+                                <button class="add-category-input-button " id ="add-category-input"><i class="fa-solid fa-plus"></i></button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal__footer"
+                        style="display: flex; margin-top: auto;padding: 10px; justify-content: flex-end;">
+                        <button class="modal__button modal__button--cancel closeModalButton">Cancel</button>
+                        <button class="modal__button modal__button--save" id = "category-input-save-button">Save</button>
+                    </div>
+
+                </div>
+            </div>
+    <script   src="/javascript/helper.js"></script>
+    <script type="module" src="/javascript/customer.js"></script>
+</body>
+
 </html>

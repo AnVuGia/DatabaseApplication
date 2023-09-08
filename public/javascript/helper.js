@@ -1,13 +1,15 @@
 const sideBarContainer = document.querySelector('.sidebar');
 const cofirmationBackdrop = document.querySelector('.confirmation-backdrop');
 const confirmationModal = document.querySelector('.confirmation-modal');
-const closeModalButton = document.querySelector('.closeModalButton');
+
 const backdrop = document.querySelector('.backdrop');
 const modal = document.querySelector('.modal');
+const closeModalButton = document.querySelector('.closeModalButton');
 closeModalButton.addEventListener('click', () => {
   backdrop.style.display = 'none';
   modal.style.display = 'none';
 });
+
 
 function displayConfirmationModal(message, callback) {
   const confirmationMessage = document.querySelector('.confirmation-message');

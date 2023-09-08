@@ -4,6 +4,7 @@ const password = document.querySelector('.password');
 const passwordEl = document.querySelector('.error-password');
 const signUp = document.querySelector('#btn-sign-up');
 const submit = document.querySelector('#btn-sign-in');
+
 import {
   getSessionCookie,
   getCookieValue,
