@@ -21,7 +21,7 @@ async function connectDB(username, password) {
 
   db.products = require('../models/Products.js')(sequelize, Sequelize);
   db.product_location = require("../models/ProductLocation.js")(sequelize, Sequelize);
-  db.warehouse = require("../models/Warehouse.js")(sequelize, Sequelize);
+  db.warehouse = require("../models/Warehouses.js")(sequelize, Sequelize);
 
   productTable = db.products;
   productLocationTable = db.product_location;

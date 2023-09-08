@@ -137,7 +137,7 @@ exports.getAdminCategory = (req, res) => {
   res.sendFile('admin-category.html', { root: 'views/adminView' });
 };
 exports.getCustomers = (req, res) => {
-  res.sendFile('customer.html', { root: 'views' });
+  res.sendFile('customer.html', { root: 'views/customerView' });
 };
 exports.getProductDetail = (req, res) => {
   res.sendFile('product-details-view.html', { root: 'views' });

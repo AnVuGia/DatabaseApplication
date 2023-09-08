@@ -35,3 +35,6 @@ const categoryModel = model("Category", categorySchema);
 // await categoryModel.createCollection();
 
 module.exports = categoryModel;
+
+
+// Compare this snippet from controllers/categoryController.js:
