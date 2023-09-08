@@ -148,20 +148,23 @@ exports.delete = async (req, res) => {
         warehouse_id: req.body.query.warehouse_id
     };
 
-    warehouseTable.findAll({
-        limit: 1,
+    warehouseTable.findOne({
         where: filterParam
     })
     .then(warehouse => {
-        // Cannot find any matching
-        if (warehouse.length < 1) {
+        // Cannot find the warehouse by id
+        if (warehouse == null) {
             res.status(500).send({
                 message: "Can't find warehouse with specified id."
               });
+
+            return;
         }
         
+        warehouse = warehouse.dataValues;
+        
         // If found warehouse is empty
-        else if (warehouse.volume == warehouse.available_volume) {
+        if (warehouse.volume == warehouse.available_volume) {
             warehouseTable.destroy({
                 where: filterParam
             })
