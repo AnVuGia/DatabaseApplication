@@ -14,6 +14,7 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="/styles/modal.css">
     <title>Sign up Page</title>
 </head>
 <body>
@@ -69,6 +70,22 @@
         </div>
         
     </div>
+     <div class="confirmation-backdrop" id="backdrop"></div>
+            <div class="confirmation-modal" id="modal">
+                <div class="modal-confirmation">
+                    <h2 style="text-align: center;">Confirmation</h2>
+                    <div class="modal__main-content confirmation-message">
+                        <p>Are you sure you want to delete this product?</p>
+                    </div>
+                    <div class="modal__footer"
+                        style="display: flex; margin-top: auto;padding: 10px; justify-content: flex-end;">
+                        <button class="modal__button modal__button--cancel"
+                            id="button__cancel-confirmation">Cancel</button>
+                        <button class="modal__button modal__button--save modal__button--yes" id="delete-button">Yes</button>
+                    </div>
+                </div>
+            </div>
+            <script src="/javascript/helper.js"></script>
         <script type="module" defer src="/javascript/sign-up.js"></script>
     
   </body>

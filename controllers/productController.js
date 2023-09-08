@@ -1,5 +1,5 @@
 const { Sequelize, Op } = require('sequelize');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const util = require('util');
 
 var db = {};
@@ -20,8 +20,11 @@ async function connectDB(username, password) {
   db.sequelize = sequelize;
 
   db.products = require('../models/Products.js')(sequelize, Sequelize);
-  db.product_location = require("../models/ProductLocation.js")(sequelize, Sequelize);
-  db.warehouse = require("../models/Warehouses.js")(sequelize, Sequelize);
+  db.product_location = require('../models/ProductLocation.js')(
+    sequelize,
+    Sequelize
+  );
+  db.warehouse = require('../models/Warehouses.js')(sequelize, Sequelize);
 
   productTable = db.products;
   productLocationTable = db.product_location;
@@ -29,17 +32,17 @@ async function connectDB(username, password) {
 
   // Establish connection for mysql
   mysqlConnection = await mysql.createConnection({
-    host: "127.0.0.1",
-    dialect: "mysql",
+    host: '127.0.0.1',
+    dialect: 'mysql',
     user: username,
     password: password,
-    database: "test",
-    multipleStatements: true
+    database: 'lazada_database',
+    multipleStatements: true,
   });
 
-  mysqlConnection.connect(function(err) {
-      if (err) throw err;
-      console.log("Connected!");
+  mysqlConnection.connect(function (err) {
+    if (err) throw err;
+    console.log('Connected!');
   });
 
   mysqlQuery = util.promisify(mysqlConnection.query).bind(mysqlConnection);
@@ -66,8 +69,8 @@ exports.create = async (req, res) => {
   const product_volume = newObject.width * newObject.height * newObject.length;
 
   // Create a stored procedure
-    await mysqlConnection.query(
-        `
+  await mysqlConnection.query(
+    `
         DROP PROCEDURE IF EXISTS warehouse_selection;
         CREATE PROCEDURE warehouse_selection(IN p_id INT, product_volume INT, product_quantity INT, OUT success BOOLEAN)
         BEGIN  
@@ -133,81 +136,82 @@ exports.create = async (req, res) => {
             CLOSE cur;  
 
         END`,
-        
-        // Call back function execute after creating procedure
-        async function (err, result) {
-            if (err) throw err;
-            console.log("Created Store procedure successfully!");
 
-            var newID = 1, warehouse_selection_result;
+    // Call back function execute after creating procedure
+    async function (err, result) {
+      if (err) throw err;
+      console.log('Created Store procedure successfully!');
 
-            // Create product in product table to get id
-            await productTable.create(newObject)
-                // Call back function execute after creating product
-                .then( async (newProduct) => {
-                    newID = newProduct.product_id;
+      var newID = 1,
+        warehouse_selection_result;
 
-                    console.log(newID);
+      // Create product in product table to get id
+      await productTable
+        .create(newObject)
+        // Call back function execute after creating product
+        .then(async (newProduct) => {
+          newID = newProduct.product_id;
 
-                    // Call procedure to select suitable warehouse
-                    await mysqlConnection.query(
-                        `CALL warehouse_selection(${newID}, ${product_volume}, ${newObject.quantity}, @outParam);
+          console.log(newID);
+
+          // Call procedure to select suitable warehouse
+          await mysqlConnection.query(
+            `CALL warehouse_selection(${newID}, ${product_volume}, ${newObject.quantity}, @outParam);
                         SELECT @outParam AS success;`,
 
-                        // Call back function execute after getting result from procedure
-                        function (err, result) {
-                            if (err) {
-                                throw err;
-                            }
-                            else {
-                                // Get result from procedure
-                                warehouse_selection_result = result[1][0]['success'];
+            // Call back function execute after getting result from procedure
+            function (err, result) {
+              if (err) {
+                throw err;
+              } else {
+                // Get result from procedure
+                warehouse_selection_result = result[1][0]['success'];
 
-                                console.log(warehouse_selection_result);
+                console.log(warehouse_selection_result);
 
-                                // Check result
-                                // If all product are store successfully
-                                if (warehouse_selection_result == 1) {
-                                    res.send({
-                                        message: "Successfully create and select suitable warehouse."
-                                    });
-                                }
-                                // If all product are not able to store
-                                else {
-                                    // Delete product in table
-                                    productTable.destroy({
-                                        where: {
-                                            product_id: newID
-                                        }
-                                    })
-                                    .then( (result) => {
-                                        res.send({
-                                            message: "All warehouses do not have enough space(s) for product."
-                                        });
-                                    })
-                                    .catch(err => {
-                                        res.status(500).send({
-                                        message:
-                                            err.message || "Some error occurred while deleting data."
-                                        });
-                                    });
-                                }
-                            }
-                        }
-                    );
-
-                    
-                })
-                .catch(err => {
-                    res.status(500).send({
+                // Check result
+                // If all product are store successfully
+                if (warehouse_selection_result == 1) {
+                  res.send({
+                    message:
+                      'Successfully create and select suitable warehouse.',
+                  });
+                }
+                // If all product are not able to store
+                else {
+                  // Delete product in table
+                  productTable
+                    .destroy({
+                      where: {
+                        product_id: newID,
+                      },
+                    })
+                    .then((result) => {
+                      res.send({
                         message:
-                            err.message || "Some error occurred while creating the Product."
+                          'All warehouses do not have enough space(s) for product.',
+                      });
+                    })
+                    .catch((err) => {
+                      res.status(500).send({
+                        message:
+                          err.message ||
+                          'Some error occurred while deleting data.',
+                      });
                     });
-                });
-
-           
-        }
-    );
+                }
+              }
+            }
+          );
+        })
+        .catch((err) => {
+          res.status(500).send({
+            message:
+              err.message || 'Some error occurred while creating the Product.',
+          });
+        });
+    }
+  );
 };
 
 // Retrieve all Tutorials from the database.
@@ -283,65 +287,59 @@ exports.getAllProductBySeller = async function (req, res) {
 
 // Update a Product by the id in the request
 exports.update = async (req, res) => {
-  const userCredential = req.body.user_credential;
+  const userCredential = req.session.credentials;
 
   await connectDB(userCredential.user_name, userCredential.password);
 
   var newObj = req.body.query;
 
   const filterParam = {
-      where: {
-          product_id: newObj.product_id
-      }
-  }
+    where: {
+      product_id: newObj.product_id,
+    },
+  };
 
   // Get old data
-  oldObj = await productTable
-      .findOne(filterParam)
-      .catch(err => {
-          res.status(500).send({
-            message:
-              err.message || "Some error occurred while retrieving data."
-          });
-        });
+  oldObj = await productTable.findOne(filterParam).catch((err) => {
+    res.status(500).send({
+      message: err.message || 'Some error occurred while retrieving data.',
+    });
+  });
 
   // Check if product existed
   if (oldObj == null) {
-      res.status(500).send({
-          message: "The product with provided id is not existed!"
-          });
+    res.status(500).send({
+      message: 'The product with provided id is not existed!',
+    });
 
-      return;
+    return;
   }
 
   // Only allow to udpate some attribute
   const updateParam = {
-      product_name: newObj.product_name,
-      product_desc: newObj.product_desc,
-      image: newObj.image,
-      category_id: newObj.category_id,
-      price: newObj.price
-  }
+    product_name: newObj.product_name,
+    product_desc: newObj.product_desc,
+    image: newObj.image,
+    category_id: newObj.category_id,
+    price: newObj.price,
+  };
 
   // Update information
-  productTable.update(
-      updateParam,
-      filterParam
-  )
-  .then(result => {
-      res.send(result ? "Sucessfully" : "Some error occurred.");
-  })
-  .catch(err => {
+  productTable
+    .update(updateParam, filterParam)
+    .then((result) => {
+      res.send(result ? 'Sucessfully' : 'Some error occurred.');
+    })
+    .catch((err) => {
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving data."
+        message: err.message || 'Some error occurred while retrieving data.',
       });
     });
 };
 
 // Delete a Tutorial with the specified id in the request
 exports.delete = async (req, res) => {
-  const userCredential = req.body.user_credential;
+  const userCredential = req.session.credentials;
 
   await connectDB(userCredential.user_name, userCredential.password);
 
@@ -350,94 +348,92 @@ exports.delete = async (req, res) => {
 
   // Check para
   if (newObj.product_id == null) {
-      res.status(500).send({
-          message: "Missing product_id."
-          });
+    res.status(500).send({
+      message: 'Missing product_id.',
+    });
 
-      return;
+    return;
   }
 
   const filterParam = {
-      where: {
-          product_id: newObj.product_id
-      }
-  }
+    where: {
+      product_id: newObj.product_id,
+    },
+  };
 
   // Get the product from db
   const product = await productTable.findOne(filterParam);
 
   // Calculate the volume of product
-  const product_volume = product.width*product.length*product.height;
+  const product_volume = product.width * product.length * product.height;
 
   // Find all location of product in productLocation table
   let results = await productLocationTable.findAll(filterParam);
 
   // Loop through each row in produclocation table contain the product_id
   for (var i = 0; i < results.length; i++) {
-      // Find the correspond warehouse by warehouse_id
-      let warehouse = await warehouseTable.findOne({
-          where: {
-              warehouse_id: results[i].dataValues.warehouse_id
-          }
-      })
+    // Find the correspond warehouse by warehouse_id
+    let warehouse = await warehouseTable.findOne({
+      where: {
+        warehouse_id: results[i].dataValues.warehouse_id,
+      },
+    });
 
-      const updateVolume = warehouse.available_volume + (product_volume*results[i].dataValues.product_quantity);
-      // Prepare the update param for available_volume
-      const updateParam = {
-          available_volume: updateVolume
-      }
+    const updateVolume =
+      warehouse.available_volume +
+      product_volume * results[i].dataValues.product_quantity;
+    // Prepare the update param for available_volume
+    const updateParam = {
+      available_volume: updateVolume,
+    };
 
-      // Update available space in warehouse
-      try {
-          await warehouseTable.update(
-              updateParam,
-              {
-                  where: {
-                      warehouse_id: results[i].dataValues.warehouse_id
-                  }
-              }
-          )
+    // Update available space in warehouse
+    try {
+      await warehouseTable.update(updateParam, {
+        where: {
+          warehouse_id: results[i].dataValues.warehouse_id,
+        },
+      });
 
-          console.log(`Restored the space in warehosue ${warehouse.warehouse_id}`);
-      }
-      catch (err) {
-          res.status(500).send({
-              message:
-                  err.message || "Some error occurred while updating warehouse volume."
-              });
+      console.log(`Restored the space in warehosue ${warehouse.warehouse_id}`);
+    } catch (err) {
+      res.status(500).send({
+        message:
+          err.message || 'Some error occurred while updating warehouse volume.',
+      });
 
-          return;
-      }
+      return;
+    }
 
-      // Delete the row in productLocation table
-      try {
-          await productLocationTable.destroy({
-              where: {
-                  id: results[i].dataValues.id
-              }
-          })
-      }
-      catch (err) {
-          res.status(500).send({
-              message:
-                  err.message || "Some error occurred while deleting in product_location table"
-              });
+    // Delete the row in productLocation table
+    try {
+      await productLocationTable.destroy({
+        where: {
+          id: results[i].dataValues.id,
+        },
+      });
+    } catch (err) {
+      res.status(500).send({
+        message:
+          err.message ||
+          'Some error occurred while deleting in product_location table',
+      });
 
-          return;
-      }
+      return;
+    }
   }
 
   // Finally delete the product
-  productTable.destroy(filterParam)
-  .then( (result) => {
+  productTable
+    .destroy(filterParam)
+    .then((result) => {
       res.send({
-          message: "Delete product successfully!"
+        message: 'Delete product successfully!',
       });
-  })
-  .catch(err => {
+    })
+    .catch((err) => {
       res.status(500).send({
-          message:
-          err.message || "Some error occurred while deleting data."
+        message: err.message || 'Some error occurred while deleting data.',
       });
-  });
+    });
 };

@@ -67,6 +67,7 @@ submit.addEventListener('click', async (event) => {
     passwordEl.textContent = 'Incorrect password.';
     password.classList.add('invalid');
   } else {
+    displayStatusModal('Login successful', true);
     if (responseData.role === 'admins') {
       window.location.href = './admin-inventory';
       sessionStorage.setItem('user', JSON.stringify(responseData.account));
@@ -76,10 +77,8 @@ submit.addEventListener('click', async (event) => {
     } else if (responseData.role === 'customers') {
       window.location.href = './customers';
       sessionStorage.setItem('user', JSON.stringify(responseData.account));
-    } 
+    }
   }
-
-
 });
 
 // FORM VALIDATION FORMULAS //
