@@ -137,7 +137,3 @@ const onConfirmEditClick = async (product) => {
   await product_find.updateProduct(product_temp);
   window.location.reload();
 };
-modalSubmitButton.addEventListener('click', () => {
-  const product_id = sessionStorage.getItem('current-product');
-  onConfirmEditClick(product_id);
-});

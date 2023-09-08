@@ -24,7 +24,7 @@ async function connectDB(username, password) {
     sequelize,
     Sequelize
   );
-  db.warehouse = require('../models/Warehouse.js')(sequelize, Sequelize);
+  db.warehouse = require('../models/Warehouses.js')(sequelize, Sequelize);
 
   productTable = db.products;
   productLocationTable = db.product_location;
@@ -36,7 +36,7 @@ async function connectDB(username, password) {
     dialect: 'mysql',
     user: username,
     password: password,
-    database: 'test',
+    database: 'lazada_database',
     multipleStatements: true,
   });
 

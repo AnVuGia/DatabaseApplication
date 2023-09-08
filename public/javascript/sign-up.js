@@ -103,7 +103,12 @@ submit.addEventListener('click', async (event) => {
       userNameEl.textContent = 'Username already exists.';
       userName.classList.add('invalid');
     } else {
-      window.location.href = 'login';
+      displayConfirmationModal(
+        'Account created successfully. Please login.',
+        () => {
+          window.location.href = 'login';
+        }
+      );
     }
   }
 });
