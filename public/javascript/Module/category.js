@@ -7,10 +7,9 @@ const category = {
         const response = await axios.post(`${API_URL}/category/search`, query);
         return response;
     },
-    async findAll(user_credential, query) {
-    const response = await axios.post(`${API_URL}/warehouse/findAll`, {
-        user_credential: user_credential,
-        query: query
+    async findAll() {
+    const response = await axios.get(`${API_URL}/category/findAll`, {
+
     });
     return response;
     },

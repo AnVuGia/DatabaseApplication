@@ -216,9 +216,13 @@ exports.create = async (req, res) => {
 
 // Retrieve all Tutorials from the database.
 exports.findAll = async (req, res) => {
-  const userCredential = req.session.credentials;
+  // const userCredential = req.session.credentials;
+  // console.log(req.body)
+  // const userCredential = req.body.user_credentials;
 
-  await connectDB(userCredential.username, userCredential.password);
+  // await connectDB(userCredential.username, userCredential.password);
+
+  await connectDB("lazada_customer","password");
 
   productTable
     .findAll()
