@@ -7,7 +7,7 @@
 5. run the project with npm start
 6. go to localhost:3000
 7. Go to routes folder to see some sample route to use
-8. userRoutes start with /user and helloRoutes start with /hello
+8. application root is appRoute
 
 # Error Handling
 
