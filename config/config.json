@@ -1,6 +1,6 @@
 {
   "development": {
-    "username": "user-test",
+    "username": "user-lazada",
     "password": "12345",
     "database": "lazada_database",
     "host": "localhost",
