@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS Orders (
     seller_id bigint(10) NOT NULL,
     product_id bigint(10) NOT NULL,
     product_quantity INT NOT NULL,
-    product_price DOUBLE NOT NULL,
+    price DOUBLE NOT NULL,
 	createdAt datetime,
     updatedAt datetime
 );
