@@ -3,13 +3,14 @@
 }
 
 .card__item{
+    margin: 30px;
     margin: 10px;
-    max-width: 200px;
+    max-width: 300px;
     cursor: pointer;
 }
 .img-item{
     max-width: 100%;
-    width: 200px;
+    width: 300px;
 }
 .card-info__container{
     padding: 0px 5px;

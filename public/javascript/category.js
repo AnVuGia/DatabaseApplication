@@ -119,10 +119,16 @@ function prepareAddCategoryForm(parentId){
     //reset the category name input
     document.querySelector("#category-name-form-input").value = "";
 
+  
     //create Heading
-    const heading = document.createElement("h3")
-    heading.innerHTML = "Attributes";
+    const heading = document.createElement("div")
+    heading.style = "display:flex"
+    heading.innerHTML = `
+    <h3>Attributes</h3>
+    <h3 style = "margin-left:250px" >Require?</h3>
+    `
     form.appendChild(heading);
+
 
     //create attribute input
     inFiniteCreate(heading,null);
@@ -141,14 +147,15 @@ function prepareAddCategoryForm(parentId){
 
 }
 
-function inFiniteCreate(lastElement, attributeName){
+function inFiniteCreate(lastElement, attributeNameObject){
   //create attribute input  
   const divTobeAdded = createAttributeElemnt();
   lastElement.parentNode.insertBefore(divTobeAdded, lastElement.nextSibling);
   const button = divTobeAdded.querySelector("button");
 
-  if (attributeName != null){
-    divTobeAdded.querySelector("input").value = attributeName;
+  if (attributeNameObject != null){
+    divTobeAdded.querySelector("input").value = attributeNameObject.name;
+    divTobeAdded.querySelector(".myCheckbox").checked = attributeNameObject.required;
   }
 
   button.addEventListener("click", () => {
@@ -159,9 +166,10 @@ function inFiniteCreate(lastElement, attributeName){
 function createAttributeElemnt (){
     let attribute = document.createElement("div");
     attribute.innerHTML = `
-    <div style = "margin: 15px 0px;>
+    <div class = "input-div"  style = "margin: 15px 0px;>
     <label for="">Attribute Name</label>
     <input class = "category-input"  type="text">
+    <input style = "margin: 0px 30px;"  type="checkbox" class="myCheckbox">
     <button class="add-category-input-button" id ="add-category-input"><i class="fa-solid fa-plus"></i></button>
     </div>
     `;
@@ -174,11 +182,14 @@ function CreateCategoryObject(parentId, name){
     "parent": parentId,
     "attributes": []
   }
-  const input = document.querySelectorAll(".category-input");
-  for (let i = 0; i < input.length; i++) {
-    const attributeName = input[i].value.trim()
+  const container = document.querySelectorAll(".input-div");
+  for (let i = 0; i < container.length; i++) {
+    const firstInput = container[i].querySelector("input");
+    const secondInput = container[i].querySelector(".myCheckbox");
+    
+    const attributeName = firstInput.value.trim();
     if( attributeName.length > 0){
-      category.attributes.push({"name": input[i].value});
+      category.attributes.push({"name": attributeName, "required": secondInput.checked ? true : false});
     }
   }
   return category;
@@ -202,13 +213,17 @@ async function prepareUpdateCategoryForm(id){
   form.innerHTML = "";
 
    //create Heading
-   const name = document.createElement("h3")
-   name.innerHTML = "Attributes";
+   const name = document.createElement("div")
+   name.style = "display:flex"
+   name.innerHTML = `
+      <h3>Attributes</h3>
+      <h3 style = "margin-left:250px" >Require?</h3>
+   `
    form.appendChild(name);
 
     //create attribute input
     for (let i = 0; i < categoryObject.attributes.length; i++) {
-      inFiniteCreate(name,categoryObject.attributes[i].name);
+      inFiniteCreate(name,categoryObject.attributes[i]);
     }
     if (categoryObject.attributes.length == 0){
       inFiniteCreate(name,null);

@@ -1,6 +1,7 @@
 const deleteInventory = document.querySelector(".delete-button");
 const addInventoryButton = document.querySelector(".button_inventory--add");
 const inventoryContainer = document.querySelector(".inventory-list");
+
 import warehouse from './Module/warehouse.js';
 
 let offset = 0;

@@ -8,6 +8,7 @@ const widthEl = document.querySelector('.product__width-input');
 const heightEl = document.querySelector('.product__height-input');
 const lengthEl = document.querySelector('.product__length-input');
 const tableBody = document.querySelector('#tablebody');
+
 const modalSubmitButton = document.querySelector(
   '.modal__button modal__button--save'
 );

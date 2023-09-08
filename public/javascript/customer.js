@@ -1,3 +1,4 @@
+import productModule from "./Module/product-helper.js"
 
 function insertViewMoreButton (filterType){
     const container = document.querySelector(`.filter-block__${filterType}`)
@@ -28,26 +29,6 @@ document.addEventListener('DOMContentLoaded', function() {
    insertViewMoreButton('location')
 });
 
-// illustrate the page might delete later  
-const container = document.querySelector(".container-list")
-for (i = 0 ; i < 50;i++){
-  container.innerHTML += `
-  <div class="card__item">
-      <img class="img-item" src="https://down-vn.img.susercontent.com/file/6db97a22ffdf63960cdb0fe349877cc9" alt="" srcset="">
-      <div class="card-info__container">
-          <div class="card-info__item-name">
-              Sim 4G Ốp Điện Thoại Nhựa Dẻo In Logo Thương Hiệu Cho iPhone 11 / 12 / 13 Promax 6 / 7 / 8 Plus / X / XR / Xs Max
-          </div>
-          <div class="card-info__price">
-              đ17.000 - đ35.000
-          </div>
-          <div class="card-info__location">
-              Hà Nội
-          </div>
-      </div>
-  </div>
-`
-}
 
 const categoryList = document.querySelector(".category-container__list")
   categoryList.addEventListener("mouseenter",()=>{
@@ -79,6 +60,49 @@ const categoryList = document.querySelector(".category-container__list")
   categoryList.addEventListener("mouseleave",()=>{
     document.querySelector(".category_container__first-order").style.display = 'none'
 })
+
+
+async function getAllIem (){
+    displayLoadingModel()
+    let data = await productModule.getProducts()
+    closeLoadingModel()
+    displayItemList(data)
+}
+
+
+
+function displayItemList (itemList){
+
+  const container = document.querySelector(".container-list")
+  container.innerHTML = ""
+  for (let i = 0 ; i < itemList.length;i++){
+    container.appendChild(createItemCard(itemList[i]))
+    lastItem = container.lastElementChild
+    lastItem.addEventListener("click",()=>{
+    })
+  }
+}
+
+
+function createItemCard (item){
+  const card  = document.createElement("div")
+  card.className = "card__item"
+  card.innerHTML = `
+  <img class="img-item" src="${item.image}" alt="" srcset="">
+      <div class="card-info__container">
+          <div class="card-info__item-name">
+              ${item.product_name}
+          </div>
+          <div class="card-info__price">
+              ${item.price}
+          </div>
+      </div>
+      `
+  return card
+}
+
+getAllIem()
+
 
 
 

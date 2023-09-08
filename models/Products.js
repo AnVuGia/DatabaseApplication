@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     category_id: {
       type: DataTypes.STRING(24),
       allowNull: false,
-    },
+    }, // attribute_id { brand: aple }
     width: {
       type: DataTypes.INTEGER,
     },
