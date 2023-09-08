@@ -42,7 +42,10 @@
     background-color: white;
     left: 60px;
     top: 35px;
+    width: 150px;
+    height: 300px;
     z-index: 1;
+    overflow-y: auto;
     
 }
 .container-bridge{
@@ -52,7 +55,9 @@
 }
 .category-item{
     color: black;
-    padding: 3px 20px 3px 15px;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
     margin-bottom: 8px;
 }
 .category-item:hover{
@@ -64,7 +69,7 @@
     background-color: black;
     opacity: 0;
     left: 60px;
-    width: 10px;
+    width: 60px;
     top: 25px;
     z-index: 2;
 }
