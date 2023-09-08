@@ -21,6 +21,18 @@ const product = {
     });
     return response.data;
   },
+  async updateProduct(product) {
+    const response = await axios.post(`${API_URL}/update`, {
+      query: product,
+    });
+    return response.data;
+  },
+  async deleteProduct(product) {
+    const response = await axios.post(`${API_URL}/delete`, {
+      query: product,
+    });
+    return response.data;
+  },
 };
 
 export default product;

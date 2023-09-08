@@ -126,13 +126,44 @@ exports.getAllProductBySeller = async function (req, res) {
 // Update a Tutorial by the id in the request
 exports.update = async (req, res) => {
   const userCredential = req.session.credentials;
-
   await connectDB(userCredential.user_name, userCredential.password);
+  const id = req.body.query.product_id;
+  console.log(req.body.query);
+  productTable
+    .update(req.body.query, {
+      where: { product_id: id },
+    })
+    .then((num) => {
+      if (num == 1) {
+        res.send({
+          message: 'Tutorial was updated successfully.',
+        });
+      } else {
+        res.send({
+          message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found or req.body is empty!`,
+        });
+      }
+    });
 };
 
 // Delete a Tutorial with the specified id in the request
 exports.delete = async (req, res) => {
   const userCredential = req.session.credentials;
-
   await connectDB(userCredential.user_name, userCredential.password);
+  const id = req.body.query.product_id;
+  productTable
+    .destroy({
+      where: { product_id: id },
+    })
+    .then((num) => {
+      if (num == 1) {
+        res.send({
+          message: 'Tutorial was deleted successfully!',
+        });
+      } else {
+        res.send({
+          message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`,
+        });
+      }
+    });
 };
