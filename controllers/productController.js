@@ -461,3 +461,41 @@ exports.delete = async (req, res) => {
       });
     });
 };
+
+exports.filterProductByAttributeValue = async (req, res) => {
+  let searchAtt = req.body.query.search_attribute;
+  let searchStr = req.body.query.search_string;
+
+  // Search by value of attribute ignore case-sensitive
+  var searchParams = {
+      "attributes.value": {$regex: searchStr, $options: "i"}
+  };
+
+  try {
+      const results = await ProductAttributes.find(searchParams);
+
+      var products = [];
+
+      for (var i = 0; i < results.length; i++) {
+        const userCredential = req.session.credentials;
+
+        await connectDB(userCredential.user_name, userCredential.password);
+
+          var product = await productTable.findOne({
+              where: {
+                  product_id: results[i].product_id
+              }
+          });
+
+          product = product.dataValues;
+          product["attributes"] = results[i].attributes;
+
+          products.push(product);
+      }
+
+      res.json(products);
+  } 
+  catch (err) {
+      res.status(500).json({message: err.message});
+  }
+}
