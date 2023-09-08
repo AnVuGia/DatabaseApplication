@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 const util = require('util');
 
 var db = {};
-var productTable;   
+var productTable;
 var productLocationTable;
 var warehouseTable;
 
@@ -287,7 +287,7 @@ exports.getAllProductBySeller = async function (req, res) {
 
 // Update a Product by the id in the request
 exports.update = async (req, res) => {
-  const userCredential = req.body.user_credential;
+  const userCredential = req.session.credentials;
 
   await connectDB(userCredential.user_name, userCredential.password);
 
@@ -339,7 +339,7 @@ exports.update = async (req, res) => {
 
 // Delete a Tutorial with the specified id in the request
 exports.delete = async (req, res) => {
-  const userCredential = req.body.user_credential;
+  const userCredential = req.session.credentials;
 
   await connectDB(userCredential.user_name, userCredential.password);
 
