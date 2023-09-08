@@ -58,15 +58,11 @@ submit.addEventListener('click', async (event) => {
       password: password.value,
     },
   };
-  const responseData = await auth.login(data.info.username, data.info.password);
-  console.log(responseData);
-  if (responseData === 'User does not exist.') {
-    userNameEl.textContent = 'User does not exist.';
-    userName.classList.add('invalid');
-  } else if (responseData === 'Incorrect password.') {
-    passwordEl.textContent = 'Incorrect password.';
-    password.classList.add('invalid');
-  } else {
+  try {
+    const responseData = await auth.login(
+      data.info.username,
+      data.info.password
+    );
     displayStatusModal('Login successful', true);
     if (responseData.role === 'admins') {
       window.location.href = './admin-inventory';
@@ -78,6 +74,9 @@ submit.addEventListener('click', async (event) => {
       window.location.href = './customers';
       sessionStorage.setItem('user', JSON.stringify(responseData.account));
     }
+  } catch (error) {
+    console.log(error);
+    window.alert('Invalid username or password');
   }
 });
 

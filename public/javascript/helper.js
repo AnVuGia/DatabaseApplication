@@ -4,11 +4,12 @@ const confirmationModal = document.querySelector('.confirmation-modal');
 const closeModalButton = document.querySelector('.closeModalButton');
 const backdrop = document.querySelector('.backdrop');
 const modal = document.querySelector('.modal');
-closeModalButton.addEventListener('click', () => {
-  backdrop.style.display = 'none';
-  modal.style.display = 'none';
-});
-
+if (closeModalButton) {
+  closeModalButton.addEventListener('click', () => {
+    backdrop.style.display = 'none';
+    modal.style.display = 'none';
+  });
+}
 function displayConfirmationModal(message, callback) {
   const confirmationMessage = document.querySelector('.confirmation-message');
   confirmationMessage.innerHTML = `<p>${message}</p>`;

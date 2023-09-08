@@ -5,8 +5,6 @@ const cors = require('cors');
 const port = 3000;
 
 const appRoute = require('./routes/appRoute');
-const userRoute = require('./routes/userRoute');
-const shopRoute = require('./routes/shopRoute');
 const productRoute = require('./routes/productRoute');
 const warehouseRoute = require('./routes/warehouseRoute');
 const categoryRoute = require('./routes/categoryRoute');
@@ -31,21 +29,20 @@ mongodb.once('open', () => console.log('Connected to Database'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({
-  secret: 'secret',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { 
-    domain: '.localhost',
-    maxAge: 1000 * 60 * 60 * 24 * 7,
-    path: '/',
-   }
-}))
+app.use(
+  session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      domain: '.localhost',
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      path: '/',
+    },
+  })
+);
 app.use('/', appRoute);
-app.use('/user', userRoute);
-app.use('/shop', shopRoute);
 app.use('/product', productRoute);
 app.use('/warehouse', warehouseRoute);
 app.use('/category', categoryRoute);
