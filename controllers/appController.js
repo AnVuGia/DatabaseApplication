@@ -7,7 +7,7 @@ const customer_credentials =
 const auth_credentials = require('../config/credentials').auth_credentials;
 const admin_account = require('../config/credentials').admin_account;
 const bcrypt = require('bcrypt');
-
+const shopCartModel = require('../models/ShopCart');
 exports.getHello = (req, res) => {
   res.sendFile('index.html', { root: 'views' });
 };
@@ -60,7 +60,12 @@ exports.signupAccount = async (req, res) => {
     }
 
     const newUser = await Table.create(account);
-
+    const shopCart = await shopCartModel.create({
+      customer_id: newUser.customer_id,
+      products: [],
+    });
+    console.log(shopCart);
+    await shopCart.save();
     res.status(200).json('User Created Successfully.');
   } catch (err) {
     res.status(500).json('An error occurred during registration.');
