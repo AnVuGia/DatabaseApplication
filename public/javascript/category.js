@@ -81,7 +81,7 @@ function displayAllCategory(categories, isSearch = false){
     document.querySelector(".add-category-same-level").addEventListener("click",() =>{
         backdrop.style.display = "block";
         modal.style.display = "block";
-        prepareAddCategoryForm(categories[0].parent);
+        prepareAddCategoryForm( categories.length == 0 ? null :    categories[0].parent);
     }
     );
 }
