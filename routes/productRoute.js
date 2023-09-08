@@ -10,5 +10,6 @@ router.post('/update/:product_id', productController.update);
 router.post('/delete/:product_id', productController.delete);
 
 router.post('/create', productController.create);
+router.post('/createInbound', productController.createInboundOrder);
 
 module.exports = router;
