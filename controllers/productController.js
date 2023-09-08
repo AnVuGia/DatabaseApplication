@@ -1,6 +1,9 @@
 const { Sequelize, Op } = require('sequelize');
 const mysql = require('mysql');
+const mongoose = require("mongoose");
 const util = require('util');
+
+const ProductAttributes = require("../models/ProductAttribute");
 
 var db = {};
 var productTable;
@@ -67,6 +70,12 @@ exports.create = async (req, res) => {
   req.body.query['unit_on_order'] = '0';
   const newObject = req.body.query;
   const product_volume = newObject.width * newObject.height * newObject.length;
+
+  // Store attribute list seperately
+  const productAttributes = newObject.attributes;
+
+  // Remove attrbute list from create product data
+  delete newObject.attributes;
 
   // Create a stored procedure
   await mysqlConnection.query(
@@ -152,15 +161,13 @@ exports.create = async (req, res) => {
         .then(async (newProduct) => {
           newID = newProduct.product_id;
 
-          console.log(newID);
-
           // Call procedure to select suitable warehouse
           await mysqlConnection.query(
             `CALL warehouse_selection(${newID}, ${product_volume}, ${newObject.quantity}, @outParam);
                         SELECT @outParam AS success;`,
 
             // Call back function execute after getting result from procedure
-            function (err, result) {
+            async function (err, result) {
               if (err) {
                 throw err;
               } else {
@@ -172,10 +179,27 @@ exports.create = async (req, res) => {
                 // Check result
                 // If all product are store successfully
                 if (warehouse_selection_result == 1) {
-                  res.send({
-                    message:
-                      'Successfully create and select suitable warehouse.',
+                  const data = new ProductAttributes({
+                    product_id: newID,
+                    attributes: productAttributes
                   });
+
+                  try {
+                      const newData = await data.save();
+
+                      console.log("Sucessfully store attribute of product.");
+
+                      res.send({
+                          message: "Successfully create and select suitable warehouse."
+                      });
+
+                      return;
+                  }
+                  catch (err) {
+                      res.status(400).json({ mesage: err.message})
+
+                      return;
+                  }
                 }
                 // If all product are not able to store
                 else {
@@ -261,6 +285,7 @@ exports.search = async function (req, res) {
       });
     });
 };
+
 // productController.js
 exports.getAllProductBySeller = async function (req, res) {
   const userCredential = req.session.credentials;
