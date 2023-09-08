@@ -72,4 +72,13 @@ CREATE TABLE IF NOT EXISTS Admin (
     createdAt datetime,
     updatedAt datetime
 );
+CREATE TABLE IF NOT EXISTS product_location (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    product_id INT NOT NULL,
+    warehouse_id INT NOT NULL,
+    product_quantity INT,
+    createdAt TIMESTAMP,
+    updatedAt TIMESTAMP
+);
+
 

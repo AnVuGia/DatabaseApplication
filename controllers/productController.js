@@ -1,5 +1,5 @@
 const { Sequelize, Op } = require('sequelize');
-const mysql = require('mysql2');
+const mysql = require('mysql');
 const util = require('util');
 
 var db = {};
@@ -65,7 +65,7 @@ exports.create = async (req, res) => {
 
   req.body.query['unit_in_stock'] = req.body.query.quantity;
   req.body.query['unit_on_order'] = '0';
-
+  const newObject = req.body.query;
   const product_volume = newObject.width * newObject.height * newObject.length;
 
   // Create a stored procedure
@@ -264,7 +264,7 @@ exports.search = async function (req, res) {
 // productController.js
 exports.getAllProductBySeller = async function (req, res) {
   const userCredential = req.session.credentials;
-  const seller_id = req.body.query.seller_id;
+  const seller_id = req.params.seller_id;
   console.log('request body: ');
   console.log(req.body);
   console.log('Seller id: ' + seller_id);
@@ -288,14 +288,13 @@ exports.getAllProductBySeller = async function (req, res) {
 // Update a Product by the id in the request
 exports.update = async (req, res) => {
   const userCredential = req.session.credentials;
-
+  const product_id = req.params.product_id;
   await connectDB(userCredential.user_name, userCredential.password);
 
-  var newObj = req.body.query;
-
+  const newObj = req.body.query;
   const filterParam = {
     where: {
-      product_id: newObj.product_id,
+      product_id: product_id,
     },
   };
 
@@ -342,12 +341,12 @@ exports.delete = async (req, res) => {
   const userCredential = req.session.credentials;
 
   await connectDB(userCredential.user_name, userCredential.password);
-
+  const product_id = req.params.product_id;
   // Get the delete product_id
   var newObj = req.body.query;
 
   // Check para
-  if (newObj.product_id == null) {
+  if (product_id == null) {
     res.status(500).send({
       message: 'Missing product_id.',
     });
@@ -357,7 +356,7 @@ exports.delete = async (req, res) => {
 
   const filterParam = {
     where: {
-      product_id: newObj.product_id,
+      product_id: product_id,
     },
   };
 

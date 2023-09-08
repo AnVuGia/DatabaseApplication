@@ -8,11 +8,7 @@ const product = {
     return response.data;
   },
   async getProductBySeller(id) {
-    const response = await axios.post(`${API_URL}/find`, {
-      query: {
-        seller_id: id,
-      },
-    });
+    const response = await axios.post(`${API_URL}/find/${id}`, {});
     return response.data;
   },
   async createProduct(product) {
@@ -22,15 +18,21 @@ const product = {
     return response.data;
   },
   async updateProduct(product) {
-    const response = await axios.post(`${API_URL}/update`, {
-      query: product,
-    });
+    const response = await axios.post(
+      `${API_URL}/update/${product.product_id}`,
+      {
+        query: product,
+      }
+    );
     return response.data;
   },
   async deleteProduct(product) {
-    const response = await axios.post(`${API_URL}/delete`, {
-      query: product,
-    });
+    const response = await axios.post(
+      `${API_URL}/delete/${product.product_id}`,
+      {
+        query: product,
+      }
+    );
     return response.data;
   },
 };
