@@ -64,6 +64,8 @@ exports.signupAccount = async (req, res) => {
       customer_id: newUser.customer_id,
       products: [],
     });
+    newUser.shop_cart_id = shopCart.shop_cart_id;
+    newUser.save();
     console.log(shopCart);
     await shopCart.save();
     res.status(200).json('User Created Successfully.');
