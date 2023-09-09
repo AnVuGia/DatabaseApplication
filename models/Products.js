@@ -22,15 +22,18 @@ module.exports = (sequelize, DataTypes) => {
     category_id: {
       type: DataTypes.STRING(24),
       allowNull: false,
-    }, // attribute_id { brand: aple }
+    }, 
     width: {
       type: DataTypes.INTEGER,
+      allowNull: false,
     },
     length: {
       type: DataTypes.INTEGER,
+      allowNull: false,
     },
     height: {
       type: DataTypes.INTEGER,
+      allowNull: false,
     },
     price: {
       type: DataTypes.DECIMAL(10,2),
@@ -56,7 +59,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'product_id',
       as: 'orders',
     });
-    Products.hasMany(models.ProductWarehouse, {
+    Products.hasMany(models.ProductWarehouses, {
       foreignKey: 'product_id',
       as: 'productWarehouse',
     });

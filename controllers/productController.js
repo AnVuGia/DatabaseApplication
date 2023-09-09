@@ -23,7 +23,7 @@ async function connectDB(username, password) {
   db.sequelize = sequelize;
 
   db.products = require('../models/Products.js')(sequelize, Sequelize);
-  db.product_location = require('../models/ProductLocation.js')(
+  db.product_location = require('../models/ProductWarehouses.js')(
     sequelize,
     Sequelize
   );
@@ -214,22 +214,26 @@ exports.createInboundOrder = async (req, res) => {
 exports.create = async (req, res) => {
   const userCredential = req.session.credentials;
 
-  await connectDB(userCredential.username, userCredential.password);
+  // await connectDB(userCredential.username, userCredential.password);
+  await connectDB('lazada_seller', 'password');
+  
+  var newObject = {};
+    
 
+  newObject = req.body.query;
+  console.log(newObject);
   newObject.quantity = 0;
-    newObject["units_in_stock"] = 0;
-    newObject["units_on_order"] = 0;
-
-  const newObject = req.body.query;
-
+  newObject["units_in_stock"] = 0;
+  newObject["units_on_order"] = 0;
   // Store attribute list seperately
   const productAttributes = newObject.attributes;
-
+  
   // Remove attrbute list from create product data
   delete newObject.attributes;
-
+  console.log(newObject);
   // Create product in product table to get id
   await productTable.create(newObject)
+  
     .then( async (newProduct) => {
         const data = new ProductAttributes({
             product_id: newProduct.product_id,
@@ -238,7 +242,7 @@ exports.create = async (req, res) => {
 
         try {
             const newData = await data.save();
-
+            
             console.log("Sucessfully store attribute of product.");
 
             res.send({
@@ -318,7 +322,8 @@ exports.getAllProductBySeller = async function (req, res) {
   console.log('request body: ');
   console.log(req.body);
   console.log('Seller id: ' + seller_id);
-  await connectDB(userCredential.username, userCredential.password);
+  // await connectDB(userCredential.username, userCredential.password);
+  await connectDB("lazada_customer","password");
   productTable
     .findAll({
       where: {

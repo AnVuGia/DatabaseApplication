@@ -1,7 +1,7 @@
 const sideBarContainer = document.querySelector('.sidebar');
 const cofirmationBackdrop = document.querySelector('.confirmation-backdrop');
 const confirmationModal = document.querySelector('.confirmation-modal');
-
+const closeModalButton = document.querySelector('.closeModalButton');
 const backdrop = document.querySelector('.backdrop');
 const modal = document.querySelector('.modal');
 
@@ -199,7 +199,15 @@ function displayStatusModal(msg, success) {
     .addEventListener('click', () => {
       window.location.reload();
     });
+  if (document.querySelector('.return-btn')){
+    document.querySelector('.return-btn').addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+  }
+  
   modal.style.display = 'block';
+  
+  
 }
 
 function processRequest(res, msg) {
