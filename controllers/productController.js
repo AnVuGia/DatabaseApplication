@@ -84,17 +84,18 @@ exports.createInboundOrder = async (req, res) => {
 
     const inboundOrder = req.body.query;
 
-  await productTable.findOne({
+  await productTable
+    .findOne({
       where: {
-          product_id: inboundOrder.product_id
-      }
-  })
-  .then( async (product) => {
+        product_id: inboundOrder.product_id,
+      },
+    })
+    .then(async (product) => {
       const product_volume = product.width * product.height * product.length;
       const newID = product.product_id;
       // Create a stored procedure
       await mysqlConnection.query(
-          `
+        `
           DROP PROCEDURE IF EXISTS warehouse_selection;
           CREATE PROCEDURE warehouse_selection(IN p_id INT, product_volume INT, product_quantity INT, OUT success BOOLEAN)
           BEGIN  
@@ -160,84 +161,84 @@ exports.createInboundOrder = async (req, res) => {
               CLOSE cur;  
 
           END`,
-          // Call back function execute after creating procedure
-          async function (err, result) {
-              // Call procedure to select suitable warehouse
-              await mysqlConnection.query(
-                  `CALL warehouse_selection(${newID}, ${product_volume}, ${inboundOrder.quantity}, @outParam);
+        // Call back function execute after creating procedure
+        async function (err, result) {
+          // Call procedure to select suitable warehouse
+          await mysqlConnection.query(
+            `CALL warehouse_selection(${newID}, ${product_volume}, ${inboundOrder.quantity}, @outParam);
                   SELECT @outParam AS success;`,
 
-                  // Call back function execute after getting result from procedure
-                  async function (err, result) {
-                      if (err) {
-                          throw err;
-                      }
-                      else {
-                          // Get result from procedure
-                          warehouse_selection_result = result[1][0]['success'];
+            // Call back function execute after getting result from procedure
+            async function (err, result) {
+              if (err) {
+                throw err;
+              } else {
+                // Get result from procedure
+                warehouse_selection_result = result[1][0]['success'];
 
-                          console.log(warehouse_selection_result);
+                console.log(warehouse_selection_result);
 
-                          // Check result
-                          // If all product are store successfully
-                          if (warehouse_selection_result == 1) {
-                              // Update information
-                              productTable.update(
-                                  {
-                                      quantity: product.quantity+inboundOrder.quantity,
-                                      units_in_stock: product.quantity+inboundOrder.quantity
-                                  },
-                                  {
-                                      where: {
-                                          product_id: inboundOrder.product_id
-                                      }
-                                  }
-                              )
-                              .then(result => {
-                                  res.send(result ? "Sucessfully" : "Some error occurred.");
-                              })
-                              .catch(err => {
-                                  res.status(500).send({
-                                  message:
-                                      err.message || "Some error occurred while retrieving data."
-                                  });
-                              });
-                              res.send({
-                                  message: "Successfully create and select suitable warehouse."
-                              });
-                          }
-                          // If all product are not able to store
-                          else {
-                              res.send({
-                                  message: "All warehouses do not have enough space(s) for product."
-                              });
-                          }
+                // Check result
+                // If all product are store successfully
+                if (warehouse_selection_result == 1) {
+                  // Update information
+                  productTable
+                    .update(
+                      {
+                        quantity: product.quantity + inboundOrder.quantity,
+                        units_in_stock:
+                          product.quantity + inboundOrder.quantity,
+                      },
+                      {
+                        where: {
+                          product_id: inboundOrder.product_id,
+                        },
                       }
-                  }
-              );
-          }
-      ) // end query create procedure
-  })
-  .catch(err => {
+                    )
+                    .then((result) => {
+                      res.send(result ? 'Sucessfully' : 'Some error occurred.');
+                    })
+                    .catch((err) => {
+                      res.status(500).send({
+                        message:
+                          err.message ||
+                          'Some error occurred while retrieving data.',
+                      });
+                    });
+                  res.send({
+                    message:
+                      'Successfully create and select suitable warehouse.',
+                  });
+                }
+                // If all product are not able to store
+                else {
+                  res.send({
+                    message:
+                      'All warehouses do not have enough space(s) for product.',
+                  });
+                }
+              }
+            }
+          );
+        }
+      ); // end query create procedure
+    })
+    .catch((err) => {
       res.status(500).send({
-          message:
-              err.message || "Cannot find product with given id."
+        message: err.message || 'Cannot find product with given id.',
       });
-  });
-
-}
+    });
+};
 
 // Create and Save a new Tutorial
 exports.create = async (req, res) => {
   const userCredential = req.session.credentials;
 
   await connectDB(userCredential.username, userCredential.password);
-
-  newObject.quantity = 0;
-    newObject["units_in_stock"] = 0;
-    newObject["units_on_order"] = 0;
-
   const newObject = req.body.query;
+  newObject.quantity = 0;
+  newObject['units_in_stock'] = 0;
+  newObject['units_on_order'] = 0;
 
   // Store attribute list seperately
   const productAttributes = newObject.attributes;
@@ -246,17 +247,18 @@ exports.create = async (req, res) => {
   delete newObject.attributes;
   console.log(newObject);
   // Create product in product table to get id
-  await productTable.create(newObject)
-    .then( async (newProduct) => {
-        const data = new ProductAttributes({
-            product_id: newProduct.product_id,
-            attributes: productAttributes
-        });
+  await productTable
+    .create(newObject)
+    .then(async (newProduct) => {
+      const data = new ProductAttributes({
+        product_id: newProduct.product_id,
+        attributes: productAttributes,
+      });
 
-        try {
-            const newData = await data.save();
+      try {
+        const newData = await data.save();
 
-            console.log("Sucessfully store attribute of product.");
+        console.log('Sucessfully store attribute of product.');
 
         res.send({
           message: 'Successfully create product and store its attributes.',
@@ -539,7 +541,6 @@ exports.filterProductByAttributeValue = async (req, res) => {
 
       products.push(product);
     }
-
     res.json(products);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -556,4 +557,22 @@ async function getCategoryAndParentCategories(categoryId, categories = []) {
   }
 
   return categories;
+
 }
+exports.filterProductByCategory = async (req, res) => {
+  const category_id = req.body.category_id;
+  const userCredential = req.session.credentials;
+  await connectDB(userCredential.user_name, userCredential.password);
+  const products = [];
+  getCategoryAndParentCategories(category_id).then(async (categories) => {
+    for (const category of categories) {
+      const product = await productTable.findAll({
+        where: {
+          category_id: category._id,
+        },
+      });
+      products.push(...product);
+    }
+    res.json(products);
+  });
+
