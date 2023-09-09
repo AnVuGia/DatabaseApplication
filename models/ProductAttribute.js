@@ -16,6 +16,10 @@ const productAttributesSchema = new Schema({
             },
             "value": {
                 type: String
+            },
+            "type": {
+                type: String,
+                required: true
             }
         }
     ]
@@ -24,9 +28,6 @@ const productAttributesSchema = new Schema({
 , {
     collection: "product_attributes"
 }
-// , {
-//     versionKey: false
-// }
 );
 
 const productAttributesModel = model("ProductAttributes", productAttributesSchema);

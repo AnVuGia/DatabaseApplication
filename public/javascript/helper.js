@@ -209,10 +209,10 @@ function displayStatusModal(msg, success) {
       modal.style.display = 'none';
     });
   }
-  
+
   modal.style.display = 'block';
-  
-  
+
+
 }
 
 function processRequest(res, msg) {
