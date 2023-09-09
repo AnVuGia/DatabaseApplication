@@ -25,12 +25,13 @@
                     <p>Inventory details</p>
                 </div>
                 <div class="table__body" style="padding: 0px 10px;">
-                    <select id="manage-inventory__dropdown" >
-                        <option value="option1">Update Inventory</option>
-                        <option value="option2">Add Inventory</option>
-                    </select>
-                    <div class="main-inventory__update">
-                        <div class="main-inventory__container-header" style="">
+                    <div class="toolbar">
+                        <select id="manage-inventory__dropdown" >
+                            <option value="option1">Update Inventory</option>
+                            <option value="option2">Add Inventory</option>
+                        </select>
+    
+                        <div class="main-inventory__container-header">
                             <div>
                                 <select name="" id="" class="attribute-filter-select">
                                     <option value="all">All</option>
@@ -38,13 +39,16 @@
                                     <option value="address">Search By Address</option>
                                 </select>
                             </div>
-                            <input class="inventory-search-input" type="text" placeholder="Please enter value in...">
+                            <input class="inventory-search-input" type="text" placeholder="&#xF002; Search" style="font-family:Arial, FontAwesome">
                             <select class="sort-selector">
                                 <option value="all">All</option>
                                 <option value="asc">Volume Ascending</option>
                                 <option value="desc">Volume Decreasing</option>
                             </select>
                         </div>
+                    </div>
+
+                    <div class="main-inventory__update">
                         <table>
                             <thead>
                                 <tr>
@@ -59,11 +63,11 @@
     
                             <tbody class="inventory-list">
                                 <tr>
-                                    <td>1</td>
-                                    <td>Store X</td>
-                                    <td>702 Nguyen Van Linh Blvd, Tan Hung ward, Ho Chi Minh City</td>
-                                    <td>16800</td>
-                                    <td>10000</td>
+                                    <td name="td__id"></td>
+                                    <td name="td__name"></td>
+                                    <td name="td__address"></td>
+                                    <td name="td__volume"></td>
+                                    <td name="td_availability"></td>
                                     <td>
                                         <button class="edit-button"><i class="fa-solid fa-pen"></i></button>
                                         <button class="delete-button"><i class="fa-solid fa-trash"></i></button>
@@ -106,8 +110,9 @@
             <div id="status-modal" class="modal-status">
                 <div class="modal-status-content success">
                     <p class = "status-msg">Operation Successful</p>
-                    <button class ="error-btn" id="close-status-modal-btn" id = "return-btn">Return</button>
-                    <button class ="error-btn" id="close-status-modal-btn">Refresh</button>
+                    <button class ="error-btn" id="close-status-modal-btn" id = "return-btn">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        Refresh</button>
                 </div>
             </div>
         <div id="loading-modal" class="loading-modal">
@@ -119,7 +124,7 @@
         <div class="backdrop" id="backdrop"></div>
         <div class="modal" id="modal">
             <div class="modal-content-update">
-                <h2 style="text-align: center;">Inbound Order</h2>
+                <h2 style="text-align: center;">Update Inventory info</h2>
                 <div class="modal__main-content">
                     <div class="modal__update-item" style="margin-bottom: 10px;">
                         <label class="product__item-info product__name">Name</label>

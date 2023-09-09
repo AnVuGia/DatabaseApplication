@@ -135,6 +135,7 @@ function displayAll(inventoryList) {
       });
   }
 }
+
 function createInventoryCard(inventory) {
   let card = document.createElement('tr');
   card.innerHTML = `
@@ -150,6 +151,7 @@ function createInventoryCard(inventory) {
     `;
   return card;
 }
+
 function prepareEditInventoryModal(inventory) {
   document.querySelector('#inventory__name--update').value =
     inventory.warehouse_name;
@@ -255,7 +257,7 @@ async function createPagination(isSearching) {
     <div><i class="fa-solid fa-angle-left"></i></div>
     <div><i class="fa-solid fa-angle-right"></i></div>
     `;
-  document
+  documentgit
     .querySelector('.fa-angle-left')
     .addEventListener('click', (event) => {
       if (offset > 0) {
