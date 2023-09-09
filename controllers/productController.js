@@ -156,10 +156,12 @@ exports.createInboundOrder = async (req, res) => {
 exports.create = async (req, res) => {
   const userCredential = req.session.credentials;
 
-  await connectDB(userCredential.username, userCredential.password);
+  // await connectDB(userCredential.username, userCredential.password);
+  await connectDB('lazada_seller', 'password');
 
-  
+
   const newObject = req.body.query;
+  console.log(newObject);
   newObject['unit_in_stock'] = 0;
   newObject['unit_on_order'] = 0;
 
@@ -170,7 +172,7 @@ exports.create = async (req, res) => {
 
   // Remove attrbute list from create product data
   delete newObject.attributes;
-
+  console.log(newObject);
   // Create product in product table to get id
   await productTable
     .create(newObject)
@@ -263,7 +265,7 @@ exports.getAllProductBySeller = async function (req, res) {
   console.log('Seller id: ' + seller_id);
   // await connectDB(userCredential.username, userCredential.password);
 
-  await connectDB("lazada_customer", "password");
+  await connectDB("lazada_seller", "password");
   productTable
     .findAll({
       where: {
@@ -284,8 +286,8 @@ exports.getAllProductBySeller = async function (req, res) {
 exports.update = async (req, res) => {
   const userCredential = req.session.credentials;
   const product_id = req.params.product_id;
-  await connectDB(userCredential.user_name, userCredential.password);
-
+  // await connectDB(userCredential.user_name, userCredential.password);
+  await connectDB("lazada_seller", "password");
   const newObj = req.body.query;
   const filterParam = {
     where: {
