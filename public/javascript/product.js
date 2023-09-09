@@ -85,35 +85,6 @@ function displayProduct(products) {
     });
   }
 }
-
-addProductButton.addEventListener('click', () => {
-  const product = createProductObject();
-  if (product.attributes.length == 0) {
-    displayStatusModal(
-      'Category has not been selected or Required attribute has not been filled!',
-      false
-    );
-    return;
-  }
-  if (
-    product.price.length == 0 ||
-    product.product_name.length == 0 ||
-    product.width == 0 ||
-    product.length == 0 ||
-    product.height == 0
-  ) {
-    displayStatusModal('Price/Name/Width/Length/Height must be filled!', false);
-    return;
-  }
-  displayConfirmationModal(
-    'Are you sure you want to add this product?',
-    async () => {
-      console.log(product);
-      let res = await productHelper.createProduct(product);
-      processRequest(res, 'Product added successfully');
-    }
-  );
-});
 const editButton = document.querySelector('.modal__buttuon--eidtProduct');
 
 function createRowCard(item) {
