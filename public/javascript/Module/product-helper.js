@@ -35,6 +35,15 @@ const product = {
     );
     return response;
   },
+  async createInbound(bodyParser) {
+    const response = await axios.post(
+      `${API_URL}/createInbound`,
+      {
+        query: bodyParser
+      }
+    );
+    return response;
+  },
   async filter(body){
     const response = await axios.post(`${API_URL}/filter-name`, {query: body});
     return response;

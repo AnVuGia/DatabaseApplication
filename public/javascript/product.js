@@ -138,11 +138,6 @@ function createRowCard(item){
   return card
 }
 
-// const openModalButton = document.querySelector('.edit-button');
-// // openModalButton.addEventListener('click', () => {
-// //   backdrop.style.display = 'block';
-// //   modal.style.display = 'block';
-// // });
 selectDetector(
   'manage-product__dropdown',
   'main-product__update',

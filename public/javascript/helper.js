@@ -15,7 +15,8 @@ if (closeModalButton) {
 function displayConfirmationModal(message, callback) {
   const confirmationMessage = document.querySelector('.confirmation-message');
   confirmationMessage.innerHTML = `<p>${message}</p>`;
-  console.log(document.querySelector('.modal__button--save'));
+  console.log(document
+    .querySelector('.modal__button--yes'));
   document
     .querySelector('.modal__button--yes')
     .addEventListener('click', () => {
