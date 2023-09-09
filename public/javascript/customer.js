@@ -1,94 +1,112 @@
-import productModule from "./Module/product-helper.js"
+import productModule from './Module/product-helper.js';
 
-function insertViewMoreButton (filterType){
-    const container = document.querySelector(`.filter-block__${filterType}`)
-    const div = document.querySelector(`.${filterType}-block__addition`)
-    const elementCount = div.children.length 
-    if (elementCount >0){
-        const button = document.createElement('div')
-        button.textContent = "VIEW MORE"
-        button.classList.add(`button__view-more-${filterType}`,'view-more-button') 
-        container.insertAdjacentElement( 'afterend',button)
-        document.querySelector(`.button__view-more-${filterType}`).addEventListener('click', function() {
-            const additionalContent = document.querySelector(`.filter-block__${filterType}`)
-            additionalContent.classList.toggle('show-content');
-            const button = document.querySelector(`.button__view-more-${filterType}`);
-            if (additionalContent.classList.contains('show-content')) {
-                button.textContent = 'VIEW LESS';
-              } else {
-                button.textContent = 'VIEW MORE';
-              }
-        })
-    }
-   
+function insertViewMoreButton(filterType) {
+  const container = document.querySelector(`.filter-block__${filterType}`);
+  const div = document.querySelector(`.${filterType}-block__addition`);
+  const elementCount = div.children.length;
+  if (elementCount > 0) {
+    const button = document.createElement('div');
+    button.textContent = 'VIEW MORE';
+    button.classList.add(`button__view-more-${filterType}`, 'view-more-button');
+    container.insertAdjacentElement('afterend', button);
+    document
+      .querySelector(`.button__view-more-${filterType}`)
+      .addEventListener('click', function () {
+        const additionalContent = document.querySelector(
+          `.filter-block__${filterType}`
+        );
+        additionalContent.classList.toggle('show-content');
+        const button = document.querySelector(
+          `.button__view-more-${filterType}`
+        );
+        if (additionalContent.classList.contains('show-content')) {
+          button.textContent = 'VIEW LESS';
+        } else {
+          button.textContent = 'VIEW MORE';
+        }
+      });
+  }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-   insertViewMoreButton('category')
-   insertViewMoreButton('brand')
-   insertViewMoreButton('location')
+document.addEventListener('DOMContentLoaded', function () {
+  insertViewMoreButton('category');
+  insertViewMoreButton('brand');
+  insertViewMoreButton('location');
 });
 
+const categoryList = document.querySelector('.category-container__list');
+categoryList.addEventListener('mouseenter', () => {
+  const firstOrderCatList = document.querySelector(
+    '.category_container__first-order'
+  );
+  firstOrderCatList.style.display = 'block';
 
-const categoryList = document.querySelector(".category-container__list")
-  categoryList.addEventListener("mouseenter",()=>{
-    const firstOrderCatList = document.querySelector(".category_container__first-order")
-    firstOrderCatList.style.display = 'block'
+  const bridge = document.createElement('div');
+  bridge.className = 'container-bridge-2nd';
+  firstOrderCatList.insertAdjacentElement('afterend', bridge);
+  bridge.style.left = `${
+    document.querySelector('.category_container__first-order').offsetWidth + 56
+  }px`;
+  bridge.style.height = `${
+    document.querySelector('.category_container__first-order').offsetHeight
+  }px`;
+  document.querySelector('.category_container__second-order').style.left = `${
+    document.querySelector('.category_container__first-order').offsetWidth + 60
+  }px`;
+  document.querySelector('.category_container__second-order').style.height = `${
+    document.querySelector('.category_container__first-order').offsetWidth + 60
+  }px`;
+  const lists = document.querySelectorAll('.category-1st__item');
 
-    
-    const bridge =  document.createElement("div")
-    bridge.className = "container-bridge-2nd"
-    firstOrderCatList.insertAdjacentElement( 'afterend',bridge)
-    bridge.style.left =  `${document.querySelector(".category_container__first-order").offsetWidth+56}px`;
-    bridge.style.height =  `${document.querySelector(".category_container__first-order").offsetHeight}px`;
-    document.querySelector(".category_container__second-order").style.left = `${document.querySelector(".category_container__first-order").offsetWidth+60}px`
-    document.querySelector(".category_container__second-order").style.height = `${document.querySelector(".category_container__first-order").offsetWidth+60}px`
-    const lists = document.querySelectorAll(".category-1st__item");
-
-    for (let i = 0; i < lists.length;i++){
-      
-      lists[i].addEventListener("mouseenter",function(){
-        console.log("display")
-        document.querySelector(".category_container__second-order").style.display = "block"
-      })
-      categoryList.addEventListener("mouseleave",()=>{
-        document.querySelector(".category_container__second-order").style.display = 'none'
-        bridge.remove()
-    })
+  for (let i = 0; i < lists.length; i++) {
+    lists[i].addEventListener('mouseenter', function () {
+      console.log('display');
+      document.querySelector(
+        '.category_container__second-order'
+      ).style.display = 'block';
+    });
+    categoryList.addEventListener('mouseleave', () => {
+      document.querySelector(
+        '.category_container__second-order'
+      ).style.display = 'none';
+      bridge.remove();
+    });
   }
-  })
-  categoryList.addEventListener("mouseleave",()=>{
-    document.querySelector(".category_container__first-order").style.display = 'none'
-})
+});
+categoryList.addEventListener('mouseleave', () => {
+  document.querySelector('.category_container__first-order').style.display =
+    'none';
+});
 
-
-async function getAllIem (){
-    displayLoadingModel()
-    let data = await productModule.getProducts()
-    closeLoadingModel()
-    displayItemList(data)
+async function getAllIem() {
+  displayLoadingModel();
+  let data = await productModule.getProducts();
+  closeLoadingModel();
+  displayItemList(data);
 }
 
-
-
-function displayItemList (itemList){
-
-  const container = document.querySelector(".container-list")
-  container.innerHTML = ""
-  for (let i = 0 ; i < itemList.length;i++){
-    container.appendChild(createItemCard(itemList[i]))
-    lastItem = container.lastElementChild
-    lastItem.addEventListener("click",()=>{
-    })
+function displayItemList(itemList) {
+  const container = document.querySelector('.container-list');
+  container.innerHTML = '';
+  for (let i = 0; i < itemList.length; i++) {
+    const card = createItemCard(itemList[i]);
+    container.appendChild(card);
+    const lastItem = container.lastElementChild;
+    lastItem.addEventListener('click', () => {
+      sessionStorage.setItem('current-item', JSON.stringify(itemList[i]));
+      window.location.href = 'product-detail';
+    });
   }
 }
 
-
-function createItemCard (item){
-  const card  = document.createElement("div")
-  card.className = "card__item"
+function createItemCard(item) {
+  const card = document.createElement('div');
+  card.className = 'card__item';
   card.innerHTML = `
-  <img class="img-item" src="${item.image}" alt="" srcset="">
+  <img class="img-item" src="${
+    item.image ||
+    'https://down-vn.img.susercontent.com/file/6db97a22ffdf63960cdb0fe349877cc9'
+  }" alt="" srcset="">
       <div class="card-info__container">
           <div class="card-info__item-name">
               ${item.product_name}
@@ -97,14 +115,8 @@ function createItemCard (item){
               ${item.price}
           </div>
       </div>
-      `
-  return card
+      `;
+  return card;
 }
 
-getAllIem()
-
-
-
-
-
-
+getAllIem();

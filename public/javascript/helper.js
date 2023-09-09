@@ -4,7 +4,7 @@ const confirmationModal = document.querySelector('.confirmation-modal');
 
 const backdrop = document.querySelector('.backdrop');
 const modal = document.querySelector('.modal');
-
+const closeModalButton = document.querySelector('.modal__button--cancel');
 if (closeModalButton) {
   closeModalButton.addEventListener('click', () => {
     backdrop.style.display = 'none';

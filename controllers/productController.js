@@ -436,3 +436,22 @@ exports.delete = async (req, res) => {
       });
     });
 };
+exports.getProductById = async (req, res) => {
+  const userCredential = req.session.credentials;
+  const product_id = req.params.product_id;
+  await connectDB(userCredential.username, userCredential.password);
+  productTable
+    .findOne({
+      where: {
+        product_id: product_id,
+      },
+    })
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || 'Some error occurred while retrieving data.',
+      });
+    });
+};

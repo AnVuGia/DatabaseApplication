@@ -55,6 +55,16 @@
               </div>
             </div>
           </div>
+          <div class="product-details-quantity mt-3">
+            <label for="quantity">Quantity:</label>
+            <input
+              type="number"
+              id="quantity"
+              name="quantity"
+              min="1"
+              value="1"
+            />
+          </div>
           <div class="button-row-container mt-4">
             <button class="btn btn-primary mr-2 add-cart">Add to Cart</button>
             <button class="btn btn-success buy-now">Buy Now</button>
@@ -63,19 +73,22 @@
       </div>
       <div class="product-description mt-4">
         <h2>Description</h2>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-          consectetur, ipsum eu posuere consectetur, velit dolor dignissim ex,
-          eu tristique nunc elit eu eros.
-        </p>
-        <p>
-          Integer ut varius ex. Phasellus euismod velit id tellus bibendum, eu
-          fringilla erat pellentesque. Quisque eu semper lectus.
-        </p>
-        <p>
-          Vestibulum rhoncus magna a felis malesuada, eget tristique est luctus.
-          Fusce bibendum laoreet mauris, vel suscipit turpis tempor in.
-        </p>
+        <div class="product-details-desc">
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+            consectetur, ipsum eu posuere consectetur, velit dolor dignissim ex,
+            eu tristique nunc elit eu eros.
+          </p>
+          <p>
+            Integer ut varius ex. Phasellus euismod velit id tellus bibendum, eu
+            fringilla erat pellentesque. Quisque eu semper lectus.
+          </p>
+          <p>
+            Vestibulum rhoncus magna a felis malesuada, eget tristique est
+            luctus. Fusce bibendum laoreet mauris, vel suscipit turpis tempor
+            in.
+          </p>
+        </div>
       </div>
     </div>
 
@@ -85,5 +98,6 @@
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
     ></script>
+    <script type="module" src="/javascript/product-detail.js"></script>
   </body>
 </html>

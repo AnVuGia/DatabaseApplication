@@ -8,6 +8,7 @@ const auth_credentials = require('../config/credentials').auth_credentials;
 const admin_account = require('../config/credentials').admin_account;
 const bcrypt = require('bcrypt');
 const shopCartModel = require('../models/ShopCart');
+const { ObjectId } = require('mongodb');
 exports.getHello = (req, res) => {
   res.sendFile('index.html', { root: 'views' });
 };
@@ -64,7 +65,9 @@ exports.signupAccount = async (req, res) => {
       customer_id: newUser.customer_id,
       products: [],
     });
-    newUser.shop_cart_id = shopCart.shop_cart_id;
+    const cart_id = new ObjectId(shopCart._id).toString();
+    console.log(cart_id);
+    newUser.cart_id = cart_id;
     newUser.save();
     console.log(shopCart);
     await shopCart.save();
@@ -147,5 +150,11 @@ exports.getCustomers = (req, res) => {
   res.sendFile('customer.html', { root: 'views/customerView' });
 };
 exports.getProductDetail = (req, res) => {
-  res.sendFile('product-details-view.html', { root: 'views' });
+  res.sendFile('product-details-view.html', { root: 'views/customerView' });
+};
+exports.getCart = (req, res) => {
+  res.sendFile('cart-view.html', { root: 'views/customerView' });
+};
+exports.getCheckout = (req, res) => {
+  res.sendFile('checkout-view.html', { root: 'views/customerView' });
 };

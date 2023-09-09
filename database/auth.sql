@@ -20,8 +20,8 @@ GRANT SELECT, UPDATE, INSERT, DELETE ON lazada_database.product_locations TO 'se
 GRANT SELECT ON lazada_database.Customers TO 'auth';
 GRANT SELECT ON lazada_database.Admins TO 'auth';
 GRANT SELECT ON lazada_database.Sellers TO 'auth';
-GRANT SELECT, INSERT ON lazada_database.Customers TO 'guest';
-GRANT SELECT, INSERT ON lazada_database.Sellers TO 'guest';
+GRANT SELECT, INSERT, UPDATE ON lazada_database.Customers TO 'guest';
+GRANT SELECT, INSERT, UPDATE ON lazada_database.Sellers TO 'guest';
 
 GRANT ALTER ROUTINE ON `lazada_database`.* TO 'lazada_seller'@'localhost';
 GRANT ALL PRIVILEGES ON `lazada_database`.* TO 'lazada_seller'@'localhost';
