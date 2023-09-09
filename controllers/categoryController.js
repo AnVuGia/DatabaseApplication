@@ -120,3 +120,30 @@ exports.createCategory = async function (req, resp) {
         resp.status(400).json({ mesage: err.message})
     }
 }
+
+
+// {
+//     "query" :{
+//       "search_string" : "64fc9067984ffca862fdc369"
+//     }
+//   }
+exports.getAllAttributesFromCategory = async function (req, resp) {
+    let body = req.body.query;
+
+    console.log(req.body);    
+    let attributes = [];
+    attributes = await getAttributes(body.search_string, attributes);
+    resp.json(attributes);
+}
+async function getAttributes(id, attributes) {
+    let category = await Category.findById(id);
+    if (category.parent != null) {
+        await getAttributes(category.parent, attributes);
+    }
+    // attributes.push(category.attributes);
+    // return attributes;
+    category.attributes.forEach(element => {
+        attributes.push(element);
+    });
+    return attributes;
+}
