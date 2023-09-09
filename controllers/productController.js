@@ -289,7 +289,8 @@ exports.findAll = async (req, res) => {
 exports.search = async function (req, res) {
   const userCredential = req.session.credentials;
 
-  await connectDB(userCredential.username, userCredential.password);
+  // await connectDB(userCredential.username, userCredential.password);
+  await connectDB("lazada_seller", "password");
 
   let searchAtt = req.body.query.search_attribute;
   let searchStr = req.body.query.search_string;
@@ -319,15 +320,14 @@ exports.search = async function (req, res) {
 exports.getAllProductBySeller = async function (req, res) {
   const userCredential = req.session.credentials;
   const seller_id = req.params.seller_id;
-  console.log('request body: ');
-  console.log(req.body);
-  console.log('Seller id: ' + seller_id);
+
   // await connectDB(userCredential.username, userCredential.password);
   await connectDB("lazada_customer","password");
   productTable
     .findAll({
       where: {
         seller_id: seller_id,
+
       },
     })
     .then((result) => {
@@ -344,7 +344,9 @@ exports.getAllProductBySeller = async function (req, res) {
 exports.update = async (req, res) => {
   const userCredential = req.session.credentials;
   const product_id = req.params.product_id;
-  await connectDB(userCredential.user_name, userCredential.password);
+
+  // await connectDB(userCredential.user_name, userCredential.password);
+  await connectDB('lazada_seller', 'password');
 
   const newObj = req.body.query;
   const filterParam = {
@@ -395,11 +397,12 @@ exports.update = async (req, res) => {
 exports.delete = async (req, res) => {
   const userCredential = req.session.credentials;
 
-  await connectDB(userCredential.user_name, userCredential.password);
+  // await connectDB(userCredential.user_name, userCredential.password);
+  await connectDB('lazada_seller', 'password');
+  
   const product_id = req.params.product_id;
   // Get the delete product_id
-  var newObj = req.body.query;
-
+  console.log(product_id);
   // Check para
   if (product_id == null) {
     res.status(500).send({
@@ -417,6 +420,8 @@ exports.delete = async (req, res) => {
 
   // Get the product from db
   const product = await productTable.findOne(filterParam);
+
+  
 
   // Calculate the volume of product
   const product_volume = product.width * product.length * product.height;
@@ -529,3 +534,45 @@ exports.filterProductByAttributeValue = async (req, res) => {
       res.status(500).json({message: err.message});
   }
 }
+
+
+
+
+exports.filter = async function (req, res) {
+  console.log("in filter")
+  const body = req.body;
+  
+  await connectDB("lazada_seller", "password");
+
+  let searchConditions = body.query;
+
+  let searchParams = {};
+
+  if (searchConditions.hasOwnProperty("search")) {
+    searchParams['where'] = {
+      product_name: {
+        [Op.like]: '%' + searchConditions.search.search_string + '%'
+      },
+      seller_id : body.query.seller_id
+    };
+  }
+
+  if (searchConditions.hasOwnProperty("order")) {
+    searchParams['order'] = [searchConditions.order];
+  }
+  console.log(searchParams)   
+  productTable
+    .findAll({
+      // Only include 'where' and 'order' in the searchParams object if they exist
+      ...(searchParams.where && { where: searchParams.where }),
+      ...(searchParams.order && { order: searchParams.order }),
+    })
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving data.",
+      });
+    });
+};

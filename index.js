@@ -9,6 +9,7 @@ const appRoute = require('./routes/appRoute');
 const productRoute = require('./routes/productRoute');
 const warehouseRoute = require('./routes/warehouseRoute');
 const categoryRoute = require('./routes/categoryRoute');
+const productCategoryRoute = require('./routes/productCategoryRoute');
 const db = require('./models');
 const app = express();
 const session = require('express-session');
@@ -47,6 +48,7 @@ app.use('/', appRoute);
 app.use('/product', productRoute);
 app.use('/warehouse', warehouseRoute);
 app.use('/category', categoryRoute);
+app.use('/attribute',productCategoryRoute)
 db.sequelize.sync().then((req) => {
   const server = app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);

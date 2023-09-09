@@ -9,33 +9,84 @@ const heightEl = document.querySelector('.product__height-input');
 const lengthEl = document.querySelector('.product__length-input');
 const tableBody = document.querySelector('#tablebody');
 const form = document.querySelector('.attribute-input-form');
+const formEdit = document.querySelector('.attribute-input-form-edit');
+const selectEdit = document.querySelector('#select-cateogry-for-update');
+const filterSelect = document.querySelector('#filter-product__dropdown');
+const  searchInput = document.querySelector('.product-input');
+let offset = 0;
+let page = 5;
+let reachMax = false;
 
 
 const modalSubmitButton = document.querySelector(
   '.modal__button modal__button--save'
 );
 import productHelper from './Module/product-helper.js';
+import attribute from './Module/attribute.js';
 import category from './Module/category.js';
+// import { create } from '../../models/ProductAttribute.js';
 // import { create } from '../../models/ProductAttribute.js';
 let products = [];
 window.onload = async () => {
   addSideBarHtmlForSeller();
   const currentUser = sessionStorage.getItem('user');
   const currentUserJSON = JSON.parse(currentUser);
-  const temp = await productHelper.getProductBySeller(currentUserJSON.seller_id);
+  
+};
+addProductButton.addEventListener('click', () => {
+  const product = createProductObject();
+        if (product.attributes.length == 0){
+          displayStatusModal('Category has not been selected or Required attribute has not been filled!', false);
+          return;
+        }
+        if ((product.price == 0 || !product.price) || (product.product_name.length == 0) ||( product.width == 0||!product.width)||( product.length == 0||!product.length)|| (product.height == 0||!product.height)  ){
+          displayStatusModal('Price/Name/Width/Length/Height must be filled!', false);
+          return;
+        }
+  displayConfirmationModal(
+    'Are you sure you want to add this product?',
+    async () => {
+      console.log(product);
+        let res = await productHelper.createProduct(product);
+        processRequest(res,'Product added successfully')
+    }
+  );
+});
+
+async function getAllProduct(){
+  const temp = await productHelper.getProductBySeller(JSON.parse(sessionStorage.getItem('user')).seller_id);
   products = [...temp];
   console.log(temp);
   console.log(tableBody);
-  products.forEach((product) => {
-    tableBody.appendChild(productRow(product));
-  });
-};
-deleteProductButton.addEventListener('click', () => {
-  displayConfirmationModal(
-    'Are you sure you want to delete this product?',
-    () => {}
-  );
-});
+  displayProduct(products);
+}
+function displayProduct(products){
+  tableBody.innerHTML = '';
+  for (let i = 0; i < products.length; i++) {
+    tableBody.appendChild(createRowCard(products[i]));
+    const deleteBtn = document.querySelector(`#delete-${products[i].product_id}`);
+    deleteBtn.addEventListener('click', () => {
+      displayConfirmationModal(
+        'Are you sure you want to delete this product?',
+        async () => {
+          let res = await productHelper.deleteProduct(products[i]);
+          processRequest(res,'Product deleted successfully')
+        }
+      );
+    });
+
+    const editBtn = document.querySelector(`#edit-${products[i].product_id}`);
+    editBtn.addEventListener('click', () => {
+      console.log(products[i]);
+      displayEditModal(products[i]);
+    });
+
+  }
+}
+
+
+
+
 addProductButton.addEventListener('click', () => {
   const product = createProductObject();
         if (product.attributes.length == 0){
@@ -55,139 +106,182 @@ addProductButton.addEventListener('click', () => {
     }
   );
 });
+const editButton = document.querySelector(".modal__buttuon--eidtProduct") 
 
 
 
 
 
-const openModalButton = document.querySelector('.edit-button');
-openModalButton.addEventListener('click', () => {
-  backdrop.style.display = 'block';
-  modal.style.display = 'block';
-});
+
+function createRowCard(item){
+  const card = document.createElement('tr');
+  card.innerHTML = `
+                    <td>${item.product_id}</td>
+                    <td>${item.product_name}</td>
+                    <td>
+                    ${item.product_desc}
+                    </td>
+                    <td>${item.price}</td>
+                    <td>${item.width}</td>
+                    <td>${item.length}</td>
+                    <td>${item.height}</td>
+                    <td>
+                      <button class="edit-button" id = "edit-${item.product_id}" >
+                        <i class="fa-solid fa-pen"></i>
+                      </button>
+                      <button class="delete-button" id = "delete-${item.product_id}">
+                        <i class="fa-solid fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  `;
+  return card
+}
+
+// const openModalButton = document.querySelector('.edit-button');
+// // openModalButton.addEventListener('click', () => {
+// //   backdrop.style.display = 'block';
+// //   modal.style.display = 'block';
+// // });
 selectDetector(
   'manage-product__dropdown',
   'main-product__update',
   'main-product__add'
 );
-const productRow = (product) => {
-  const edit_button = document.createElement('button');
-  edit_button.classList.add('edit-button');
-  edit_button.innerHTML = '<i class="fa-solid fa-pen"></i>';
-  const delete_button = document.createElement('button');
-  delete_button.classList.add('delete-button');
-  delete_button.innerHTML = '<i class="fa-solid fa-trash"></i>';
-  edit_button.addEventListener('click', () => {
-    onEditClick(product);
-  });
-  delete_button.addEventListener('click', () => {
-    onDeleteClick(product);
-  });
-  const tr = document.createElement('tr');
-  const td = document.createElement('td');
-  td.appendChild(edit_button);
-  td.appendChild(delete_button);
-  tr.innerHTML = `
-    <td>${product.product_id}</td>
-    <td>${product.product_name}</td>
-    <td>${product.product_desc}</td>
-    <td>${product.price}</td>
-    <td>${product.width}</td>
-    <td>${product.length}</td>
-    <td>${product.height}</td>
-    `;
-  tr.appendChild(td);
-  return tr;
-};
-const onEditClick = (product) => {
-  sessionStorage.setItem('current-product', JSON.stringify(product.product_id));
-  const product_find = products.find(
-    (item) => item.product_id === product.product_id
-  );
-  nameEl.value = product_find.product_name;
-  descriptionEl.value = product_find.product_desc;
-  priceEl.value = product_find.price;
-  quantityEl.value = product_find.quantity;
-  widthEl.value = product_find.width;
-  heightEl.value = product_find.height;
-  lengthEl.value = product_find.length;
+
+const nameUpdateInput = document.querySelector('#product__name--update'); 
+const descriptionUpdateInput = document.querySelector('#product__description--update'); 
+const priceUpdateInput = document.querySelector('#product__price--update');
+const imageUpdateInput = document.querySelector('#product__image--update');
+
+async function displayEditModal(item) {
   backdrop.style.display = 'block';
   modal.style.display = 'block';
-};
-const onDeleteClick = (product) => {
-  displayConfirmationModal(
-    'Are you sure you want to delete this product?',
-    async () => {
-      await product.deleteProduct(product);
-      window.location.reload();
+  
+  nameUpdateInput.value = item.product_name;
+  descriptionUpdateInput.value = item.product_desc;
+  priceUpdateInput.value = item.price;
+  imageUpdateInput.value = item.image;
+
+  const selecteAtributeForUpdate = document.querySelector('#select-cateogry-for-update');
+  selecteAtributeForUpdate.innerHTML = "";
+  await getAllCategory(selecteAtributeForUpdate);
+  selecteAtributeForUpdate.value = item.category_id;
+
+  // console.log(selecteAtributeForUpdate)
+  renderSelect(selecteAtributeForUpdate, formEdit);
+  // console.log(selecteAtributeForUpdate)
+
+
+  let data = await attribute.find(item.product_id);
+  formEdit.innerHTML = "";
+  const attributes = data[0].attributes;
+
+  
+  for (let i = 0; i < attributes.length; i++) {
+    formEdit.appendChild(createInputEdit(attributes[i]));
+    console.log(formEdit);
+  }
+
+  
+  editButton.addEventListener('click', () => {
+    const product = createProductForUpdate();
+    product.product_id = item.product_id;
+    console.log(product);
+    if (product.attributes.length == 0){
+      displayStatusModal('Category has not been selected or Required attribute has not been filled!', false);
+      return;
     }
-  );
-};
-const onConfirmEditClick = async (product) => {
-  const product_find = products.find(
-    (item) => item.product_id === product.product_id
-  );
-  const product_temp = {
-    product_id: product_find.product_id,
-    product_name: nameEl.value,
-    product_desc: descriptionEl.value,
-    price: priceEl.value,
-    seller_id: product_find.seller_id,
-    quantity: quantityEl.value,
-    category_id: '1',
-    width: widthEl.value,
-    height: heightEl.value,
-    length: lengthEl.value,
-  };
-  await product_find.updateProduct(product_temp);
-  window.location.reload();
-};
+    if ((product.price.length == 0||  !product.price) || product.product_name.length == 0){
+      displayStatusModal('Price/Name must be filled!', false);
+      return;
+    }
+    displayConfirmationModal(
+      'Are you sure you want to edit this product?',
+      async () => {
+        console.log(product);
+        let res = await productHelper.updateProduct(product);
+        processRequest(res,'Product updated successfully')
+      }
+    );
+  });
+}
 
-
-async function getAllCategory(){
+async function getAllCategory(selectType){
   const res = await category.findAll();
   console.log(res.data);
-  createSelectCategory(res.data);
+  createSelectCategory(selectType,res.data);
 }
 
 const select = document.querySelector('#select-cateogry-for-create');
-function createSelectCategory(catList){
-  select.innerHTML = "";
+function createSelectCategory(selectType, catList){
+  selectType.innerHTML = "";
   const defaultOption = document.createElement('option');
   defaultOption.value = "all";
   defaultOption.innerHTML = "Select Category";
-  select.appendChild(defaultOption);
+  selectType.appendChild(defaultOption);
   for (let i = 0; i < catList.length; i++) {
     const option = document.createElement('option');
     option.value = catList[i]._id;
     option.innerHTML = catList[i].name;
-    select.appendChild(option);
+    selectType.appendChild(option);
   }
-  return select;
+  return selectType;
 }
 
 select.addEventListener('change', async () => {
-  if (select.value == "all"){
-    form.innerHTML = "";
+  await renderSelect();
+})
+selectEdit.addEventListener('change', async () => {
+  const clasName = 'attribute-input-edit';  
+  await renderSelectEdit();
+})
+
+async function renderSelect(){
+    if (select.value == "all"){
+      form.innerHTML = "";
+      return;
+    }
+    const body = {
+      "search_attribute":"_id",
+      "search_string": select.value
+    }
+    let res = await category.search(body);
+    displayInputCategoryForm(res.data[0].attributes);
+   
+}
+async function renderSelectEdit(){
+  if (selectEdit.value == "all"){
+    formEdit.innerHTML = "";
     return;
   }
   const body = {
     "search_attribute":"_id",
-    "search_string": select.value
+    "search_string": selectEdit.value
   }
   let res = await category.search(body);
-  displayInputCategoryForm(res.data[0].attributes);
-  
-})
+  displayEditForm(res.data[0].attributes);
+ 
+}
+
 function displayInputCategoryForm(list){
-    
-    form.innerHTML = "";
+  
+  form.innerHTML = "";
     for (let i = 0; i < list.length; i++) {
       form.appendChild(createCatInputCard(list[i]));
     }
 
 }
+function displayEditForm(list){
+  
+  formEdit.innerHTML = "";
+    for (let i = 0; i < list.length; i++) {
+      formEdit.appendChild(createInputEdit(list[i]));
+    }
+
+}
 function createCatInputCard(attribute){
+ 
   const card = document.createElement('div');
   card.classList.add('attribute-input');
   const label = document.createElement('label');
@@ -196,6 +290,27 @@ function createCatInputCard(attribute){
   input.type = 'text';
   input.id = attribute.name;
   input.required = attribute.required;
+  input.value = attribute.value ? attribute.value : "";
+
+  const label2 = document.createElement('label');
+  label2.innerHTML = attribute.required ? 'Required' : 'Optional';  
+
+  card.appendChild(label);
+  card.appendChild(input);
+  card.appendChild(label2);
+  return card;
+}
+function createInputEdit(attribute){
+ 
+  const card = document.createElement('div');
+  card.classList.add('attribute-input-edit');
+  const label = document.createElement('label');
+  label.innerHTML = attribute.name;
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.id = attribute.name;
+  input.required = attribute.required;
+  input.value = attribute.value ? attribute.value : "";
 
   const label2 = document.createElement('label');
   label2.innerHTML = attribute.required ? 'Required' : 'Optional';  
@@ -206,7 +321,7 @@ function createCatInputCard(attribute){
   return card;
 }
 
-getAllCategory();
+
 function createProductObject(){
   const product = {
     product_name: document.getElementById('product__name--add').value,
@@ -223,8 +338,21 @@ function createProductObject(){
   return product
   
 }
-function getAttributeValue(){
-  const attributes = document.querySelectorAll('.attribute-input');
+
+function createProductForUpdate(){
+  const product = {
+    product_name: document.getElementById('product__name--update').value,
+    product_desc: document.getElementById('product__description--update').value,
+    image: document.getElementById('product__image--update').value,
+    seller_id : JSON.parse(sessionStorage.getItem('user')).seller_id,
+    category_id: selectEdit.value,
+    price: parseFloat (document.getElementById('product__price--update').value),
+    attributes: getAttributeValue('.attribute-input-edit')
+  }
+  return product
+}
+function getAttributeValue(className = 'attribute-input'){
+  const attributes = document.querySelectorAll(className);
   const attributeList = [];
   for (let i = 0; i < attributes.length; i++) {
     if (attributes[i].children[1].value == "" && attributes[i].children[1].required){
@@ -239,3 +367,34 @@ function getAttributeValue(){
   }
   return attributeList;
 }
+getAllCategory(select);
+
+getAllProduct()
+
+searchInput.addEventListener('input', async () => {gatherInformation()});
+filterSelect.addEventListener('change', async () => {gatherInformation()});
+async function gatherInformation(){
+  const body = {
+  }
+  if (searchInput.value.length > 0){  
+    body["search"] = {
+      "search_string": searchInput.value,
+    }
+  }
+  if (filterSelect.value !== "all"){
+    if (filterSelect.value == "nameasc"){
+        body["order"] = ['product_name','ASC']
+    }else if (filterSelect.value == "namedcr"){
+        body["order"] = ['product_name','DESC']
+    }else if (filterSelect.value == "priceasc"){
+        body["order"] = ['price','ASC']
+    }else if (filterSelect.value == "pricedcr"){
+        body["order"] = ['price','DESC']
+    }
+  }
+  console.log(body);
+  body["seller_id"] = JSON.parse(sessionStorage.getItem('user')).seller_id;
+  let res = await productHelper.filter(body);
+  console.log(res.data);
+  displayProduct(res.data);
+};

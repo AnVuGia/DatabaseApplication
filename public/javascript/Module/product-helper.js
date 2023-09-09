@@ -33,8 +33,13 @@ const product = {
         query: product,
       }
     );
-    return response.data;
+    return response;
   },
+  async filter(body){
+    const response = await axios.post(`${API_URL}/filter-name`, {query: body});
+    return response;
+  }
+
 };
 
 export default product;
