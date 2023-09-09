@@ -1,3 +1,5 @@
+const { sequelize } = require('../models');
+
 const connectDB = require('./helperController').connectDB;
 exports.addOrder = async (req, res) => {
   const body = req.body;
@@ -19,6 +21,7 @@ exports.addOrder = async (req, res) => {
     res.status(500).json('Product not found');
     return;
   }
+
   const seller_id = product.seller_id;
   const price = product.price * body.product_quantity;
   const newOrder = {
@@ -27,7 +30,20 @@ exports.addOrder = async (req, res) => {
     product_quantity: body.product_quantity,
     seller_id: seller_id,
   };
-  const order = await orderTable.create(newOrder);
+  sequelize.transaction(async (t) => {
+    const order = await orderTable.create({ newOrder }, { transaction: t });
+    if (product.quantity < body.product_quantity) {
+      console.log('Not enough product');
+      await t.rollback();
+    }
+    await productTable.update(
+      { unit_in_stock: product.unit_in_stock - body.product_quantity },
+      { where: { product_id: body.product_id } },
+      { transaction: t }
+    );
+    await t.commit();
+  });
+
   res.status(200).json(order);
 };
 exports.getOrdersByCustomerId = async (req, res) => {
