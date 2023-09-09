@@ -470,20 +470,48 @@ exports.filterProductByAttributeValue = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+async function getAllChildrenID(categoryId) {
+    var results = [];
+
+    var categories = await Category.find({
+        parent: categoryId
+    });
+
+    categories = categories.map(i => i._id.toString());
+
+    results.push(...categories);
+
+    for (var i = 0; i < categories.length; i++) {
+        results.push(...await getAllChildrenID(categories[i]));
+    }
+
+    return results;
+}
+
 exports.filterProductByCategory = async (req, res) => {
   const category_id = req.body.category_id;
   const userCredential = req.session.credentials;
+
   await connectDB(userCredential.user_name, userCredential.password);
-  const products = [];
-  getCategoryAndParentCategories(category_id).then(async (categories) => {
-    for (const category of categories) {
-      const product = await productTable.findAll({
-        where: {
-          category_id: category._id,
-        },
-      });
-      products.push(...product);
+
+  var cateIDs = [category_id];
+    cateIDs.push(...await getAllChildrenID(category_id));
+
+    console.log(cateIDs);
+
+    try {
+        var products = await productTable.findAll({
+            where: {
+                category_id: {
+                    [Op.in]: cateIDs
+                }
+            }
+        });
+
+        res.send(products);
     }
-    res.json(products);
-  });
+    catch (err) {
+        res.status(500).json({message: err.message});
+    }
 };
