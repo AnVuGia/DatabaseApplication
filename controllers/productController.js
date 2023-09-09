@@ -37,7 +37,7 @@ async function connectDB(username, password) {
   db.sequelize = sequelize;
 
   db.products = require('../models/Products.js')(sequelize, Sequelize);
-  db.product_location = require('../models/ProductLocation.js')(
+  db.product_location = require('../models/ProductWarehouses.js')(
     sequelize,
     Sequelize
   );
@@ -76,10 +76,13 @@ async function connectDB(username, password) {
 
 exports.createInboundOrder = async (req, res) => {
   const userCredential = req.session.credentials;
+  console.log("create inbound");
 
-  await connectDB(userCredential.username, userCredential.password);
+  try {
+    // Connect to the database
+    await connectDB('lazada_seller', 'password');
 
-  var inboundOrder = req.body.query;
+    const inboundOrder = req.body.query;
 
   await productTable
     .findOne({
@@ -239,10 +242,10 @@ exports.create = async (req, res) => {
 
   // Store attribute list seperately
   const productAttributes = newObject.attributes;
-
+  
   // Remove attrbute list from create product data
   delete newObject.attributes;
-
+  console.log(newObject);
   // Create product in product table to get id
   await productTable
     .create(newObject)
@@ -300,7 +303,8 @@ exports.findAll = async (req, res) => {
 exports.search = async function (req, res) {
   const userCredential = req.session.credentials;
 
-  await connectDB(userCredential.username, userCredential.password);
+  // await connectDB(userCredential.username, userCredential.password);
+  await connectDB("lazada_seller", "password");
 
   let searchAtt = req.body.query.search_attribute;
   let searchStr = req.body.query.search_string;
@@ -330,14 +334,14 @@ exports.search = async function (req, res) {
 exports.getAllProductBySeller = async function (req, res) {
   const userCredential = req.session.credentials;
   const seller_id = req.params.seller_id;
-  console.log('request body: ');
-  console.log(req.body);
-  console.log('Seller id: ' + seller_id);
-  await connectDB(userCredential.username, userCredential.password);
+
+  // await connectDB(userCredential.username, userCredential.password);
+  await connectDB("lazada_customer","password");
   productTable
     .findAll({
       where: {
         seller_id: seller_id,
+
       },
     })
     .then((result) => {
@@ -354,7 +358,9 @@ exports.getAllProductBySeller = async function (req, res) {
 exports.update = async (req, res) => {
   const userCredential = req.session.credentials;
   const product_id = req.params.product_id;
-  await connectDB(userCredential.user_name, userCredential.password);
+
+  // await connectDB(userCredential.user_name, userCredential.password);
+  await connectDB('lazada_seller', 'password');
 
   const newObj = req.body.query;
   const filterParam = {
@@ -405,11 +411,12 @@ exports.update = async (req, res) => {
 exports.delete = async (req, res) => {
   const userCredential = req.session.credentials;
 
-  await connectDB(userCredential.user_name, userCredential.password);
+  // await connectDB(userCredential.user_name, userCredential.password);
+  await connectDB('lazada_seller', 'password');
+  
   const product_id = req.params.product_id;
   // Get the delete product_id
-  var newObj = req.body.query;
-
+  console.log(product_id);
   // Check para
   if (product_id == null) {
     res.status(500).send({
@@ -427,6 +434,8 @@ exports.delete = async (req, res) => {
 
   // Get the product from db
   const product = await productTable.findOne(filterParam);
+
+  
 
   // Calculate the volume of product
   const product_volume = product.width * product.length * product.height;
@@ -532,7 +541,6 @@ exports.filterProductByAttributeValue = async (req, res) => {
 
       products.push(product);
     }
-
     res.json(products);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -549,6 +557,7 @@ async function getCategoryAndParentCategories(categoryId, categories = []) {
   }
 
   return categories;
+
 }
 exports.filterProductByCategory = async (req, res) => {
   const category_id = req.body.category_id;
@@ -566,4 +575,4 @@ exports.filterProductByCategory = async (req, res) => {
     }
     res.json(products);
   });
-};
+

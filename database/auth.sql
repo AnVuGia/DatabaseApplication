@@ -10,6 +10,7 @@ CREATE ROLE 'customer','seller','auth','guest';
 -- Grant Permission for Role
 GRANT ALL ON lazada_database.* TO 'lazada_admin'@'localhost';
 GRANT SELECT, INSERT, UPDATE, DELETE ON lazada_database.Products TO 'seller';
+-- GRANT lazada_database.ProductWarehouses TO 'seller';
 GRANT SELECT, INSERT ON lazada_database.ProductWarehouses TO 'seller';
 GRANT SELECT, INSERT ON lazada_database.Warehouses TO 'seller';
 GRANT SELECT ON lazada_database.Products TO 'customer';
@@ -23,8 +24,7 @@ GRANT SELECT ON lazada_database.Sellers TO 'auth';
 GRANT SELECT, INSERT, UPDATE ON lazada_database.Customers TO 'guest';
 GRANT SELECT, INSERT, UPDATE ON lazada_database.Sellers TO 'guest';
 
-GRANT ALTER ROUTINE ON `lazada_database`.* TO 'lazada_seller'@'localhost';
-GRANT ALL PRIVILEGES ON `lazada_database`.* TO 'lazada_seller'@'localhost';
+GRANT EXECUTE ON PROCEDURE lazada_database.warehouse_selection TO 'lazada_seller'@'localhost';
 
 
 -- Grant Role to User

@@ -4,7 +4,7 @@ const appController = require('../controllers/appController');
 const authJwt = require('../controllers/auth/roleAccess');
 router.get('/', appController.getHello);
 router.get('/login', authJwt.isGuest, appController.getLogin);
-router.post('/login', appController.loginAccount);
+router.post('/login',authJwt.isGuest,appController.loginAccount);
 router.get('/signup', appController.getSignup);
 router.post('/signup', appController.signupAccount);
 router.get('/seller-product', authJwt.isSeller, appController.getSellerProduct);

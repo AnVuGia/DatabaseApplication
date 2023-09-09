@@ -1,328 +1,282 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script
-      src="https://kit.fontawesome.com/0c16ccb70e.js"
-      crossorigin="anonymous"
-    ></script>
-    <link rel="stylesheet" href="/styles/sidebar.css" />
-    <link rel="stylesheet" href="/styles/inventory.css" />
-    <link rel="stylesheet" href="/styles/product.css" />
-    <link rel="stylesheet" href="/styles/modal.css" />
 
-    <title>Inventory | Storeal</title>
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://kit.fontawesome.com/0c16ccb70e.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="/styles/sidebar.css" />
+  <link rel="stylesheet" href="/styles/inventory.css" />
+  <link rel="stylesheet" href="/styles/product.css" />
+  <link rel="stylesheet" href="/styles/modal.css" />
 
-  <body>
-    <div class="root">
-      <div class="sidebar"></div>
+  <title>Inventory | Storeal</title>
+</head>
 
-      <div class="main-content">
-        <div class="table">
-          <div class="table__header">
-            <p>Product Detail</p>
-          </div>
-          <div class="fullpath">
-            <div class="fullpath__items">
-              <a href="../index.html">
-                <i class="fa-solid fa-house"></i>
-                <span>Home</span>
-              </a>
+<body>
+  <div class="root">
+    <div class="sidebar"></div>
 
-              <span>></span>
-
-              <a href="inventory.html">
-                <i class="fa-solid fa-dolly"></i>
-                <span>Inbound</span>
-              </a>
-            </div>
-          </div>
+    <div class="main-content">
+      <div class="table">
+        <div class="table__header">
+          <p>Product Detail</p>
         </div>
-        <div class="container__product">
-          <select id="manage-product__dropdown" style="margin-top: 10px">
-            <option value="option1">Update Product</option>
-            <option value="option2">Add Product</option>
-          </select>
-          <div class="main-product__update">
-            <div class="main-product__container-header">
-              <input
-                class="product-input"
-                type="text"
-                placeholder="Please enter product name..."
-              />
-              <select id="filter-product__dropdown">
-                <option value="all">All</option>
-                <option value="nameasc">Name Ascending</option>
-                <option value="namedcr">Name Decreasing</option>
-                <option value="priceasc">Price Ascending</option>
-                <option value="pricedcr">Price Decreasing</option>
-              </select>
-            </div>
+        <div class="fullpath">
+          <div class="fullpath__items">
+            <a href="../index.html">
+              <i class="fa-solid fa-house"></i>
+              <span>Home</span>
+            </a>
 
-            <div class="main-proudct__update-product">
-              <div>
-                <table class="table__body-product">
-                  <thead>
-                    <tr>
-                      <th name="product-no" width="60px">ID</th>
-                      <th name="product-name" width="150px">Name</th>
-                      <th name="product-description" width="120px">
-                        Product Description
-                      </th>
-                      <th name="product-price" width="10%">Price</th>
-                      <th name="product-width" width="10%">Width</th>
-                      <th name="product-length" width="10%">Length</th>
-                      <th name="product-height" width="10%">Height</th>
-                      <th name="product-actions" width="10%">Action</th>
-                    </tr>
-                  </thead>
+            <span>></span>
 
-                  <tbody id="tablebody">
-                    <tr>
-                      <td>1</td>
-                      <td>iphone 11</td>
-                      <td>
-                        702 Nguyen Van Linh Blvd, Tan Hung ward, Ho Chi Minh
-                        City
-                      </td>
-                      <td>16800</td>
-                      <td>16800</td>
-                      <td>10000</td>
-                      <td>10000</td>
-                      <td>
-                        <button class="edit-button">
-                          <i class="fa-solid fa-pen"></i>
-                        </button>
-                        <button class="delete-button">
-                          <i class="fa-solid fa-trash"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div class="pagination">
-              <div><i class="fa-solid fa-angles-left"></i></div>
-              <div><i class="fa-solid fa-angle-left"></i></div>
-              <div><i class="fa-solid fa-1"></i></div>
-              <div><i class="fa-solid fa-2"></i></div>
-              <div><i class="fa-solid fa-angle-right"></i></div>
-              <div><i class="fa-solid fa-angles-right"></i></div>
-            </div>
-          </div>
-          <div class="main-product__add">
-            <h2 style="text-align: center">Add Product</h2>
-            <div class="modal__main-content">
-              <div class="modal__update-item" style="margin-bottom: 10px">
-                <label class="product__item-info product__name">Name</label>
-                <input
-                  class="product__input-modal product__name-input"
-                  id="product__name--add"
-                  type="text"
-                />
-              </div>
-              <div class="modal__update-item" style="margin-bottom: 10px">
-                <label class="product__item-info product__description"
-                  >Description</label
-                >
-                <textarea
-                  class="product__input-modal product__description-input"
-                  style="flex: 1; height: 60px"
-                  type="text"
-                  id="product__description--add"
-                ></textarea>
-              </div>
-              <div class="modal__update-item" style="margin-bottom: 10px">
-                <label class="product__item-info product__price">Price</label>
-                <input
-                  class="product__input-modal product__price-input"
-                  id="product__price--add"
-                  type="number"
-                />
-              </div>
-              <div class="modal__update-item" style="margin-bottom: 10px">
-                <label class="product__item-info product__price"
-                  >Quantity</label
-                >
-                <input
-                  class="product__input-modal product__quantity-input"
-                  id="product__quantity--add"
-                  type="number"
-                />
-              </div>
-              <div class="modal__update-item" style="margin-bottom: 10px">
-                <label class="product__item-info product__price"
-                  >Width (in cm)</label
-                >
-                <input
-                  class="product__input-modal product__width-input"
-                  id="product__width--add"
-                  type="number"
-                />
-              </div>
-              <div class="modal__update-item" style="margin-bottom: 10px">
-                <label class="product__item-info product__price"
-                  >Length (in cm)</label
-                >
-                <input
-                  class="product__input-modal product__length-input"
-                  id="product__length--add"
-                  type="number"
-                />
-              </div>
-              <div class="modal__update-item" style="margin-bottom: 10px">
-                <label class="product__item-info product__price"
-                  >Height (in cm)</label
-                >
-                <input
-                  class="product__input-modal product__height-input"
-                  id="product__height--add"
-                  type="number"
-                />
-              </div>
-            </div>
-            <div
-              class="modal__footer"
-              style="
-                display: flex;
-                margin-top: auto;
-                padding: 10px;
-                justify-content: flex-end;
-              "
-            >
-              <button
-                class="modal__button modal__button--save button_product--add"
-              >
-                Add
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="backdrop" id="backdrop"></div>
-        <div class="modal" id="modal">
-          <div class="modal-content-update">
-            <h2 style="text-align: center">Product Details</h2>
-            <div class="modal__main-content">
-              <div class="modal__update-item" style="margin-bottom: 10px">
-                <label class="product__item-info product__name">Name</label>
-                <input
-                  class="product__input-modal product__name-input"
-                  id="product__name--update"
-                  type="text"
-                />
-              </div>
-              <div class="modal__update-item" style="margin-bottom: 10px">
-                <label class="product__item-info product__description"
-                  >Description</label
-                >
-                <textarea
-                  class="product__input-modal product__description-input"
-                  style="flex: 1; height: 60px"
-                  id="product__description--update"
-                  type="text"
-                ></textarea>
-              </div>
-              <div class="modal__update-item" style="margin-bottom: 10px">
-                <label class="product__item-info product__price">Price</label>
-                <input
-                  class="product__input-modal product__price-input"
-                  id="product__price--update"
-                  type="number"
-                />
-              </div>
-              <div class="modal__update-item" style="margin-bottom: 10px">
-                <label class="product__item-info product__price"
-                  >Width (in cm)</label
-                >
-                <input
-                  class="product__input-modal product__width-input"
-                  id="product__width--update"
-                  type="number"
-                />
-              </div>
-              <div class="modal__update-item" style="margin-bottom: 10px">
-                <label class="product__item-info product__price"
-                  >Length (in cm)</label
-                >
-                <input
-                  class="product__input-modal product__length-input"
-                  id="product__length--update"
-                  type="number"
-                />
-              </div>
-              <div class="modal__update-item" style="margin-bottom: 10px">
-                <label class="product__item-info product__price"
-                  >Height (in cm)</label
-                >
-                <input
-                  class="product__input-modal product__height-input"
-                  id="product__height--update"
-                  type="number"
-                />
-              </div>
-            </div>
-            <div
-              class="modal__footer"
-              style="
-                display: flex;
-                margin-top: auto;
-                padding: 10px;
-                justify-content: flex-end;
-              "
-            >
-              <button
-                class="modal__button modal__button--cancel closeModalButton"
-              >
-                Cancel
-              </button>
-              <button class="modal__button modal__button--save">Save</button>
-            </div>
-          </div>
-        </div>
-        <div class="confirmation-backdrop" id="backdrop"></div>
-        <div class="confirmation-modal" id="modal">
-          <div class="modal-confirmation">
-            <h2 style="text-align: center">Confirmation</h2>
-            <div class="modal__main-content confirmation-message">
-              <p>Are you sure you want to delete this product?</p>
-            </div>
-            <div
-              class="modal__footer"
-              style="
-                display: flex;
-                margin-top: auto;
-                padding: 10px;
-                justify-content: flex-end;
-              "
-            >
-              <button
-                class="modal__button modal__button--cancel"
-                id="button__cancel-confirmation"
-              >
-                Cancel
-              </button>
-              <button
-                class="modal__button modal__button--save modal__button--yes"
-                id="delete-button"
-              >
-                Yes
-              </button>
-            </div>
+            <a href="inventory.html">
+              <i class="fa-solid fa-dolly"></i>
+              <span>Inbound</span>
+            </a>
           </div>
         </div>
       </div>
-    </div>
+      <div class="container__product">
+        <select id="manage-product__dropdown" style="margin-top: 10px">
+          <option value="option1">Update Product</option>
+          <option value="option2">Add Product</option>
+        </select>
+        <div class="main-product__update">
+          <div class="main-product__container-header">
+            <input class="product-input" type="text" placeholder="Please enter product name..." />
+            <select id="filter-product__dropdown">
+              <option value="all">All</option>
+              <option value="nameasc">Name Ascending</option>
+              <option value="namedcr">Name Decreasing</option>
+              <option value="priceasc">Price Ascending</option>
+              <option value="pricedcr">Price Decreasing</option>
+            </select>
+          </div>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-      crossorigin="anonymous"
-    ></script>
-    <script src="/javascript/helper.js"></script>
-    <script type="module" src="/javascript/product.js"></script>
-  </body>
+          <div class="main-proudct__update-product">
+            <div>
+              <table class="table__body-product">
+                <thead>
+                  <tr>
+                    <th name="product-no" width="60px">ID</th>
+                    <th name="product-name" width="150px">Name</th>
+                    <th name="product-description" width="120px">
+                      Product Description
+                    </th>
+                    <th name="product-price" width="10%">Price</th>
+                    <th name="product-width" width="10%">Width</th>
+                    <th name="product-length" width="10%">Length</th>
+                    <th name="product-height" width="10%">Height</th>
+                    <th name="product-actions" width="10%">Action</th>
+                  </tr>
+                </thead>
+
+                <tbody id="tablebody">
+                  <!-- <tr>
+                    <td>1</td>
+                    <td>iphone 11</td>
+                    <td>
+                      702 Nguyen Van Linh Blvd, Tan Hung ward, Ho Chi Minh
+                      City
+                    </td>
+                    <td>16800</td>
+                    <td>16800</td>
+                    <td>10000</td>
+                    <td>10000</td>
+                    <td>
+                      <button class="edit-button">
+                        <i class="fa-solid fa-pen"></i>
+                      </button>
+                      <button class="delete-button">
+                        <i class="fa-solid fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr> -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="pagination">
+            <div><i class="fa-solid fa-angles-left"></i></div>
+            <div><i class="fa-solid fa-angle-left"></i></div>
+            <div><i class="fa-solid fa-1"></i></div>
+            <div><i class="fa-solid fa-2"></i></div>
+            <div><i class="fa-solid fa-angle-right"></i></div>
+            <div><i class="fa-solid fa-angles-right"></i></div>
+          </div>
+        </div>
+        <div class="main-product__add">
+          <h2 style="text-align: center">Add Product</h2>
+          <div class="modal__main-content" id = "create-product-form">
+            <div class="modal__update-item" style="margin-bottom: 10px">
+              <label class="product__item-info product__name">Name</label>
+              <input class="product__input-modal product__name-input" id="product__name--add" type="text" required />
+            </div>
+            <div class="modal__update-item" style="margin-bottom: 10px">
+              <label class="product__item-info product__description">Description</label>
+              <textarea class="product__input-modal product__description-input" style="flex: 1; height: 60px"
+                type="text" id="product__description--add"></textarea>
+            </div>
+            <div class="modal__update-item" style="margin-bottom: 10px">
+              <label class="product__item-info product__description">Image Url</label>
+              <input class="product__input-modal product__description-input" style="flex: 1; height: 60px"
+                type="text" id="product__image--add"></input>
+            </div>
+            <div class="modal__update-item" style="margin-bottom: 10px">
+              <label class="product__item-info product__price">Price</label>
+              <input class="product__input-modal product__price-input" id="product__price--add" type="number"
+                required />
+            </div>
+            <div class="modal__update-item" style="margin-bottom: 10px">
+              <label class="product__item-info product__price">Width (in cm)</label>
+              <input class="product__input-modal product__width-input" id="product__width--add" type="number"
+                required />
+            </div>
+            <div class="modal__update-item" style="margin-bottom: 10px">
+              <label class="product__item-info product__price">Length (in cm)</label>
+              <input class="product__input-modal product__length-input" id="product__length--add" type="number"
+                required />
+            </div>
+            <div class="modal__update-item" style="margin-bottom: 10px">
+              <label class="product__item-info product__price">Height (in cm)</label>
+              <input class="product__input-modal product__height-input" id="product__height--add" type="number"
+                required />
+            </div>
+            <div>
+              <div class="heading">
+                <h3>Attributes</h3>
+                <select name="" id="select-cateogry-for-create">
+                  <option value="option1">Category</option>
+                  <option value="option2">Add Category</option>
+                </select>
+              </div>
+              <div class="attribute-input-form">
+                <!-- <div class="attribute-input">
+                    <label class="product__item-info" for="">Color</label>
+                    <input type="text" id="color" req />
+                  </div>
+                  <div class="attribute-input">
+                    <label for="">Size</label>
+                    <input type="text" id="size" />
+                  </div>
+                  <div class="attribute-input">
+                    <label for="">Weight</label>
+                    <input type="text" id="weight" />
+                  </div>
+                  <div class="attribute-input">
+                    <label for="">Material</label>
+                    <input type="text" id="material" />
+                  </div> -->
+
+              </div>
+             
+              <div class="modal__footer" style="
+                display: flex;
+                margin-top: auto;
+                padding: 10px;
+                justify-content: flex-end;
+              ">
+               <button class="modal__button modal__button--save button_product--add">
+                Add
+              </button>
+            
+          </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+      <div class="backdrop" id="backdrop"></div>
+      <div class="modal" id="modal">
+        <div class="modal-content-update">
+          <h2 style="text-align: center">Product Details</h2>
+          <div class="modal__main-content">
+            <div class="modal__update-item" style="margin-bottom: 10px">
+              <label class="product__item-info product__name">Name</label>
+              <input class="product__input-modal product__name-input" id="product__name--update" type="text" />
+            </div>
+            <div class="modal__update-item" style="margin-bottom: 10px">
+              <label class="product__item-info product__description">Description</label>
+              <textarea class="product__input-modal product__description-input" style="flex: 1; height: 60px"
+                id="product__description--update" type="text"></textarea>
+            </div>
+            <div class="modal__update-item" style="margin-bottom: 10px">
+              <label class="product__item-info product__price">Price</label>
+              <input class="product__input-modal product__price-input" id="product__price--update" type="number" />
+            </div>
+            <div class="modal__update-item" style="margin-bottom: 10px">
+              <label class="product__item-info product__price">Image URL</label>
+              <input class="product__input-modal product__price-input" id="product__image--update" type="text" />
+            </div>
+            <div class="heading">
+              <h3>Attributes</h3>
+              <select name="" id="select-cateogry-for-update">
+                
+              </select>
+              <div class="attribute-input-form-edit">
+              </div>
+            </div>
+          </div>
+          <div class="modal__footer" style="
+                display: flex;
+                margin-top: auto;
+                padding: 10px;
+                justify-content: flex-end;
+              ">
+            <button class="modal__button modal__button--cancel closeModalButton">
+              Cancel
+            </button>
+            <button class="modal__button modal__button--save modal__buttuon--eidtProduct">Save</button>
+          </div>
+        </div>
+      </div>
+      <div class="confirmation-backdrop" id="backdrop"></div>
+      <div class="confirmation-modal" id="modal">
+        <div class="modal-confirmation">
+          <h2 style="text-align: center">Confirmation</h2>
+          <div class="modal__main-content confirmation-message">
+            <p>Are you sure you want to delete this product?</p>
+          </div>
+          <div class="modal__footer" style="
+                display: flex;
+                margin-top: auto;
+                padding: 10px;
+                justify-content: flex-end;
+              ">
+            <button class="modal__button modal__button--cancel" id="button__cancel-confirmation">
+              Cancel
+            </button>
+            <button class="modal__button modal__button--save modal__button--yes" id="delete-button">
+              Yes
+            </button>
+          </div>
+        </div>
+      </div>
+      <div id="status-modal" class="modal-status">
+        <div class="modal-status-content success">
+            <p class = "status-msg">Operation Successful</p>
+            <button class ="error-btn return-btn" >Return</button>
+            <button class ="error-btn" id="close-status-modal-btn">Refresh</button>
+            
+        </div>
+    </div>
+<div id="loading-modal" class="loading-modal">
+    <div class="modal-content">
+        <div class="loader"></div>
+        <p style="margin: auto;">Loading...</p>
+    </div>
+</div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <script src="/javascript/helper.js"></script>
+  <script type="module" src="/javascript/product.js"></script>
+</body>
+
 </html>

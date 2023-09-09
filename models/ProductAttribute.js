@@ -15,8 +15,7 @@ const productAttributesSchema = new Schema({
                 required: true
             },
             "value": {
-                type: String,
-                required: true
+                type: String
             }
         }
     ]

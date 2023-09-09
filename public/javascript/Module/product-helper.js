@@ -15,7 +15,7 @@ const product = {
     const response = await axios.post(`${API_URL}/create`, {
       query: product,
     });
-    return response.data;
+    return response;
   },
   async updateProduct(product) {
     const response = await axios.post(
@@ -33,8 +33,22 @@ const product = {
         query: product,
       }
     );
-    return response.data;
+    return response;
   },
+  async createInbound(bodyParser) {
+    const response = await axios.post(
+      `${API_URL}/createInbound`,
+      {
+        query: bodyParser
+      }
+    );
+    return response;
+  },
+  async filter(body){
+    const response = await axios.post(`${API_URL}/filter-name`, {query: body});
+    return response;
+  }
+
 };
 
 export default product;

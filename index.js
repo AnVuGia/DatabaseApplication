@@ -9,6 +9,7 @@ const appRoute = require('./routes/appRoute');
 const productRoute = require('./routes/productRoute');
 const warehouseRoute = require('./routes/warehouseRoute');
 const categoryRoute = require('./routes/categoryRoute');
+const productCategoryRoute = require('./routes/productCategoryRoute');
 const customerRoute = require('./routes/customerRoute');
 const ordersRoute = require('./routes/ordersRoute');
 const db = require('./models');
@@ -49,6 +50,7 @@ app.use('/', appRoute);
 app.use('/product', productRoute);
 app.use('/warehouse', warehouseRoute);
 app.use('/category', categoryRoute);
+app.use('/attribute',productCategoryRoute)
 app.use('/customer', customerRoute);
 app.use('/order', ordersRoute);
 db.sequelize.sync().then((req) => {

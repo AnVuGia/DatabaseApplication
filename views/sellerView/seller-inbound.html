@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/styles/inventory.css">
     <link rel="stylesheet" href="/styles/product.css">
     <link rel="stylesheet" href="/styles/inbound.css">
+    <link rel="stylesheet" href="/styles/modal.css">
 
 
     <title>Inventory | Storeal</title>
@@ -58,7 +59,7 @@
                     </div>
                     <div class="main-proudct__update-product">
                         <div>
-                            <table class="table__body-product">
+                            <table class="">
                                 <thead>
                                     <tr>
                                         <th name="product-no" width="60px">ID</th>
@@ -72,7 +73,7 @@
                                     </tr>
                                 </thead>
 
-                                <tbody>
+                                <tbody class="browsing-table">
                                     <tr>
                                         <td>1</td>
                                         <td>iphone 11</td>
@@ -104,35 +105,35 @@
                 <div class="inbound-product-container" style="margin-top: 30px;">
                     <div>
                         <h2>Inbound Order Table</h2>
-                        <table class="table__body-product">
+                        <table >
                             <thead>
                                 <tr>
                                     <th name="product-no" width="60px">ID</th>
                                     <th name="product-name" width="150px">Name</th>
-                                    <th name="product-width" width="10%">Width</th>
-                                    <th name="product-length" width="10%">Length</th>
-                                    <th name="product-height" width="10%">Height</th>
-                                    <th name="product-actions" width="10%">Quanity</th>
+                                    <th name="product-quantity" width="10%">Quanity</th>
+                                    <th name="product-actions" width="10%">Action</th>
                                 </tr>
                             </thead>
 
-                            <tbody>
+                            <tbody class="inbound-table" >
                                 <tr>
-                                    <td>1</td>
+                                    <!-- <td>1</td>
                                     <td>iphone 11</td>
-                                    <td>16800</td>
-                                    <td>10000</td>
-                                    <td>10000</td>
                                     <td>
                                         <input type="number"  min="0" style="width:90px;">
                                     </td>
+                                    <td>
+                                        <button class="add-button"><i class="fa-solid fa-minus"></i></button>
+                                    </td> -->
                                 </tr>
                             </tbody>
                         </table>
+                        
                         <div class="inbound-footer" style="display: flex; justify-content: flex-end; padding: 20px;">
                             <button class="inbound-button-order">Order</button>
                         </div>
                     </div>
+                    
                 </div>
                 
             </div>
@@ -177,6 +178,41 @@
 
                 </div>
             </div>
+        </div>
+        <div class="backdrop" id="backdrop"></div>
+            <div class="modal"  id="modal">
+                <div class="modal-content-update">
+                    <h2 style="text-align: center;">Add New Category</h2>
+                    <div class="modal__main-content">
+                        <div class="modal__update-item" style="margin-bottom: 10px;">
+                            <label class="product__item-info product__name">Name</label>
+                            <input class="product__input-modal inventory__name-input" id="category-name-form-input"
+                                type="text">
+                        </div>
+                        <div class="attribute-section" style="margin-top: 30px;">
+                            <h3 style="margin: 15px 0px;">Attributes</h1>
+                            <div>
+                                <label for="">Attribute Name</label>
+                                <input class = "category-input"  type="text">
+                                <button class="add-category-input-button " id ="add-category-input"><i class="fa-solid fa-plus"></i></button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal__footer"
+                        style="display: flex; margin-top: auto;padding: 10px; justify-content: flex-end;">
+                        <button class="modal__button modal__button--cancel closeModalButton">Cancel</button>
+                        <button class="modal__button modal__button--save" id = "category-input-save-button">Save</button>
+                    </div>
+
+                </div>
+            </div>
+            <div id="loading-modal" class="loading-modal">
+                <div class="modal-content">
+                    <div class="loader"></div>
+                    <p style="margin: auto;">Loading...</p>
+                </div>
+            </div>
             <div class="confirmation-backdrop" id="backdrop"></div>
             <div class="confirmation-modal" id="modal">
                 <div class="modal-confirmation">
@@ -188,19 +224,22 @@
                         style="display: flex; margin-top: auto;padding: 10px; justify-content: flex-end;">
                         <button class="modal__button modal__button--cancel"
                             id="button__cancel-confirmation">Cancel</button>
-                        <button class="modal__button modal__button--save" id="delete-button">Yes</button>
+                        <button class="modal__button modal__button--save modal__button--yes" id="delete-button">Yes</button>
                     </div>
                 </div>
             </div>
-        </div>
-
+            <div id="status-modal" class="modal-status">
+            <div class="modal-status-content success">
+                <p class = "status-msg">Operation Successful</p>
+                <button class ="error-btn" id="close-status-modal-btn">Close</button>
+            </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
     <script src="/javascript/helper.js"></script>
-    <script src="/javascript/inbound.js"></script>
+    <script type = "module" src="/javascript/inbound.js"></script>
     <script>
 
     </script>
