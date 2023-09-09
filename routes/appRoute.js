@@ -13,4 +13,6 @@ router.get('/admin-inventory', authJwt.isAdmin, appController.getAdminVentory);
 router.get('/admin-category', authJwt.isAdmin, appController.getAdminCategory);
 router.get('/customers', authJwt.isCustomer, appController.getCustomers);
 router.get('/product-detail', appController.getProductDetail);
+router.get('/cart-view', appController.getCart);
+router.get('/checkout', appController.getCheckout);
 module.exports = router;

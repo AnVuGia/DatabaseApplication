@@ -22,7 +22,7 @@ const shopCartSchema = new Schema(
     ],
   },
   {
-    collection: 'shopCarts',
+    collection: 'shop-carts',
   }
 );
 

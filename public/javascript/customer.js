@@ -1,3 +1,4 @@
+
 import productModule from "./Module/product-helper.js"
 import category from "./Module/category.js"
 
@@ -76,7 +77,10 @@ function createItemCard(item) {
   const card = document.createElement("div")
   card.className = "card__item"
   card.innerHTML = `
-  <img class="img-item" src="${item.image}" alt="" srcset="">
+  <img class="img-item" src="${
+    item.image ||
+    'https://down-vn.img.susercontent.com/file/6db97a22ffdf63960cdb0fe349877cc9'
+  }" alt="" srcset="">
       <div class="card-info__container">
           <div class="card-info__item-name">
               ${item.product_name}
@@ -85,9 +89,11 @@ function createItemCard(item) {
               ${item.price}
           </div>
       </div>
-      `
-  return card
+      `;
+  return card;
 }
+
+
 
 async function getFirstOrderCategory() {
   let res = await category.findAll();
@@ -120,9 +126,6 @@ function displayCategoryList(container, categories, offsetWidth,id) {
 
 
   getAllIem()
-
-
-
 
 
 
