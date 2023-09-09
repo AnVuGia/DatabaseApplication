@@ -1,7 +1,7 @@
 const connectDB = require('./helperController').connectDB;
 const { MongoClient, ObjectId } = require('mongodb');
 const shopCartModel = require('../models/ShopCart');
-
+const { Sequelize } = require('sequelize');
 const mongodb_uri = 'mongodb://localhost:27017';
 const db_name = 'group_asm2';
 const mongo_client = new MongoClient(`${mongodb_uri}/${db_name}`);
@@ -104,34 +104,30 @@ exports.deleteFromCart = async (req, res) => {
   const body = req.body;
   console.log(body);
   const connection = await connect();
-  const transaction = await connection.transaction();
-  const shopCart = await connection.collection('shop-carts').findOne({
-    customer_id: body.customer_id,
-  });
-  const products = shopCart.products;
-  const product = products.find((product) => {
-    return product.product_id === body.product_id;
-  });
-  if (!product) {
-    res.status(500).json('Product not found');
-    return;
-  }
-  products.splice(products.indexOf(product), 1);
   try {
-    await connection.collection('shop-carts').updateOne(
-      { products: products },
-      {
-        where: {
-          customer_id: body.customer_id,
-        },
-        transaction: transaction,
-      }
-    );
-    await transaction.commit();
+    const shopCart = await connection.collection('shop-carts').findOne({
+      customer_id: body.customer_id,
+    });
+    const products = shopCart.products;
+    const product = products.find((product) => {
+      return product.product_id === body.product_id;
+    });
+    if (!product) {
+      throw new Error('Product not found');
+    }
+    products.splice(products.indexOf(product), 1);
+    try {
+      await connection
+        .collection('shop-carts')
+        .updateOne(
+          { customer_id: body.customer_id },
+          { $set: { products: products } }
+        );
+    } catch (err) {
+      throw err;
+    }
+    res.status(200).json('Product deleted');
   } catch (err) {
-    await transaction.rollback();
     res.status(500).json('Product not found');
-    return;
   }
-  res.status(200).json('Product deleted');
 };

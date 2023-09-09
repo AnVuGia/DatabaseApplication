@@ -13,10 +13,11 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON lazada_database.Products TO 'seller';
 -- GRANT lazada_database.ProductWarehouses TO 'seller';
 GRANT SELECT, INSERT ON lazada_database.ProductWarehouses TO 'seller';
 GRANT SELECT, INSERT ON lazada_database.Warehouses TO 'seller';
-GRANT SELECT ON lazada_database.Products TO 'customer';
+GRANT SELECT, UPDATE ON lazada_database.Products TO 'customer';
 GRANT SELECT, INSERT, DELETE ON lazada_database.Orders TO 'customer';
 GRANT SELECT ON lazada_database.Warehouses TO 'customer';
 GRANT SELECT, UPDATE ON lazada_database.ProductWarehouses TO 'customer';
+
 GRANT SELECT ON lazada_database.Customers TO 'auth';
 GRANT SELECT ON lazada_database.Admins TO 'auth';
 GRANT SELECT ON lazada_database.Sellers TO 'auth';

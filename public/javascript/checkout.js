@@ -16,35 +16,53 @@ window.onload = async function () {
   for (let i = 0; i < ordersList.length; i++) {
     const product = productList[i];
     const order = ordersList[i];
-    const row = orderRow(
-      product.product_name,
-      product.price,
-      order.product_quantity,
-      product.image
-    );
-    orderContainer.insertAdjacentHTML('beforeend', row);
+    const row = orderRow(product, order);
+    orderContainer.appendChild(row);
   }
 };
 
-function orderRow(name, price, quantity, image) {
-  return `  <div class="cart-item mb-4">
+function orderRow(product, order) {
+  console.log('product');
+  console.log(product);
+  console.log('order');
+  console.log(order);
+  const row = document.createElement('div');
+  row.classList.add('row');
+  row.innerHTML = `  <div class="cart-item mb-4">
         <div class="row">
           <div class="col-md-3">
             <img src="${
-              image ||
+              product.image ||
               'https://down-vn.img.susercontent.com/file/6db97a22ffdf63960cdb0fe349877cc9'
             }" alt="Product" class="img-fluid" />
           </div>
           <div class="col-md-6">
-            <h4>${name}</h4>
-            <p>${price}</p>
+            <h4>${product.product_name}</h4>
+            <p>${product.price}</p>
           </div>
           <div class="col-md-3">
-            <p>Quantity: ${quantity}</p>
+            <p>Quantity: ${order.product_quantity}</p>
+            <p>Order ID: ${order.order_id}</p>  
             <button class="btn btn-sm btn-danger">Remove</button>
             <button class="btn btn-sm btn-success">Accept</button>
             <button class="btn btn-sm btn-secondary">Decline</button>
           </div>
         </div>
       </div>`;
+  const acceptBtn = row.querySelector('.btn-success');
+  const declineBtn = row.querySelector('.btn-secondary');
+  const removeBtn = row.querySelector('.btn-danger');
+  acceptBtn.addEventListener('click', () => {
+    orderHelper.AcceptOrder({
+      order_id: order.order_id,
+      product_id: product.product_id,
+    });
+  });
+  declineBtn.addEventListener('click', () => {
+    console.log('decline');
+  });
+  removeBtn.addEventListener('click', () => {
+    console.log('remove');
+  });
+  return row;
 }

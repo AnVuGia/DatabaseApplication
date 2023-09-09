@@ -61,7 +61,7 @@ function displayCart() {
 }
 proceedButton.addEventListener('click', () => {
   onProceed();
-  window.location.href = '/checkout';
+  // window.location.href = '/checkout';
 });
 
 async function onProceed() {
@@ -71,6 +71,7 @@ async function onProceed() {
       product_id: cartItems[i].product_id,
       product_quantity: cartItems[i].quantity,
     };
+    console.log(order);
     try {
       await orderHelper.addOrder(order);
       await cartHelper.removeFromCart({

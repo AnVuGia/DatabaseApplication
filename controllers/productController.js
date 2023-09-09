@@ -66,14 +66,22 @@ exports.createInboundOrder = async (req, res) => {
   await connectDB(userCredential.username, userCredential.password);
 
   var inboundOrder = req.body.query;
-
+  await productTable.update(
+    {
+      unit_in_stock: inboundOrder.quantity,
+    },
+    {
+      where: {
+        product_id: inboundOrder.product_id,
+      },
+    }
+  );
   await productTable
     .findOne({
       where: {
         product_id: inboundOrder.product_id,
       },
     })
-
     .then(async (product) => {
       const product_volume = product.width * product.height * product.length;
 

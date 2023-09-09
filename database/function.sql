@@ -83,7 +83,7 @@ BEGIN
 
   -- Declare a cursor to fetch rows from PRODUCTWAREHOUSES
   DECLARE cur CURSOR FOR
-    SELECT warehouse_id, quantity
+    SELECT warehouse_id, product_quantity
     FROM PRODUCTWAREHOUSES
     WHERE product_id = productID
     ORDER BY warehouse_id;
@@ -92,7 +92,7 @@ BEGIN
   DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
   -- Start a transaction
-  START TRANSACTION;
+
 
   OPEN cur;
 
@@ -106,12 +106,12 @@ BEGIN
     IF quantityChange > quantityInWarehouse THEN
       -- Reduce quantity in the current warehouse to 0
       UPDATE PRODUCTWAREHOUSES
-      SET quantity = 0
+      SET product_quantity = 0
       WHERE product_id = productID AND warehouse_id = warehouseID;
     ELSE
       -- Reduce quantity in the current warehouse by quantityChange
       UPDATE PRODUCTWAREHOUSES
-      SET quantity = quantity - quantityChange
+      SET product_quantity = product_quantity - quantityChange
       WHERE product_id = productID AND warehouse_id = warehouseID;
       LEAVE update_loop;
     END IF;
@@ -125,17 +125,11 @@ BEGIN
 
   CLOSE cur;
 
-  -- Commit the transaction
-  COMMIT;
 
 END;
 //
 
 DELIMITER ;
-
-
-
-
 
 
 
@@ -155,5 +149,5 @@ BEGIN
     END IF;
 END;
 //
-
+    
 DELIMITER ;
