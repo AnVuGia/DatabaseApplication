@@ -1,6 +1,23 @@
-
-
-window.onload = function () {
+const orderContainer = document.getElementById('order-container');
+import orderHelper from './Module/order-helper.js';
+const currentCustomer = sessionStorage.getItem('user');
+const ordersList = [];
+window.onload = async function () {
+  const orders = await orderHelper.getOrdersByCustomerId({
+    customer_id: currentCustomer.customer_id,
+  });
+  ordersList.push(...orders.data);
+  for (let i = 0; i < ordersList.length; i++) {
+    const product = ordersList[i].product;
+    const order = ordersList[i];
+    const row = orderRow(
+      product.product_name,
+      product.price,
+      order.product_quantity,
+      product.image
+    );
+    orderContainer.insertAdjacentHTML('beforeend', row);
+  }
 };
 
 function orderRow(name, price, quantity, image) {
