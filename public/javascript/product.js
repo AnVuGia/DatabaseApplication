@@ -33,34 +33,12 @@ window.onload = async () => {
 };
 addProductButton.addEventListener('click', () => {
   const product = createProductObject();
-<<<<<<< HEAD
   console.log(product); 
   if (product.attributes.length == 0){
     displayStatusModal('Category has not been selected or Required attribute has not been filled!', false);
     return;
   }
   if ((product.price == 0 || !product.price) || (product.product_name.length == 0) ||( product.width == 0||!product.width)||( product.length == 0||!product.length)|| (product.height == 0||!product.height)  ){
-=======
-  console.log(product);
-  if (product.attributes.length == 0) {
-    displayStatusModal(
-      'Category has not been selected or Required attribute has not been filled!',
-      false
-    );
-    return;
-  }
-  if (
-    product.price == 0 ||
-    !product.price ||
-    product.product_name.length == 0 ||
-    product.width == 0 ||
-    !product.width ||
-    product.length == 0 ||
-    !product.length ||
-    product.height == 0 ||
-    !product.height
-  ) {
->>>>>>> f8cee1a17e908968c84f9338c1709435be9226e2
     displayStatusModal('Price/Name/Width/Length/Height must be filled!', false);
     return;
   }
@@ -265,7 +243,6 @@ selectEdit.addEventListener('change', async () => {
   await renderSelectEdit();
 });
 
-<<<<<<< HEAD
 async function renderSelect(){
     if (select.value == "all"){
       form.innerHTML = "";
@@ -293,31 +270,6 @@ async function renderSelectEdit(){
   console.log(res.data);
   displayEditForm(res.data);
  
-=======
-async function renderSelect() {
-  if (select.value == 'all') {
-    form.innerHTML = '';
-    return;
-  }
-  const body = {
-    search_attribute: '_id',
-    search_string: select.value,
-  };
-  let res = await category.search(body);
-  displayInputCategoryForm(res.data[0].attributes);
-}
-async function renderSelectEdit() {
-  if (selectEdit.value == 'all') {
-    formEdit.innerHTML = '';
-    return;
-  }
-  const body = {
-    search_attribute: '_id',
-    search_string: selectEdit.value,
-  };
-  let res = await category.search(body);
-  displayEditForm(res.data[0].attributes);
->>>>>>> f8cee1a17e908968c84f9338c1709435be9226e2
 }
 
 function displayInputCategoryForm(list) {
@@ -341,11 +293,7 @@ function createCatInputCard(attribute) {
   input.type = attribute.type;
   input.id = attribute.name;
   input.required = attribute.required;
-<<<<<<< HEAD
   
-=======
-  input.value = attribute.value ? attribute.value : '';
->>>>>>> f8cee1a17e908968c84f9338c1709435be9226e2
 
   if (attribute.type == "number"){
     input.type = "number"
@@ -369,11 +317,7 @@ function createInputEdit(attribute) {
   input.type = attribute.type;
   input.id = attribute.name;
   input.required = attribute.required;
-<<<<<<< HEAD
   
-=======
-  input.value = attribute.value ? attribute.value : '';
->>>>>>> f8cee1a17e908968c84f9338c1709435be9226e2
 
   if (attribute.type == "number"){
     input.type = "number"
@@ -393,18 +337,10 @@ function createProductObject() {
   const product = {
     product_name: document.getElementById('product__name--add').value,
     product_desc: document.getElementById('product__description--add').value,
-<<<<<<< HEAD
     seller_id : JSON.parse(sessionStorage.getItem('user')).seller_id,
     category_id: select.value,
-=======
-    image: document.getElementById('product__image--add').value,
-    seller_id: JSON.parse(sessionStorage.getItem('user')).seller_id,
-    category_id: select.value,
-    price: parseFloat(document.getElementById('product__price--add').value),
->>>>>>> f8cee1a17e908968c84f9338c1709435be9226e2
     width: parseInt(document.getElementById('product__width--add').value),
     length: parseInt(document.getElementById('product__length--add').value),
-<<<<<<< HEAD
     height: parseInt(document.getElementById('product__height--add').value),
     price: parseFloat (document.getElementById('product__price--add').value),
     image: document.getElementById('product__image--add').value,
@@ -412,11 +348,6 @@ function createProductObject() {
   }
   return product
   
-=======
-    attributes: getAttributeValue(),
-  };
-  return product;
->>>>>>> f8cee1a17e908968c84f9338c1709435be9226e2
 }
 
 function createProductForUpdate() {
@@ -431,14 +362,9 @@ function createProductForUpdate() {
   };
   return product;
 }
-<<<<<<< HEAD
 function getAttributeValue(className){
   console.log(className);
   const attributes = document.querySelectorAll('.attribute-input');
-=======
-function getAttributeValue(className = 'attribute-input') {
-  const attributes = document.querySelectorAll(className);
->>>>>>> f8cee1a17e908968c84f9338c1709435be9226e2
   const attributeList = [];
   for (let i = 0; i < attributes.length; i++) {
     if (
@@ -450,12 +376,8 @@ function getAttributeValue(className = 'attribute-input') {
     const attribute = {
       name: attributes[i].children[0].innerHTML,
       value: attributes[i].children[1].value,
-<<<<<<< HEAD
       type: attributes[i].children[1].type,
     }
-=======
-    };
->>>>>>> f8cee1a17e908968c84f9338c1709435be9226e2
     attributeList.push(attribute);
   }
   return attributeList;
