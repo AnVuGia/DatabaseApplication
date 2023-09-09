@@ -69,7 +69,10 @@ function displayItemList(itemList) {
   for (let i = 0; i < itemList.length; i++) {
     container.appendChild(createItemCard(itemList[i]));
     const lastItem = container.lastElementChild;
-    lastItem.addEventListener('click', () => {});
+    lastItem.addEventListener('click', () => {
+      sessionStorage.setItem('product', JSON.stringify(itemList[i]));
+      window.location.href = '/product-detail';
+    });
   }
 }
 

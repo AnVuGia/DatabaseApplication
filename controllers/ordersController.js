@@ -33,6 +33,7 @@ exports.addOrder = async (req, res) => {
 };
 exports.getOrdersByCustomerId = async (req, res) => {
   const body = req.body;
+  console.log(body);
   const orderTable = await connectDB(
     req.session.credentials,
     require('../models/Orders')
