@@ -1,4 +1,5 @@
 // Sample cart data (replace with actual data or load dynamically)
+
 import cartHelper from './Module/cart-helper.js';
 import customer from './Module/cart-helper.js';
 import orderHelper from './Module/order-helper.js';
@@ -59,7 +60,8 @@ function displayCart() {
   });
 }
 proceedButton.addEventListener('click', () => {
-  window.location.href = 'checkout';
+  onProceed();
+  window.location.href = '/checkout';
 });
 
 async function onProceed() {
@@ -69,11 +71,14 @@ async function onProceed() {
       product_id: cartItems[i].product_id,
       product_quantity: cartItems[i].quantity,
     };
-    await orderHelper.addOrder(order);
-    await cartHelper.removeFromCart({
-      customer_id: currentUserJSON.customer_id.toString(),
-      product_id: cartItems[i].product_id,
-    });
+    try {
+      await orderHelper.addOrder(order);
+      await cartHelper.removeFromCart({
+        customer_id: currentUserJSON.customer_id.toString(),
+        product_id: cartItems[i].product_id,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
-  window.location.href = 'checkout';
 }

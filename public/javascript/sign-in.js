@@ -76,8 +76,8 @@ submit.addEventListener('click', async (event) => {
       sessionStorage.setItem('user', JSON.stringify(responseData.account));
     }
   } catch (error) {
+    displayStatusModal('Login failed', false);
     console.log(error);
-    window.alert('Invalid username or password');
   }
 });
 
