@@ -1,9 +1,11 @@
 // Sample cart data (replace with actual data or load dynamically)
 import cartHelper from './Module/cart-helper.js';
 import customer from './Module/cart-helper.js';
+import orderHelper from './Module/order-helper.js';
 const cartItems = [];
 const currentUser = sessionStorage.getItem('user');
 const currentUserJSON = JSON.parse(currentUser);
+const proceedButton = document.querySelector('.proceed-button');
 console.log(currentUserJSON);
 window.onload = async function () {
   await customer
@@ -55,4 +57,23 @@ function displayCart() {
     });
     cartContainer.appendChild(cartItemDiv);
   });
+}
+proceedButton.addEventListener('click', () => {
+  window.location.href = 'checkout';
+});
+
+async function onProceed() {
+  for (let i = 0; i < cartItems.length; i++) {
+    const order = {
+      customer_id: currentUserJSON.customer_id.toString(),
+      product_id: cartItems[i].product_id,
+      product_quantity: cartItems[i].quantity,
+    };
+    await orderHelper.addOrder(order);
+    await cartHelper.removeFromCart({
+      customer_id: currentUserJSON.customer_id.toString(),
+      product_id: cartItems[i].product_id,
+    });
+  }
+  window.location.href = 'checkout';
 }
