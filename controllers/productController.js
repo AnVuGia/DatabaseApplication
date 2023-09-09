@@ -1,24 +1,10 @@
 const { Sequelize, Op } = require('sequelize');
 const mysql = require('mysql');
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const util = require('util');
-const Category = require('../models/Category');
-const ProductAttributes = require('../models/ProductAttribute');
 
-const { MongoClient, ObjectId } = require('mongodb');
-const mongodb_uri = 'mongodb://127.0.0.1:27017';
-const mongo_client = new MongoClient(mongodb_uri);
+const ProductAttributes = require("../models/ProductAttribute");
 
-// Connect to database and return the database with given name
-async function connect(dbName) {
-  try {
-    await mongo_client.connect();
-
-    return mongo_client.db(dbName);
-  } catch (e) {
-    console.error(e);
-  }
-}
 var db = {};
 var productTable;
 var productLocationTable;
@@ -37,7 +23,7 @@ async function connectDB(username, password) {
   db.sequelize = sequelize;
 
   db.products = require('../models/Products.js')(sequelize, Sequelize);
-  db.product_location = require('../models/ProductWarehouses.js')(
+  db.product_location = require('../models/ProductLocation.js')(
     sequelize,
     Sequelize
   );
@@ -76,26 +62,22 @@ async function connectDB(username, password) {
 
 exports.createInboundOrder = async (req, res) => {
   const userCredential = req.session.credentials;
-  console.log("create inbound");
 
-  try {
-    // Connect to the database
-    await connectDB('lazada_seller', 'password');
+  await connectDB(userCredential.username, userCredential.password);
 
-    const inboundOrder = req.body.query;
+  var inboundOrder = req.body.query;
 
-  await productTable
-    .findOne({
+  await productTable.findOne({
       where: {
-        product_id: inboundOrder.product_id,
-      },
-    })
-    .then(async (product) => {
+          product_id: inboundOrder.product_id
+      }
+  })
+  .then( async (product) => {
       const product_volume = product.width * product.height * product.length;
       const newID = product.product_id;
       // Create a stored procedure
       await mysqlConnection.query(
-        `
+          `
           DROP PROCEDURE IF EXISTS warehouse_selection;
           CREATE PROCEDURE warehouse_selection(IN p_id INT, product_volume INT, product_quantity INT, OUT success BOOLEAN)
           BEGIN  
@@ -161,119 +143,119 @@ exports.createInboundOrder = async (req, res) => {
               CLOSE cur;  
 
           END`,
-        // Call back function execute after creating procedure
-        async function (err, result) {
-          // Call procedure to select suitable warehouse
-          await mysqlConnection.query(
-            `CALL warehouse_selection(${newID}, ${product_volume}, ${inboundOrder.quantity}, @outParam);
+          // Call back function execute after creating procedure
+          async function (err, result) {
+              // Call procedure to select suitable warehouse
+              await mysqlConnection.query(
+                  `CALL warehouse_selection(${newID}, ${product_volume}, ${inboundOrder.quantity}, @outParam);
                   SELECT @outParam AS success;`,
 
-            // Call back function execute after getting result from procedure
-            async function (err, result) {
-              if (err) {
-                throw err;
-              } else {
-                // Get result from procedure
-                warehouse_selection_result = result[1][0]['success'];
-
-                console.log(warehouse_selection_result);
-
-                // Check result
-                // If all product are store successfully
-                if (warehouse_selection_result == 1) {
-                  // Update information
-                  productTable
-                    .update(
-                      {
-                        quantity: product.quantity + inboundOrder.quantity,
-                        units_in_stock:
-                          product.quantity + inboundOrder.quantity,
-                      },
-                      {
-                        where: {
-                          product_id: inboundOrder.product_id,
-                        },
+                  // Call back function execute after getting result from procedure
+                  async function (err, result) {
+                      if (err) {
+                          throw err;
                       }
-                    )
-                    .then((result) => {
-                      res.send(result ? 'Sucessfully' : 'Some error occurred.');
-                    })
-                    .catch((err) => {
-                      res.status(500).send({
-                        message:
-                          err.message ||
-                          'Some error occurred while retrieving data.',
-                      });
-                    });
-                  res.send({
-                    message:
-                      'Successfully create and select suitable warehouse.',
-                  });
-                }
-                // If all product are not able to store
-                else {
-                  res.send({
-                    message:
-                      'All warehouses do not have enough space(s) for product.',
-                  });
-                }
-              }
-            }
-          );
-        }
-      ); // end query create procedure
-    })
-    .catch((err) => {
+                      else {
+                          // Get result from procedure
+                          warehouse_selection_result = result[1][0]['success'];
+
+                          console.log(warehouse_selection_result);
+
+                          // Check result
+                          // If all product are store successfully
+                          if (warehouse_selection_result == 1) {
+                              // Update information
+                              productTable.update(
+                                  {
+                                      quantity: product.quantity+inboundOrder.quantity,
+                                      units_in_stock: product.quantity+inboundOrder.quantity
+                                  },
+                                  {
+                                      where: {
+                                          product_id: inboundOrder.product_id
+                                      }
+                                  }
+                              )
+                              .then(result => {
+                                  res.send(result ? "Sucessfully" : "Some error occurred.");
+                              })
+                              .catch(err => {
+                                  res.status(500).send({
+                                  message:
+                                      err.message || "Some error occurred while retrieving data."
+                                  });
+                              });
+                              res.send({
+                                  message: "Successfully create and select suitable warehouse."
+                              });
+                          }
+                          // If all product are not able to store
+                          else {
+                              res.send({
+                                  message: "All warehouses do not have enough space(s) for product."
+                              });
+                          }
+                      }
+                  }
+              );
+          }
+      ) // end query create procedure
+  })
+  .catch(err => {
       res.status(500).send({
-        message: err.message || 'Cannot find product with given id.',
+          message:
+              err.message || "Cannot find product with given id."
       });
-    });
-};
+  });
+
+}
 
 // Create and Save a new Tutorial
 exports.create = async (req, res) => {
   const userCredential = req.session.credentials;
 
   await connectDB(userCredential.username, userCredential.password);
-  const newObject = req.body.query;
+
   newObject.quantity = 0;
-  newObject['units_in_stock'] = 0;
-  newObject['units_on_order'] = 0;
+    newObject["units_in_stock"] = 0;
+    newObject["units_on_order"] = 0;
+
+  const newObject = req.body.query;
 
   // Store attribute list seperately
   const productAttributes = newObject.attributes;
-  
+
   // Remove attrbute list from create product data
   delete newObject.attributes;
-  console.log(newObject);
+
   // Create product in product table to get id
-  await productTable
-    .create(newObject)
-    .then(async (newProduct) => {
-      const data = new ProductAttributes({
-        product_id: newProduct.product_id,
-        attributes: productAttributes,
-      });
-
-      try {
-        const newData = await data.save();
-
-        console.log('Sucessfully store attribute of product.');
-
-        res.send({
-          message: 'Successfully create product and store its attributes.',
+  await productTable.create(newObject)
+    .then( async (newProduct) => {
+        const data = new ProductAttributes({
+            product_id: newProduct.product_id,
+            attributes: productAttributes
         });
-      } catch (err) {
-        res.status(400).json({ mesage: err.message });
 
-        return;
-      }
+        try {
+            const newData = await data.save();
+
+            console.log("Sucessfully store attribute of product.");
+
+            res.send({
+                message: "Successfully create product and store its attributes."
+            });
+        }
+        catch (err) {
+            res.status(400).json({ mesage: err.message})
+
+            return;
+        }
     })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while creating the Product.',
-      });
+    .catch(err => {
+        res.status(500).send({
+            message:
+                err.message || "Some error occurred while creating the Product."
+        });
     });
 };
 
@@ -285,7 +267,7 @@ exports.findAll = async (req, res) => {
 
   // await connectDB(userCredential.username, userCredential.password);
 
-  await connectDB('lazada_customer', 'password');
+  await connectDB("lazada_customer","password");
 
   productTable
     .findAll()
@@ -303,8 +285,7 @@ exports.findAll = async (req, res) => {
 exports.search = async function (req, res) {
   const userCredential = req.session.credentials;
 
-  // await connectDB(userCredential.username, userCredential.password);
-  await connectDB("lazada_seller", "password");
+  await connectDB(userCredential.username, userCredential.password);
 
   let searchAtt = req.body.query.search_attribute;
   let searchStr = req.body.query.search_string;
@@ -335,14 +316,14 @@ exports.search = async function (req, res) {
 exports.getAllProductBySeller = async function (req, res) {
   const userCredential = req.session.credentials;
   const seller_id = req.params.seller_id;
-
-  // await connectDB(userCredential.username, userCredential.password);
-  await connectDB("lazada_customer","password");
+  console.log('request body: ');
+  console.log(req.body);
+  console.log('Seller id: ' + seller_id);
+  await connectDB(userCredential.username, userCredential.password);
   productTable
     .findAll({
       where: {
         seller_id: seller_id,
-
       },
     })
     .then((result) => {
@@ -359,9 +340,7 @@ exports.getAllProductBySeller = async function (req, res) {
 exports.update = async (req, res) => {
   const userCredential = req.session.credentials;
   const product_id = req.params.product_id;
-
-  // await connectDB(userCredential.user_name, userCredential.password);
-  await connectDB('lazada_seller', 'password');
+  await connectDB(userCredential.user_name, userCredential.password);
 
   const newObj = req.body.query;
   const filterParam = {
@@ -412,12 +391,11 @@ exports.update = async (req, res) => {
 exports.delete = async (req, res) => {
   const userCredential = req.session.credentials;
 
-  // await connectDB(userCredential.user_name, userCredential.password);
-  await connectDB('lazada_seller', 'password');
-  
+  await connectDB(userCredential.user_name, userCredential.password);
   const product_id = req.params.product_id;
   // Get the delete product_id
-  console.log(product_id);
+  var newObj = req.body.query;
+
   // Check para
   if (product_id == null) {
     res.status(500).send({
@@ -435,8 +413,6 @@ exports.delete = async (req, res) => {
 
   // Get the product from db
   const product = await productTable.findOne(filterParam);
-
-  
 
   // Calculate the volume of product
   const product_volume = product.width * product.length * product.height;
@@ -518,47 +494,36 @@ exports.filterProductByAttributeValue = async (req, res) => {
 
   // Search by value of attribute ignore case-sensitive
   var searchParams = {
-    'attributes.value': { $regex: searchStr, $options: 'i' },
+      "attributes.value": {$regex: searchStr, $options: "i"}
   };
 
   try {
-    const results = await ProductAttributes.find(searchParams);
+      const results = await ProductAttributes.find(searchParams);
 
-    var products = [];
+      var products = [];
 
-    for (var i = 0; i < results.length; i++) {
-      const userCredential = req.session.credentials;
+      for (var i = 0; i < results.length; i++) {
+        const userCredential = req.session.credentials;
 
-      await connectDB(userCredential.user_name, userCredential.password);
+        await connectDB(userCredential.user_name, userCredential.password);
 
-      var product = await productTable.findOne({
-        where: {
-          product_id: results[i].product_id,
-        },
-      });
+          var product = await productTable.findOne({
+              where: {
+                  product_id: results[i].product_id
+              }
+          });
 
-      product = product.dataValues;
-      product['attributes'] = results[i].attributes;
+          product = product.dataValues;
+          product["attributes"] = results[i].attributes;
 
-      products.push(product);
-    }
-    res.json(products);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+          products.push(product);
+      }
+
+      res.json(products);
+  } 
+  catch (err) {
+      res.status(500).json({message: err.message});
   }
-};
-async function getCategoryAndParentCategories(categoryId, categories = []) {
-  const category = await Category.findOne({ _id: categoryId });
-  if (category) {
-    categories.push(category);
-
-    if (category.parent) {
-      await getCategoryAndParentCategories(category.parent, categories);
-    }
-  }
-
-  return categories;
-
 }
 exports.filterProductByCategory = async (req, res) => {
   const category_id = req.body.category_id;

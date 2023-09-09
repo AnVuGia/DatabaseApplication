@@ -1,7 +1,7 @@
 const sideBarContainer = document.querySelector('.sidebar');
 const cofirmationBackdrop = document.querySelector('.confirmation-backdrop');
 const confirmationModal = document.querySelector('.confirmation-modal');
-const closeModalButton = document.querySelector('.closeModalButton');
+
 const backdrop = document.querySelector('.backdrop');
 const modal = document.querySelector('.modal');
 const closeModalButton = document.querySelector('.modal__button--cancel');
