@@ -104,6 +104,7 @@ exports.deleteFromCart = async (req, res) => {
   const body = req.body;
   console.log(body);
   const connection = await connect();
+  const transaction = await connection.transaction();
   const shopCart = await connection.collection('shop-carts').findOne({
     customer_id: body.customer_id,
   });
@@ -116,11 +117,21 @@ exports.deleteFromCart = async (req, res) => {
     return;
   }
   products.splice(products.indexOf(product), 1);
-  await connection
-    .collection('shop-carts')
-    .updateOne(
-      { customer_id: body.customer_id },
-      { $set: { products: products } }
+  try {
+    await connection.collection('shop-carts').updateOne(
+      { products: products },
+      {
+        where: {
+          customer_id: body.customer_id,
+        },
+        transaction: transaction,
+      }
     );
+    await transaction.commit();
+  } catch (err) {
+    await transaction.rollback();
+    res.status(500).json('Product not found');
+    return;
+  }
   res.status(200).json('Product deleted');
 };

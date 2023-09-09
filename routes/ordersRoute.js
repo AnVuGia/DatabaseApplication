@@ -7,5 +7,6 @@ router.post(
   '/get-orders-by-customer-id',
   ordersController.getOrdersByCustomerId
 );
+router.post('/accept-order', ordersController.AcceptOrder);
 
 module.exports = router;
