@@ -1,6 +1,9 @@
 const { Sequelize, Op } = require('sequelize');
 const mysql = require('mysql');
+const mongoose = require("mongoose");
 const util = require('util');
+
+const ProductAttributes = require("../models/ProductAttribute");
 
 var db = {};
 var productTable;
@@ -57,168 +60,214 @@ async function connectDB(username, password) {
     });
 }
 
+exports.createInboundOrder = async (req, res) => {
+  const userCredential = req.session.credentials;
+
+  await connectDB(userCredential.username, userCredential.password);
+
+  var inboundOrder = req.body.query;
+
+  await productTable.findOne({
+      where: {
+          product_id: inboundOrder.product_id
+      }
+  })
+  .then( async (product) => {
+      const product_volume = product.width * product.height * product.length;
+      const newID = product.product_id;
+      // Create a stored procedure
+      await mysqlConnection.query(
+          `
+          DROP PROCEDURE IF EXISTS warehouse_selection;
+          CREATE PROCEDURE warehouse_selection(IN p_id INT, product_volume INT, product_quantity INT, OUT success BOOLEAN)
+          BEGIN  
+              DECLARE id INT; 
+              DECLARE warehouse_volume INT;  
+
+              DECLARE done INT DEFAULT FALSE;  
+
+              DECLARE num_product INT;
+
+              DECLARE cur CURSOR FOR SELECT warehouse_id, available_volume FROM warehouses ORDER BY available_volume DESC;  
+
+              DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;  
+
+              START TRANSACTION;  
+
+              OPEN cur;  
+
+              read_loop: LOOP  
+                  FETCH cur INTO id, warehouse_volume;  
+                  IF done THEN  
+                      LEAVE read_loop;  
+                  END IF;  
+
+                  SET num_product = 0;
+
+                  while_loop: WHILE warehouse_volume >= product_volume DO  
+                      SET warehouse_volume = warehouse_volume - product_volume;
+
+                      SET product_quantity = product_quantity - 1;
+                      
+                      SET num_product = num_product + 1;
+
+                      IF product_quantity = 0  THEN
+                          SET success = TRUE;  
+
+                          SET done = TRUE;
+
+                          LEAVE while_loop;
+                          LEAVE read_loop;
+                      END IF;  
+
+                  END WHILE while_loop;
+
+                  UPDATE warehouses
+                  SET available_volume = warehouse_volume
+                  WHERE warehouse_id = id;
+
+                  INSERT INTO product_locations(product_id, warehouse_id, product_quantity)
+                              VALUES(p_id, id, num_product);
+
+              END LOOP;  
+
+              IF product_quantity > 0 THEN  
+                  ROLLBACK;  
+                  SET success = FALSE;  
+              END IF;  
+
+              IF product_quantity = 0  THEN
+                  COMMIT;
+              END IF;  
+
+              CLOSE cur;  
+
+          END`,
+          // Call back function execute after creating procedure
+          async function (err, result) {
+              // Call procedure to select suitable warehouse
+              await mysqlConnection.query(
+                  `CALL warehouse_selection(${newID}, ${product_volume}, ${inboundOrder.quantity}, @outParam);
+                  SELECT @outParam AS success;`,
+
+                  // Call back function execute after getting result from procedure
+                  async function (err, result) {
+                      if (err) {
+                          throw err;
+                      }
+                      else {
+                          // Get result from procedure
+                          warehouse_selection_result = result[1][0]['success'];
+
+                          console.log(warehouse_selection_result);
+
+                          // Check result
+                          // If all product are store successfully
+                          if (warehouse_selection_result == 1) {
+                              // Update information
+                              productTable.update(
+                                  {
+                                      quantity: product.quantity+inboundOrder.quantity,
+                                      units_in_stock: product.quantity+inboundOrder.quantity
+                                  },
+                                  {
+                                      where: {
+                                          product_id: inboundOrder.product_id
+                                      }
+                                  }
+                              )
+                              .then(result => {
+                                  res.send(result ? "Sucessfully" : "Some error occurred.");
+                              })
+                              .catch(err => {
+                                  res.status(500).send({
+                                  message:
+                                      err.message || "Some error occurred while retrieving data."
+                                  });
+                              });
+                              res.send({
+                                  message: "Successfully create and select suitable warehouse."
+                              });
+                          }
+                          // If all product are not able to store
+                          else {
+                              res.send({
+                                  message: "All warehouses do not have enough space(s) for product."
+                              });
+                          }
+                      }
+                  }
+              );
+          }
+      ) // end query create procedure
+  })
+  .catch(err => {
+      res.status(500).send({
+          message:
+              err.message || "Cannot find product with given id."
+      });
+  });
+
+}
+
 // Create and Save a new Tutorial
 exports.create = async (req, res) => {
   const userCredential = req.session.credentials;
-  console.log(req.body.query);
+
   await connectDB(userCredential.username, userCredential.password);
 
-  req.body.query['unit_in_stock'] = req.body.query.quantity;
-  req.body.query['unit_on_order'] = '0';
+  newObject.quantity = 0;
+    newObject["units_in_stock"] = 0;
+    newObject["units_on_order"] = 0;
+
   const newObject = req.body.query;
-  const product_volume = newObject.width * newObject.height * newObject.length;
 
-  // Create a stored procedure
-  await mysqlConnection.query(
-    `
-        DROP PROCEDURE IF EXISTS warehouse_selection;
-        CREATE PROCEDURE warehouse_selection(IN p_id INT, product_volume INT, product_quantity INT, OUT success BOOLEAN)
-        BEGIN  
-            DECLARE id INT; 
-            DECLARE warehouse_volume INT;  
+  // Store attribute list seperately
+  const productAttributes = newObject.attributes;
 
-            DECLARE done INT DEFAULT FALSE;  
+  // Remove attrbute list from create product data
+  delete newObject.attributes;
 
-            DECLARE num_product INT;
-
-            DECLARE cur CURSOR FOR SELECT warehouse_id, available_volume FROM warehouses ORDER BY available_volume DESC;  
-
-            DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;  
-
-            START TRANSACTION;  
-
-            OPEN cur;  
-
-            read_loop: LOOP  
-                FETCH cur INTO id, warehouse_volume;  
-                IF done THEN  
-                    LEAVE read_loop;  
-                END IF;  
-
-                SET num_product = 0;
-
-                while_loop: WHILE warehouse_volume >= product_volume DO  
-                    SET warehouse_volume = warehouse_volume - product_volume;
-
-                    SET product_quantity = product_quantity - 1;
-                    
-                    SET num_product = num_product + 1;
-
-                    IF product_quantity = 0  THEN
-                        SET success = TRUE;  
-
-                        SET done = TRUE;
-
-                        LEAVE while_loop;
-                        LEAVE read_loop;
-                    END IF;  
-
-                END WHILE while_loop;
-
-                UPDATE warehouses
-                SET available_volume = warehouse_volume
-                WHERE warehouse_id = id;
-
-                INSERT INTO product_locations(product_id, warehouse_id, product_quantity)
-                            VALUES(p_id, id, num_product);
-
-            END LOOP;  
-
-            IF product_quantity > 0 THEN  
-                ROLLBACK;  
-                SET success = FALSE;  
-            END IF;  
-
-            IF product_quantity = 0  THEN
-                COMMIT;
-            END IF;  
-
-            CLOSE cur;  
-
-        END`,
-
-    // Call back function execute after creating procedure
-    async function (err, result) {
-      if (err) throw err;
-      console.log('Created Store procedure successfully!');
-
-      var newID = 1,
-        warehouse_selection_result;
-
-      // Create product in product table to get id
-      await productTable
-        .create(newObject)
-        // Call back function execute after creating product
-        .then(async (newProduct) => {
-          newID = newProduct.product_id;
-
-          console.log(newID);
-
-          // Call procedure to select suitable warehouse
-          await mysqlConnection.query(
-            `CALL warehouse_selection(${newID}, ${product_volume}, ${newObject.quantity}, @outParam);
-                        SELECT @outParam AS success;`,
-
-            // Call back function execute after getting result from procedure
-            function (err, result) {
-              if (err) {
-                throw err;
-              } else {
-                // Get result from procedure
-                warehouse_selection_result = result[1][0]['success'];
-
-                console.log(warehouse_selection_result);
-
-                // Check result
-                // If all product are store successfully
-                if (warehouse_selection_result == 1) {
-                  res.send({
-                    message:
-                      'Successfully create and select suitable warehouse.',
-                  });
-                }
-                // If all product are not able to store
-                else {
-                  // Delete product in table
-                  productTable
-                    .destroy({
-                      where: {
-                        product_id: newID,
-                      },
-                    })
-                    .then((result) => {
-                      res.send({
-                        message:
-                          'All warehouses do not have enough space(s) for product.',
-                      });
-                    })
-                    .catch((err) => {
-                      res.status(500).send({
-                        message:
-                          err.message ||
-                          'Some error occurred while deleting data.',
-                      });
-                    });
-                }
-              }
-            }
-          );
-        })
-        .catch((err) => {
-          res.status(500).send({
-            message:
-              err.message || 'Some error occurred while creating the Product.',
-          });
+  // Create product in product table to get id
+  await productTable.create(newObject)
+    .then( async (newProduct) => {
+        const data = new ProductAttributes({
+            product_id: newProduct.product_id,
+            attributes: productAttributes
         });
-    }
-  );
+
+        try {
+            const newData = await data.save();
+
+            console.log("Sucessfully store attribute of product.");
+
+            res.send({
+                message: "Successfully create product and store its attributes."
+            });
+        }
+        catch (err) {
+            res.status(400).json({ mesage: err.message})
+
+            return;
+        }
+    })
+    .catch(err => {
+        res.status(500).send({
+            message:
+                err.message || "Some error occurred while creating the Product."
+        });
+    });
 };
 
 // Retrieve all Tutorials from the database.
 exports.findAll = async (req, res) => {
-  const userCredential = req.session.credentials;
+  // const userCredential = req.session.credentials;
+  // console.log(req.body)
+  // const userCredential = req.body.user_credentials;
 
-  await connectDB(userCredential.username, userCredential.password);
+  // await connectDB(userCredential.username, userCredential.password);
+
+  await connectDB("lazada_customer","password");
 
   productTable
     .findAll()
@@ -261,6 +310,7 @@ exports.search = async function (req, res) {
       });
     });
 };
+
 // productController.js
 exports.getAllProductBySeller = async function (req, res) {
   const userCredential = req.session.credentials;
@@ -436,22 +486,41 @@ exports.delete = async (req, res) => {
       });
     });
 };
-exports.getProductById = async (req, res) => {
-  const userCredential = req.session.credentials;
-  const product_id = req.params.product_id;
-  await connectDB(userCredential.username, userCredential.password);
-  productTable
-    .findOne({
-      where: {
-        product_id: product_id,
-      },
-    })
-    .then((result) => {
-      res.send(result);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || 'Some error occurred while retrieving data.',
-      });
-    });
-};
+
+exports.filterProductByAttributeValue = async (req, res) => {
+  let searchAtt = req.body.query.search_attribute;
+  let searchStr = req.body.query.search_string;
+
+  // Search by value of attribute ignore case-sensitive
+  var searchParams = {
+      "attributes.value": {$regex: searchStr, $options: "i"}
+  };
+
+  try {
+      const results = await ProductAttributes.find(searchParams);
+
+      var products = [];
+
+      for (var i = 0; i < results.length; i++) {
+        const userCredential = req.session.credentials;
+
+        await connectDB(userCredential.user_name, userCredential.password);
+
+          var product = await productTable.findOne({
+              where: {
+                  product_id: results[i].product_id
+              }
+          });
+
+          product = product.dataValues;
+          product["attributes"] = results[i].attributes;
+
+          products.push(product);
+      }
+
+      res.json(products);
+  } 
+  catch (err) {
+      res.status(500).json({message: err.message});
+  }
+}

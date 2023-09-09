@@ -9,6 +9,7 @@ function connect(user, pass) {
 
 // Find all document in collection
 exports.findAll = async function (req, resp) {
+    console.log("find all category");
     try {
         const results = await Category.find({});
         resp.json(results);
