@@ -8,7 +8,7 @@ const productHeight = document.querySelector('.product-details-height');
 const productLength = document.querySelector('.product-details-length');
 const AddToCartButton = document.querySelector('.add-cart');
 const BuyNowButton = document.querySelector('.buy-now');
-const product = JSON.parse(sessionStorage.getItem('current-item'));
+const product = JSON.parse(sessionStorage.getItem('product'));
 
 const currentUser = sessionStorage.getItem('user');
 const currentUserJSON = JSON.parse(currentUser);

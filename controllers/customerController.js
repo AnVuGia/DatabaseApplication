@@ -79,11 +79,15 @@ exports.getCartProducts = async (req, res) => {
     res.status(200).json([]);
   } else {
     const productsIds = shopCart.products;
-
+    console.log(productsIds);
     for (const product of productsIds) {
+      console.log(product);
       const productData = await productTable.findOne({
-        product_id: product.product_id,
+        where: {
+          product_id: product.product_id,
+        }
       });
+      console.log(productData);
       products.push({
         product_id: product.product_id,
         quantity: product.quantity,
@@ -92,6 +96,7 @@ exports.getCartProducts = async (req, res) => {
         image: productData.image,
       });
     }
+    console.log(products);
     res.status(200).json(products);
   }
 };
