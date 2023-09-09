@@ -2,9 +2,23 @@ const { Sequelize, Op } = require('sequelize');
 const mysql = require('mysql');
 const mongoose = require('mongoose');
 const util = require('util');
-
+const Category = require('../models/Category');
 const ProductAttributes = require('../models/ProductAttribute');
 
+const { MongoClient, ObjectId } = require('mongodb');
+const mongodb_uri = 'mongodb://127.0.0.1:27017';
+const mongo_client = new MongoClient(mongodb_uri);
+
+// Connect to database and return the database with given name
+async function connect(dbName) {
+  try {
+    await mongo_client.connect();
+
+    return mongo_client.db(dbName);
+  } catch (e) {
+    console.error(e);
+  }
+}
 var db = {};
 var productTable;
 var productLocationTable;
@@ -523,4 +537,33 @@ exports.filterProductByAttributeValue = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
+};
+async function getCategoryAndParentCategories(categoryId, categories = []) {
+  const category = await Category.findOne({ _id: categoryId });
+  if (category) {
+    categories.push(category);
+
+    if (category.parent) {
+      await getCategoryAndParentCategories(category.parent, categories);
+    }
+  }
+
+  return categories;
+}
+exports.filterProductByCategory = async (req, res) => {
+  const category_id = req.body.category_id;
+  const userCredential = req.session.credentials;
+  await connectDB(userCredential.user_name, userCredential.password);
+  const products = [];
+  getCategoryAndParentCategories(category_id).then(async (categories) => {
+    for (const category of categories) {
+      const product = await productTable.findAll({
+        where: {
+          category_id: category._id,
+        },
+      });
+      products.push(...product);
+    }
+    res.json(products);
+  });
 };
