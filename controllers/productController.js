@@ -158,12 +158,9 @@ exports.create = async (req, res) => {
 
   await connectDB(userCredential.username, userCredential.password);
 
-  
   const newObject = req.body.query;
   newObject['unit_in_stock'] = 0;
   newObject['unit_on_order'] = 0;
-
-  
 
   // Store attribute list seperately
   const productAttributes = newObject.attributes;
@@ -263,7 +260,7 @@ exports.getAllProductBySeller = async function (req, res) {
   console.log('Seller id: ' + seller_id);
   // await connectDB(userCredential.username, userCredential.password);
 
-  await connectDB("lazada_customer", "password");
+  await connectDB('lazada_customer', 'password');
   productTable
     .findAll({
       where: {
@@ -468,6 +465,7 @@ exports.filterProductByAttributeValue = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
 exports.filterProductByCategory = async (req, res) => {
   const category_id = req.body.category_id;
   const userCredential = req.session.credentials;
