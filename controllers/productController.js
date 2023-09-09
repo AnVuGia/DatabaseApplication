@@ -218,10 +218,12 @@ exports.create = async (req, res) => {
 
   await connectDB(userCredential.username, userCredential.password);
 
+  
+  const newObject = req.body.query;
   newObject['unit_in_stock'] = 0;
   newObject['unit_on_order'] = 0;
 
-  const newObject = req.body.query;
+  
 
   // Store attribute list seperately
   const productAttributes = newObject.attributes;
@@ -319,7 +321,9 @@ exports.getAllProductBySeller = async function (req, res) {
   console.log('request body: ');
   console.log(req.body);
   console.log('Seller id: ' + seller_id);
-  await connectDB(userCredential.username, userCredential.password);
+  // await connectDB(userCredential.username, userCredential.password);
+
+  await connectDB("lazada_customer", "password");
   productTable
     .findAll({
       where: {

@@ -61,10 +61,10 @@ function displayAllCategory(categories, isSearch = false){
             closeLoadingModel();
           }
       });
-          document.querySelector(`#add-${categories[i]._id}`).addEventListener("click",() =>{ 
-            backdrop.style.display = "block";
-            modal.style.display = "block";
-            prepareAddCategoryForm(categories[i]._id);
+      document.querySelector(`#add-${categories[i]._id}`).addEventListener("click",() =>{ 
+        backdrop.style.display = "block";
+        modal.style.display = "block";
+        prepareAddCategoryForm(categories[i]._id);
       });
       document.querySelector(`#edit-${categories[i]._id}`).addEventListener("click",async () =>{
         backdrop.style.display = "block";
@@ -125,7 +125,7 @@ function prepareAddCategoryForm(parentId){
     heading.style = "display:flex"
     heading.innerHTML = `
     <h3>Attributes</h3>
-    <h3 style = "margin-left:250px" >Require?</h3>
+    <h3 style = "margin-left:170px" >Require?</h3>
     `
     form.appendChild(heading);
 
@@ -137,14 +137,17 @@ function prepareAddCategoryForm(parentId){
     document.querySelector("#category-input-save-button").addEventListener("click", async () => {
         const nameValue = document.querySelector("#category-name-form-input").value.trim();
 
-        if (nameValue.length > 0){
-          let categoryObject = CreateCategoryObject(parentId,nameValue) 
-          let res = await category.create(categoryObject,nameValue);
-          processRequest(res, "Category created successfully");
-        } 
        
+          let categoryObject = CreateCategoryObject(parentId,nameValue)
+          if (categoryObject == null){
+            displayStatusModal("Please fill all the attribute name and select type", false);
+            return;
+          } 
+          displayConfirmationModal("Are you sure you want to create this category?", async () => {
+            let res = await category.create(categoryObject);
+            processRequest(res, "Category created successfully");
+          });
     });
-
 }
 
 function inFiniteCreate(lastElement, attributeNameObject){
@@ -156,23 +159,49 @@ function inFiniteCreate(lastElement, attributeNameObject){
   if (attributeNameObject != null){
     divTobeAdded.querySelector("input").value = attributeNameObject.name;
     divTobeAdded.querySelector(".myCheckbox").checked = attributeNameObject.required;
+    divTobeAdded.querySelector("select").value = attributeNameObject.type;
   }
-
+ 
   button.addEventListener("click", () => {
     inFiniteCreate(divTobeAdded,null);}
   );   
 }
 
+function createSelect(){
+    const select = document.createElement("select");
+    const option = document.createElement("option");
+    option.value = "all";
+    option.innerHTML = "Select Type";
+    select.appendChild(option);
+
+    const textOption = document.createElement("option");
+    textOption.value = "text";
+    textOption.innerHTML = "Text";
+
+    const numberOption = document.createElement("option");
+    numberOption.value = "number";
+    numberOption.innerHTML = "Number";
+
+    select.appendChild(textOption);
+    select.appendChild(numberOption);
+    select.style.marginLeft = "10px";
+    select.style.marginLeft = "10px";
+    return select;
+}
+
 function createAttributeElemnt (){
     let attribute = document.createElement("div");
+    attribute.classList.add("input-div");
+    attribute.style.margin = "15px 0px";
+    attribute.style.display = "flex";
     attribute.innerHTML = `
-    <div class = "input-div"  style = "margin: 15px 0px;>
+  
     <label for="">Attribute Name</label>
-    <input class = "category-input"  type="text">
+    <input style ="width:150px" class = "category-input"  type="text">
     <input style = "margin: 0px 30px;"  type="checkbox" class="myCheckbox">
-    <button class="add-category-input-button" id ="add-category-input"><i class="fa-solid fa-plus"></i></button>
-    </div>
     `;
+    attribute.appendChild(createSelect());
+    attribute.innerHTML += ` <button class="add-category-input-button" id ="add-category-input"><i class="fa-solid fa-plus"></i></button>`
     return attribute; 
 }
 
@@ -186,10 +215,12 @@ function CreateCategoryObject(parentId, name){
   for (let i = 0; i < container.length; i++) {
     const firstInput = container[i].querySelector("input");
     const secondInput = container[i].querySelector(".myCheckbox");
-    
+    const conatainerInput = container[i].querySelector("select");
     const attributeName = firstInput.value.trim();
-    if( attributeName.length > 0){
-      category.attributes.push({"name": attributeName, "required": secondInput.checked ? true : false});
+    if( attributeName.length > 0  && conatainerInput.value != "all"){
+      category.attributes.push({"name": attributeName, "required": secondInput.checked ? true : false, "type": conatainerInput.value});
+    }else{
+      return null;
     }
   }
   return category;
