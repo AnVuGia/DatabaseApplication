@@ -144,7 +144,6 @@ exports.delete = async function (req, resp) {
 
         // There are no children category so check if there are any product use it
         else {
-            const userCredential = req.body.user_credential;
             await connectDB(userCredential.user_name, userCredential.password);
 
             // find all product have this category id
