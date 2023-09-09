@@ -85,7 +85,7 @@ exports.getCartProducts = async (req, res) => {
       const productData = await productTable.findOne({
         where: {
           product_id: product.product_id,
-        }
+        },
       });
       console.log(productData);
       products.push({
@@ -99,4 +99,28 @@ exports.getCartProducts = async (req, res) => {
     console.log(products);
     res.status(200).json(products);
   }
+};
+exports.deleteFromCart = async (req, res) => {
+  const body = req.body;
+  console.log(body);
+  const connection = await connect();
+  const shopCart = await connection.collection('shop-carts').findOne({
+    customer_id: body.customer_id,
+  });
+  const products = shopCart.products;
+  const product = products.find((product) => {
+    return product.product_id === body.product_id;
+  });
+  if (!product) {
+    res.status(500).json('Product not found');
+    return;
+  }
+  products.splice(products.indexOf(product), 1);
+  await connection
+    .collection('shop-carts')
+    .updateOne(
+      { customer_id: body.customer_id },
+      { $set: { products: products } }
+    );
+  res.status(200).json('Product deleted');
 };

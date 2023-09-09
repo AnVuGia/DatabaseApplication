@@ -1,10 +1,11 @@
 // Sample cart data (replace with actual data or load dynamically)
+import cartHelper from './Module/cart-helper.js';
 import customer from './Module/cart-helper.js';
 const cartItems = [];
+const currentUser = sessionStorage.getItem('user');
+const currentUserJSON = JSON.parse(currentUser);
+console.log(currentUserJSON);
 window.onload = async function () {
-  const currentUser = sessionStorage.getItem('user');
-  const currentUserJSON = JSON.parse(currentUser);
-  console.log(currentUserJSON);
   await customer
     .getCartProducts(currentUserJSON.customer_id.toString())
     .then((data) => {
@@ -39,21 +40,19 @@ function displayCart() {
                         </div>
                         <div class="col-md-3">
                             <p>Quantity: ${item.quantity}</p>
-                            <button class="btn btn-sm btn-danger" onclick="removeFromCart(${
+                            <button class="btn btn-sm btn-danger remove" onclick="removeFromCart(${
                               item.id
                             })">Remove</button>
                         </div>
                     </div>
                 `;
+    cartItemDiv.querySelector('.remove').addEventListener('click', () => {
+      cartHelper.removeFromCart({
+        customer_id: currentUserJSON.customer_id.toString(),
+        product_id: item.product_id,
+      });
+      window.location.reload();
+    });
     cartContainer.appendChild(cartItemDiv);
   });
-}
-
-// Function to remove an item from the cart
-function removeFromCart(itemId) {
-  const itemIndex = cartItems.findIndex((item) => item.id === itemId);
-  if (itemIndex !== -1) {
-    cartItems.splice(itemIndex, 1);
-    displayCart(); // Update the cart display
-  }
 }

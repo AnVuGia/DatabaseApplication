@@ -17,6 +17,13 @@ const cartHelper = {
     });
     return response.data;
   },
+  async removeFromCart(cart) {
+    const response = await axios.post(`${API_URL}/delete-product`, {
+      customer_id: cart.customer_id,
+      product_id: cart.product_id,
+    });
+    return response.data;
+  },
 };
 
 export default cartHelper;
