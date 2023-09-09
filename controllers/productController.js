@@ -23,7 +23,7 @@ async function connectDB(username, password) {
   db.sequelize = sequelize;
 
   db.products = require('../models/Products.js')(sequelize, Sequelize);
-  db.product_location = require('../models/ProductLocation.js')(
+  db.product_location = require('../models/ProductWarehouses.js')(
     sequelize,
     Sequelize
   );
