@@ -22,6 +22,10 @@ const categorySchema = new Schema({
             "required": {
                 type: Boolean,
                 required: true
+            },
+            "type": {
+                type: String,
+                required: true
             }
         }
     ]
@@ -30,9 +34,6 @@ const categorySchema = new Schema({
 , {
     collection: "categories"
 }
-// , {
-//     versionKey: false
-// }
 );
 
 const categoryModel = model("Category", categorySchema);

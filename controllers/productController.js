@@ -23,7 +23,7 @@ async function connectDB(username, password) {
   db.sequelize = sequelize;
 
   db.products = require('../models/Products.js')(sequelize, Sequelize);
-  db.product_location = require('../models/ProductLocation.js')(
+  db.product_location = require('../models/ProductWarehouses.js')(
     sequelize,
     Sequelize
   );
@@ -311,6 +311,7 @@ exports.search = async function (req, res) {
     });
 };
 
+
 // productController.js
 exports.getAllProductBySeller = async function (req, res) {
   const userCredential = req.session.credentials;
@@ -524,3 +525,20 @@ exports.filterProductByAttributeValue = async (req, res) => {
       res.status(500).json({message: err.message});
   }
 }
+exports.filterProductByCategory = async (req, res) => {
+  const category_id = req.body.category_id;
+  const userCredential = req.session.credentials;
+  await connectDB(userCredential.user_name, userCredential.password);
+  const products = [];
+  getCategoryAndParentCategories(category_id).then(async (categories) => {
+    for (const category of categories) {
+      const product = await productTable.findAll({
+        where: {
+          category_id: category._id,
+        },
+      });
+      products.push(...product);
+    }
+    res.json(products);
+  });
+};
