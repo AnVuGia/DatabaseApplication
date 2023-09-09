@@ -16,13 +16,13 @@ GRANT SELECT, INSERT ON lazada_database.Warehouses TO 'seller';
 GRANT SELECT ON lazada_database.Products TO 'customer';
 GRANT SELECT, INSERT, DELETE ON lazada_database.Orders TO 'customer';
 GRANT SELECT ON lazada_database.Warehouses TO 'customer';
-GRANT SELECT, UPDATE ON lazada_database.ProductWarehouse TO 'customer';
+GRANT SELECT, UPDATE ON lazada_database.ProductWarehouses TO 'customer';
 GRANT SELECT, UPDATE, INSERT, DELETE ON lazada_database.product_locations TO 'seller';
 GRANT SELECT ON lazada_database.Customers TO 'auth';
 GRANT SELECT ON lazada_database.Admins TO 'auth';
 GRANT SELECT ON lazada_database.Sellers TO 'auth';
-GRANT SELECT, INSERT ON lazada_database.Customers TO 'guest';
-GRANT SELECT, INSERT ON lazada_database.Sellers TO 'guest';
+GRANT SELECT, INSERT, UPDATE ON lazada_database.Customers TO 'guest';
+GRANT SELECT, INSERT, UPDATE ON lazada_database.Sellers TO 'guest';
 
 GRANT EXECUTE ON PROCEDURE lazada_database.warehouse_selection TO 'lazada_seller'@'localhost';
 

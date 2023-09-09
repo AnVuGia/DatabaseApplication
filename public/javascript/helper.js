@@ -4,7 +4,7 @@ const confirmationModal = document.querySelector('.confirmation-modal');
 const closeModalButton = document.querySelector('.closeModalButton');
 const backdrop = document.querySelector('.backdrop');
 const modal = document.querySelector('.modal');
-
+const closeModalButton = document.querySelector('.modal__button--cancel');
 if (closeModalButton) {
   closeModalButton.addEventListener('click', () => {
     backdrop.style.display = 'none';
@@ -30,26 +30,30 @@ const closeConfirmationButton = document.getElementById(
   'button__cancel-confirmation'
 );
 console.log(closeConfirmationButton);
-closeConfirmationButton.addEventListener('click', () => {
-  cofirmationBackdrop.style.display = 'none';
-  confirmationModal.style.display = 'none';
-});
+if (closeConfirmationButton) {
+  closeConfirmationButton.addEventListener('click', () => {
+    cofirmationBackdrop.style.display = 'none';
+    confirmationModal.style.display = 'none';
+  });
+}
 
 function selectDetector(selectClassName, updateClassName, createClassName) {
   const selectProductDisplayMode = document.getElementById(
     `${selectClassName}`
   );
-  selectProductDisplayMode.addEventListener('change', () => {
-    const selectedValue = selectProductDisplayMode.value;
-    if (selectedValue === 'option1') {
-      document.querySelector(`.${updateClassName}`).style.display = 'block';
-      document.querySelector(`.${createClassName}`).style.display = 'none';
-    } else if (selectedValue === 'option2') {
-      document.querySelector(`.${updateClassName}`).style.display = 'none';
-      document.querySelector(`.${createClassName}`).style.display = 'block';
-    }
-  });
-  selectProductDisplayMode.dispatchEvent(new Event('change'));
+  if (selectProductDisplayMode) {
+    selectProductDisplayMode.addEventListener('change', () => {
+      const selectedValue = selectProductDisplayMode.value;
+      if (selectedValue === 'option1') {
+        document.querySelector(`.${updateClassName}`).style.display = 'block';
+        document.querySelector(`.${createClassName}`).style.display = 'none';
+      } else if (selectedValue === 'option2') {
+        document.querySelector(`.${updateClassName}`).style.display = 'none';
+        document.querySelector(`.${createClassName}`).style.display = 'block';
+      }
+    });
+    selectProductDisplayMode.dispatchEvent(new Event('change'));
+  }
 }
 
 function addSideBarHtmlForAdmin() {

@@ -22,10 +22,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER(10),
       allowNull: false,
     },
-    price: {
-      type: DataTypes.DECIMAL(10,2),
-      allowNull: false,
-    }
   });
   Order.associate = function (models) {
     // associations can be defined here

@@ -9,7 +9,12 @@ const appRoute = require('./routes/appRoute');
 const productRoute = require('./routes/productRoute');
 const warehouseRoute = require('./routes/warehouseRoute');
 const categoryRoute = require('./routes/categoryRoute');
+<<<<<<< HEAD
 const productCategoryRoute = require('./routes/productCategoryRoute');
+=======
+const customerRoute = require('./routes/customerRoute');
+const ordersRoute = require('./routes/ordersRoute');
+>>>>>>> 45f63f12d6680a0858c04a3ad7a076988271d4a5
 const db = require('./models');
 const app = express();
 const session = require('express-session');
@@ -48,7 +53,12 @@ app.use('/', appRoute);
 app.use('/product', productRoute);
 app.use('/warehouse', warehouseRoute);
 app.use('/category', categoryRoute);
+<<<<<<< HEAD
 app.use('/attribute',productCategoryRoute)
+=======
+app.use('/customer', customerRoute);
+app.use('/order', ordersRoute);
+>>>>>>> 45f63f12d6680a0858c04a3ad7a076988271d4a5
 db.sequelize.sync().then((req) => {
   const server = app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
