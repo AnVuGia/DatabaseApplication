@@ -23,7 +23,7 @@ body {
     font-size: 1.1rem;
 }
 
-.toolbar select, input {
+.toolbar select, input[type=text] {
     height: 2rem;
     border-radius: 6px;
     padding: 0.3rem;
@@ -66,6 +66,12 @@ input {
     outline: none;
     border: 1px solid #0298cf;
     /* border-radius: 6px; */
+}
+
+input[type=checkbox] {
+    outline: none;
+    border: 1px solid #0298cf;
+    border-radius: 6px;
 }
 
 ::placeholder {

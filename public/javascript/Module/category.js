@@ -29,5 +29,11 @@ const category = {
         const response = await axios.post(`${API_URL}/category/searchByName`, query); 
         return response;
     },
+    async getAttributes(query) {
+        const response = await axios.post(`${API_URL}/category/getAttribute`, {
+            query: query
+        }); 
+        return response;
+    },
 };
 export default category;

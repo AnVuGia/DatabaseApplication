@@ -17,7 +17,6 @@ GRANT SELECT ON lazada_database.Products TO 'customer';
 GRANT SELECT, INSERT, DELETE ON lazada_database.Orders TO 'customer';
 GRANT SELECT ON lazada_database.Warehouses TO 'customer';
 GRANT SELECT, UPDATE ON lazada_database.ProductWarehouses TO 'customer';
-GRANT SELECT, UPDATE, INSERT, DELETE ON lazada_database.product_locations TO 'seller';
 GRANT SELECT ON lazada_database.Customers TO 'auth';
 GRANT SELECT ON lazada_database.Admins TO 'auth';
 GRANT SELECT ON lazada_database.Sellers TO 'auth';
@@ -40,3 +39,7 @@ SET DEFAULT ROLE ALL TO
 'lazada_seller'@'localhost',
 'lazada_auth'@'localhost',
 'lazada_guest'@'localhost';
+
+
+
+FLUSH PRIVILEGES;

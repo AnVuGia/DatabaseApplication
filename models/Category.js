@@ -13,6 +13,7 @@ const categorySchema = new Schema(
       required: false,
       default: null,
     },
+    children: [String],
     attributes: [
       {
         name: {
