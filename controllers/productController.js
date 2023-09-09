@@ -330,6 +330,7 @@ exports.search = async function (req, res) {
     });
 };
 
+
 // productController.js
 exports.getAllProductBySeller = async function (req, res) {
   const userCredential = req.session.credentials;
@@ -575,4 +576,4 @@ exports.filterProductByCategory = async (req, res) => {
     }
     res.json(products);
   });
-
+};

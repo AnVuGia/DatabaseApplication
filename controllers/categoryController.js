@@ -90,6 +90,17 @@ exports.delete = async function (req, resp) {
     }
 };
 
+
+
+//CREATE NEW CATEGORY
+// {
+//     "name": "laptop",
+//     "parent": null,
+//     "attributes": [
+//       { "name": "name", "required": true },
+//       { "name": "address", "required": false }
+//     ]
+// }
 // Create new Category by passing Categroy into request body
 exports.createCategory = async function (req, resp) {
     console.log(req.body);
