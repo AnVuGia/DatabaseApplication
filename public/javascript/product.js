@@ -12,11 +12,10 @@ const form = document.querySelector('.attribute-input-form');
 const formEdit = document.querySelector('.attribute-input-form-edit');
 const selectEdit = document.querySelector('#select-cateogry-for-update');
 const filterSelect = document.querySelector('#filter-product__dropdown');
-const  searchInput = document.querySelector('.product-input');
+const searchInput = document.querySelector('.product-input');
 let offset = 0;
 let page = 5;
 let reachMax = false;
-
 
 const modalSubmitButton = document.querySelector(
   '.modal__button modal__button--save'
@@ -31,16 +30,37 @@ window.onload = async () => {
   addSideBarHtmlForSeller();
   const currentUser = sessionStorage.getItem('user');
   const currentUserJSON = JSON.parse(currentUser);
-  
 };
 addProductButton.addEventListener('click', () => {
   const product = createProductObject();
+<<<<<<< HEAD
   console.log(product); 
   if (product.attributes.length == 0){
     displayStatusModal('Category has not been selected or Required attribute has not been filled!', false);
     return;
   }
   if ((product.price == 0 || !product.price) || (product.product_name.length == 0) ||( product.width == 0||!product.width)||( product.length == 0||!product.length)|| (product.height == 0||!product.height)  ){
+=======
+  console.log(product);
+  if (product.attributes.length == 0) {
+    displayStatusModal(
+      'Category has not been selected or Required attribute has not been filled!',
+      false
+    );
+    return;
+  }
+  if (
+    product.price == 0 ||
+    !product.price ||
+    product.product_name.length == 0 ||
+    product.width == 0 ||
+    !product.width ||
+    product.length == 0 ||
+    !product.length ||
+    product.height == 0 ||
+    !product.height
+  ) {
+>>>>>>> f8cee1a17e908968c84f9338c1709435be9226e2
     displayStatusModal('Price/Name/Width/Length/Height must be filled!', false);
     return;
   }
@@ -48,30 +68,34 @@ addProductButton.addEventListener('click', () => {
     'Are you sure you want to add this product?',
     async () => {
       console.log(product);
-        let res = await productHelper.createProduct(product);
-        processRequest(res,'Product added successfully')
+      let res = await productHelper.createProduct(product);
+      processRequest(res, 'Product added successfully');
     }
   );
 });
 
-async function getAllProduct(){
-  const temp = await productHelper.getProductBySeller(JSON.parse(sessionStorage.getItem('user')).seller_id);
+async function getAllProduct() {
+  const temp = await productHelper.getProductBySeller(
+    JSON.parse(sessionStorage.getItem('user')).seller_id
+  );
   products = [...temp];
   console.log(temp);
   console.log(tableBody);
   displayProduct(products);
 }
-function displayProduct(products){
+function displayProduct(products) {
   tableBody.innerHTML = '';
   for (let i = 0; i < products.length; i++) {
     tableBody.appendChild(createRowCard(products[i]));
-    const deleteBtn = document.querySelector(`#delete-${products[i].product_id}`);
+    const deleteBtn = document.querySelector(
+      `#delete-${products[i].product_id}`
+    );
     deleteBtn.addEventListener('click', () => {
       displayConfirmationModal(
         'Are you sure you want to delete this product?',
         async () => {
           let res = await productHelper.deleteProduct(products[i]);
-          processRequest(res,'Product deleted successfully')
+          processRequest(res, 'Product deleted successfully');
         }
       );
     });
@@ -81,40 +105,40 @@ function displayProduct(products){
       console.log(products[i]);
       displayEditModal(products[i]);
     });
-
   }
 }
 
-
-
-
 addProductButton.addEventListener('click', () => {
   const product = createProductObject();
-        if (product.attributes.length == 0){
-          displayStatusModal('Category has not been selected or Required attribute has not been filled!', false);
-          return;
-        }
-        if (product.price.length == 0 || product.product_name.length == 0 || product.width == 0|| product.length == 0|| product.height == 0  ){
-          displayStatusModal('Price/Name/Width/Length/Height must be filled!', false);
-          return;
-        }
+  if (product.attributes.length == 0) {
+    displayStatusModal(
+      'Category has not been selected or Required attribute has not been filled!',
+      false
+    );
+    return;
+  }
+  if (
+    product.price.length == 0 ||
+    product.product_name.length == 0 ||
+    product.width == 0 ||
+    product.length == 0 ||
+    product.height == 0
+  ) {
+    displayStatusModal('Price/Name/Width/Length/Height must be filled!', false);
+    return;
+  }
   displayConfirmationModal(
     'Are you sure you want to add this product?',
     async () => {
       console.log(product);
-        let res = await productHelper.createProduct(product);
-        processRequest(res,'Product added successfully')
+      let res = await productHelper.createProduct(product);
+      processRequest(res, 'Product added successfully');
     }
   );
 });
-const editButton = document.querySelector(".modal__buttuon--eidtProduct") 
+const editButton = document.querySelector('.modal__buttuon--eidtProduct');
 
-
-
-
-
-
-function createRowCard(item){
+function createRowCard(item) {
   const card = document.createElement('tr');
   card.innerHTML = `
                     <td>${item.product_id}</td>
@@ -136,7 +160,7 @@ function createRowCard(item){
                     </td>
                   </tr>
                   `;
-  return card
+  return card;
 }
 
 selectDetector(
@@ -145,22 +169,26 @@ selectDetector(
   'main-product__add'
 );
 
-const nameUpdateInput = document.querySelector('#product__name--update'); 
-const descriptionUpdateInput = document.querySelector('#product__description--update'); 
+const nameUpdateInput = document.querySelector('#product__name--update');
+const descriptionUpdateInput = document.querySelector(
+  '#product__description--update'
+);
 const priceUpdateInput = document.querySelector('#product__price--update');
 const imageUpdateInput = document.querySelector('#product__image--update');
 
 async function displayEditModal(item) {
   backdrop.style.display = 'block';
   modal.style.display = 'block';
-  
+
   nameUpdateInput.value = item.product_name;
   descriptionUpdateInput.value = item.product_desc;
   priceUpdateInput.value = item.price;
   imageUpdateInput.value = item.image;
 
-  const selecteAtributeForUpdate = document.querySelector('#select-cateogry-for-update');
-  selecteAtributeForUpdate.innerHTML = "";
+  const selecteAtributeForUpdate = document.querySelector(
+    '#select-cateogry-for-update'
+  );
+  selecteAtributeForUpdate.innerHTML = '';
   await getAllCategory(selecteAtributeForUpdate);
   selecteAtributeForUpdate.value = item.category_id;
 
@@ -168,27 +196,31 @@ async function displayEditModal(item) {
   renderSelect(selecteAtributeForUpdate, formEdit);
   // console.log(selecteAtributeForUpdate)
 
-
   let data = await attribute.find(item.product_id);
-  formEdit.innerHTML = "";
+  formEdit.innerHTML = '';
   const attributes = data[0].attributes;
 
-  
   for (let i = 0; i < attributes.length; i++) {
     formEdit.appendChild(createInputEdit(attributes[i]));
     console.log(formEdit);
   }
 
-  
   editButton.addEventListener('click', () => {
     const product = createProductForUpdate();
     product.product_id = item.product_id;
     console.log(product);
-    if (product.attributes.length == 0){
-      displayStatusModal('Category has not been selected or Required attribute has not been filled!', false);
+    if (product.attributes.length == 0) {
+      displayStatusModal(
+        'Category has not been selected or Required attribute has not been filled!',
+        false
+      );
       return;
     }
-    if ((product.price.length == 0||  !product.price) || product.product_name.length == 0){
+    if (
+      product.price.length == 0 ||
+      !product.price ||
+      product.product_name.length == 0
+    ) {
       displayStatusModal('Price/Name must be filled!', false);
       return;
     }
@@ -197,24 +229,24 @@ async function displayEditModal(item) {
       async () => {
         console.log(product);
         let res = await productHelper.updateProduct(product);
-        processRequest(res,'Product updated successfully')
+        processRequest(res, 'Product updated successfully');
       }
     );
   });
 }
 
-async function getAllCategory(selectType){
+async function getAllCategory(selectType) {
   const res = await category.findAll();
   console.log(res.data);
-  createSelectCategory(selectType,res.data);
+  createSelectCategory(selectType, res.data);
 }
 
 const select = document.querySelector('#select-cateogry-for-create');
-function createSelectCategory(selectType, catList){
-  selectType.innerHTML = "";
+function createSelectCategory(selectType, catList) {
+  selectType.innerHTML = '';
   const defaultOption = document.createElement('option');
-  defaultOption.value = "all";
-  defaultOption.innerHTML = "Select Category";
+  defaultOption.value = 'all';
+  defaultOption.innerHTML = 'Select Category';
   selectType.appendChild(defaultOption);
   for (let i = 0; i < catList.length; i++) {
     const option = document.createElement('option');
@@ -227,12 +259,13 @@ function createSelectCategory(selectType, catList){
 
 select.addEventListener('change', async () => {
   await renderSelect();
-})
+});
 selectEdit.addEventListener('change', async () => {
-  const clasName = 'attribute-input-edit';  
+  const clasName = 'attribute-input-edit';
   await renderSelectEdit();
-})
+});
 
+<<<<<<< HEAD
 async function renderSelect(){
     if (select.value == "all"){
       form.innerHTML = "";
@@ -260,26 +293,46 @@ async function renderSelectEdit(){
   console.log(res.data);
   displayEditForm(res.data);
  
+=======
+async function renderSelect() {
+  if (select.value == 'all') {
+    form.innerHTML = '';
+    return;
+  }
+  const body = {
+    search_attribute: '_id',
+    search_string: select.value,
+  };
+  let res = await category.search(body);
+  displayInputCategoryForm(res.data[0].attributes);
+}
+async function renderSelectEdit() {
+  if (selectEdit.value == 'all') {
+    formEdit.innerHTML = '';
+    return;
+  }
+  const body = {
+    search_attribute: '_id',
+    search_string: selectEdit.value,
+  };
+  let res = await category.search(body);
+  displayEditForm(res.data[0].attributes);
+>>>>>>> f8cee1a17e908968c84f9338c1709435be9226e2
 }
 
-function displayInputCategoryForm(list){
-  
-  form.innerHTML = "";
-    for (let i = 0; i < list.length; i++) {
-      form.appendChild(createCatInputCard(list[i]));
-    }
-
+function displayInputCategoryForm(list) {
+  form.innerHTML = '';
+  for (let i = 0; i < list.length; i++) {
+    form.appendChild(createCatInputCard(list[i]));
+  }
 }
-function displayEditForm(list){
-  
-  formEdit.innerHTML = "";
-    for (let i = 0; i < list.length; i++) {
-      formEdit.appendChild(createInputEdit(list[i]));
-    }
-
+function displayEditForm(list) {
+  formEdit.innerHTML = '';
+  for (let i = 0; i < list.length; i++) {
+    formEdit.appendChild(createInputEdit(list[i]));
+  }
 }
-function createCatInputCard(attribute){
- 
+function createCatInputCard(attribute) {
   const card = document.createElement('div');
   card.classList.add('attribute-input');
   const label = document.createElement('label');
@@ -288,7 +341,11 @@ function createCatInputCard(attribute){
   input.type = attribute.type;
   input.id = attribute.name;
   input.required = attribute.required;
+<<<<<<< HEAD
   
+=======
+  input.value = attribute.value ? attribute.value : '';
+>>>>>>> f8cee1a17e908968c84f9338c1709435be9226e2
 
   if (attribute.type == "number"){
     input.type = "number"
@@ -296,15 +353,14 @@ function createCatInputCard(attribute){
   }
   input.value = attribute.type == "text" ? (attribute.value ?attribute.value : "" ) : parseInt(attribute.value)
   const label2 = document.createElement('label');
-  label2.innerHTML = attribute.required ? 'Required' : 'Optional';  
+  label2.innerHTML = attribute.required ? 'Required' : 'Optional';
 
   card.appendChild(label);
   card.appendChild(input);
   card.appendChild(label2);
   return card;
 }
-function createInputEdit(attribute){
- 
+function createInputEdit(attribute) {
   const card = document.createElement('div');
   card.classList.add('attribute-input');
   const label = document.createElement('label');
@@ -313,7 +369,11 @@ function createInputEdit(attribute){
   input.type = attribute.type;
   input.id = attribute.name;
   input.required = attribute.required;
+<<<<<<< HEAD
   
+=======
+  input.value = attribute.value ? attribute.value : '';
+>>>>>>> f8cee1a17e908968c84f9338c1709435be9226e2
 
   if (attribute.type == "number"){
     input.type = "number"
@@ -321,7 +381,7 @@ function createInputEdit(attribute){
   }
   input.value = attribute.type == "text" ? (attribute.value ?attribute.value : "" ) : parseInt(attribute.value)
   const label2 = document.createElement('label');
-  label2.innerHTML = attribute.required ? 'Required' : 'Optional';  
+  label2.innerHTML = attribute.required ? 'Required' : 'Optional';
 
   card.appendChild(label);
   card.appendChild(input);
@@ -329,15 +389,22 @@ function createInputEdit(attribute){
   return card;
 }
 
-
-function createProductObject(){
+function createProductObject() {
   const product = {
     product_name: document.getElementById('product__name--add').value,
     product_desc: document.getElementById('product__description--add').value,
+<<<<<<< HEAD
     seller_id : JSON.parse(sessionStorage.getItem('user')).seller_id,
     category_id: select.value,
+=======
+    image: document.getElementById('product__image--add').value,
+    seller_id: JSON.parse(sessionStorage.getItem('user')).seller_id,
+    category_id: select.value,
+    price: parseFloat(document.getElementById('product__price--add').value),
+>>>>>>> f8cee1a17e908968c84f9338c1709435be9226e2
     width: parseInt(document.getElementById('product__width--add').value),
     length: parseInt(document.getElementById('product__length--add').value),
+<<<<<<< HEAD
     height: parseInt(document.getElementById('product__height--add').value),
     price: parseFloat (document.getElementById('product__price--add').value),
     image: document.getElementById('product__image--add').value,
@@ -345,66 +412,85 @@ function createProductObject(){
   }
   return product
   
+=======
+    attributes: getAttributeValue(),
+  };
+  return product;
+>>>>>>> f8cee1a17e908968c84f9338c1709435be9226e2
 }
 
-function createProductForUpdate(){
+function createProductForUpdate() {
   const product = {
     product_name: document.getElementById('product__name--update').value,
     product_desc: document.getElementById('product__description--update').value,
     image: document.getElementById('product__image--update').value,
-    seller_id : JSON.parse(sessionStorage.getItem('user')).seller_id,
+    seller_id: JSON.parse(sessionStorage.getItem('user')).seller_id,
     category_id: selectEdit.value,
-    price: parseFloat (document.getElementById('product__price--update').value),
-    attributes: getAttributeValue('.attribute-input-edit')
-  }
-  return product
+    price: parseFloat(document.getElementById('product__price--update').value),
+    attributes: getAttributeValue('.attribute-input-edit'),
+  };
+  return product;
 }
+<<<<<<< HEAD
 function getAttributeValue(className){
   console.log(className);
   const attributes = document.querySelectorAll('.attribute-input');
+=======
+function getAttributeValue(className = 'attribute-input') {
+  const attributes = document.querySelectorAll(className);
+>>>>>>> f8cee1a17e908968c84f9338c1709435be9226e2
   const attributeList = [];
   for (let i = 0; i < attributes.length; i++) {
-    if (attributes[i].children[1].value == "" && attributes[i].children[1].required){
-      
+    if (
+      attributes[i].children[1].value == '' &&
+      attributes[i].children[1].required
+    ) {
       return [];
     }
     const attribute = {
       name: attributes[i].children[0].innerHTML,
       value: attributes[i].children[1].value,
+<<<<<<< HEAD
       type: attributes[i].children[1].type,
     }
+=======
+    };
+>>>>>>> f8cee1a17e908968c84f9338c1709435be9226e2
     attributeList.push(attribute);
   }
   return attributeList;
 }
 getAllCategory(select);
 
-getAllProduct()
+getAllProduct();
 
-searchInput.addEventListener('input', async () => {gatherInformation()});
-filterSelect.addEventListener('change', async () => {gatherInformation()});
-async function gatherInformation(){
-  const body = {
+searchInput.addEventListener('input', async () => {
+  gatherInformation();
+});
+filterSelect.addEventListener('change', async () => {
+  gatherInformation();
+});
+async function gatherInformation() {
+  const body = {};
+  if (searchInput.value.length > 0) {
+    body['search'] = {
+      search_string: searchInput.value,
+    };
   }
-  if (searchInput.value.length > 0){  
-    body["search"] = {
-      "search_string": searchInput.value,
-    }
-  }
-  if (filterSelect.value !== "all"){
-    if (filterSelect.value == "nameasc"){
-        body["order"] = ['product_name','ASC']
-    }else if (filterSelect.value == "namedcr"){
-        body["order"] = ['product_name','DESC']
-    }else if (filterSelect.value == "priceasc"){
-        body["order"] = ['price','ASC']
-    }else if (filterSelect.value == "pricedcr"){
-        body["order"] = ['price','DESC']
+  if (filterSelect.value !== 'all') {
+    if (filterSelect.value == 'nameasc') {
+      body['order'] = ['product_name', 'ASC'];
+    } else if (filterSelect.value == 'namedcr') {
+      body['order'] = ['product_name', 'DESC'];
+    } else if (filterSelect.value == 'priceasc') {
+      body['order'] = ['price', 'ASC'];
+    } else if (filterSelect.value == 'pricedcr') {
+      body['order'] = ['price', 'DESC'];
     }
   }
   console.log(body);
-  body["seller_id"] = JSON.parse(sessionStorage.getItem('user')).seller_id;
+  body['seller_id'] = JSON.parse(sessionStorage.getItem('user')).seller_id;
   let res = await productHelper.filter(body);
   console.log(res.data);
   displayProduct(res.data);
-};
+}

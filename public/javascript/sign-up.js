@@ -106,7 +106,7 @@ submit.addEventListener('click', async (event) => {
       displayConfirmationModal(
         'Account created successfully. Please login.',
         () => {
-          window.location.href = 'login';
+          window.location.href = '/login';
         }
       );
     }
