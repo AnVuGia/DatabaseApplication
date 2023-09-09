@@ -32,9 +32,10 @@ exports.addOrder = async (req, res) => {
   };
   sequelize.transaction(async (t) => {
     const order = await orderTable.create({ newOrder }, { transaction: t });
-    if (product.quantity < body.product_quantity) {
+    if (product.unit_in_stock < body.product_quantity) {
       console.log('Not enough product');
       await t.rollback();
+      return;
     }
     await productTable.update(
       { unit_in_stock: product.unit_in_stock - body.product_quantity },
@@ -43,7 +44,6 @@ exports.addOrder = async (req, res) => {
     );
     await t.commit();
   });
-
   res.status(200).json(order);
 };
 exports.getOrdersByCustomerId = async (req, res) => {
