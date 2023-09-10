@@ -2,7 +2,6 @@ const { Sequelize, Op } = require('sequelize');
 const mysql = require('mysql');
 const mongoose = require('mongoose');
 const util = require('util');
-
 const ProductAttributes = require('../models/ProductAttribute');
 
 var db = {};
@@ -63,12 +62,9 @@ async function connectDB(username, password) {
 exports.findAll = async function (req, resp) {
 
     const query = req.body.query;
-    await connectDB('lazada_admin','password');
-
+    await connectDB ('lazada_admin','password')
     await mysqlConnection.query(
-      `SELECT * FROM product_warehouse_view
-      LIMIT 5
-      OFFSET ${query.offset};      
+      `SELECT * FROM product_warehouse_view;      
       `,
       async function (err, result, fields) {
         if (err) throw err;
@@ -76,6 +72,46 @@ exports.findAll = async function (req, resp) {
       }
     );
 };
+
+exports.moveProduct = async function (req, resp) {
+  const query = req.body.query;
+
+  console.log(query); 
+  await connectDB ('lazada_admin','password')
+  console.log('after connect');
+  productTable.findOne({
+    where: {
+      product_id: query.productID
+    }
+  }).then(async (product) => {
+    console.log('foudn product'); 
+    console.log(product); 
+      product = product.dataValues;
+      console.log(product); 
+     let volume = product.length * product.width * product.height;
+     let totalVolum = volume * query.quantity;
+
+     await mysqlConnection.query(
+      `CALL move_product(${query.wid_start},${query.productID},${query.wid_dest},${totalVolum},${query.quantity},@outParam);
+        SELECT @outParam as success;
+      `, async function (err, result) {
+        if (err) throw err;
+        else{
+          result = result[1][0]['success'];
+
+          console.log(result);
+          if(result == 1){
+            resp.status(200).send({message: "Move product successfully"});
+          }else{
+            resp.status(400).send({message: "Move product failed"});
+          }
+        }
+
+      });
+  }).catch((err) => {
+    resp.status(400).send({message: "Move product failed"});
+  }
+);};
 
 
 

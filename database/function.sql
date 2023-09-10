@@ -80,8 +80,6 @@ END $$
 DELIMITER ;
 
 
-
--- Move product procedure
 DELIMITER $$
 DROP PROCEDURE IF EXISTS move_product;
 CREATE PROCEDURE move_product(IN wid_start BIGINT, 
@@ -138,11 +136,17 @@ BEGIN
         END IF;
 
         -- Subtract the quantity from the source ProductWarehouses
-        UPDATE ProductWarehouses
-        SET product_quantity = product_quantity - quantity
-        WHERE ProductWarehouses.product_id = productID
-        AND ProductWarehouses.warehouse_id = wid_start;
-
+        IF avai_quantity = quantity THEN
+			DELETE FROM ProductWarehouses
+            WHERE  ProductWarehouses.product_id = productID
+            AND ProductWarehouses.warehouse_id = wid_start;
+        ELSE
+			UPDATE ProductWarehouses
+			SET product_quantity = product_quantity - quantity
+			WHERE ProductWarehouses.product_id = productID
+			AND ProductWarehouses.warehouse_id = wid_start;
+        END IF;
+        
         SET success = true;
         COMMIT;
     END IF;
@@ -241,8 +245,9 @@ DELIMITER ;
 
 
 -- create product warehouse view for moving product easily
+DROP VIEW product_warehouse_view;
 CREATE VIEW product_warehouse_view AS
-SELECT ph.warehouse_id, w.warehouse_name, p.product_name, ph.product_quantity
+SELECT ph.warehouse_id, w.warehouse_name, p.product_name, ph.product_id, ph.product_quantity
 FROM productWarehouses ph
 JOIN warehouses w
 ON ph.warehouse_id = w.warehouse_id
