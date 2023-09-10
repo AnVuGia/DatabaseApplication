@@ -55,7 +55,10 @@ exports.search = async function (req, resp) {
     const results = await Category.find(searchParams);
     resp.json(results);
   } catch (err) {
-    resp.status(500).json({ message: err.message });
+    resp.json({
+      status: false,
+      message: 'Some error occurred while retrieving data.',
+    });
   }
 };
 exports.searchByName = async function (req, resp) {
@@ -65,7 +68,10 @@ exports.searchByName = async function (req, resp) {
     const results = await Category.find({ name: new RegExp(searchValue, 'i') });
     resp.json(results);
   } catch (err) {
-    resp.status(500).json({ message: err.message });
+    resp.json({
+      status: false,
+      message: 'Some error occurred while retrieving data.',
+    });
   }
 };
 
@@ -103,19 +109,24 @@ exports.update = async function (req, resp) {
           console.log(results);
           resp.json(results);
         } catch (err) {
-          resp.status(500).json({ message: err.message });
+          resp.json({
+            status: false,
+            message: 'Some error occurred while retrieving data.',
+          });
         }
       }
       // There are at least 1 product have
       else {
-        resp.status(500).send({
-          message: 'Update failed. There are product(s) inherit this category.',
+        resp.json({
+          status: false,
+          message: 'Some error occurred while retrieving data.',
         });
       }
     })
     .catch((err) => {
-      resp.status(500).send({
-        message: err.message || 'Cannot find product by id.',
+      resp.json({
+        status: false,
+        message: 'Some error occurred while retrieving data.',
       });
     });
 };
@@ -134,8 +145,9 @@ exports.delete = async function (req, resp) {
 
     // There are children category(s)
     if (result.children.length > 0) {
-      resp.status(500).json({
-        message: 'Delete Failed! There are sub-category(s) inherit it.',
+      resp.json({
+        status: false,
+        message: 'Some error occurred while retrieving data.',
       });
 
       return;
@@ -173,20 +185,24 @@ exports.delete = async function (req, resp) {
           }
           // There are at least 1 product have
           else {
-            resp.status(500).send({
-              message:
-                'Delete failed. There are product(s) inherit this category.',
+            resp.json({
+              status: false,
+              message: 'Some error occurred while retrieving data.',
             });
           }
         })
         .catch((err) => {
-          resp.status(500).send({
-            message: err.message || 'Cannot find product by id.',
+          resp.json({
+            status: false,
+            message: 'Some error occurred while retrieving data.',
           });
         });
     }
   } catch (err) {
-    resp.status(500).json({ message: err.message });
+    resp.json({
+      status: false,
+      message: 'Some error occurred while retrieving data.',
+    });
   }
 };
 

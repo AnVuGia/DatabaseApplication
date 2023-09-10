@@ -35,9 +35,8 @@ function displayAllCategory(categories, isSearch = false) {
           'Are you sure you want to delete this category?',
           async () => {
             let res = await category.delete(categories[i]);
-            processRequest(res, 'Category deleted successfully');
-          }
-        );
+            processRequest(res);
+          })
       });
     document
       .querySelector(`#forward-${categories[i]._id}`)
@@ -151,21 +150,20 @@ function prepareAddCategoryForm(parentId) {
         .querySelector('#category-name-form-input')
         .value.trim();
 
-      let categoryObject = CreateCategoryObject(parentId, nameValue);
-      if (categoryObject == null) {
-        displayStatusModal(
-          'Please fill all the attribute name and select type',
-          false
-        );
-        return;
-      }
-      displayConfirmationModal(
-        'Are you sure you want to create this category?',
-        async () => {
-          let res = await category.create(categoryObject);
-          processRequest(res, 'Category created successfully');
-        }
-      );
+    //process if they click on add category button
+    document.querySelector("#category-input-save-button").addEventListener("click", async () => {
+        const nameValue = document.querySelector("#category-name-form-input").value.trim();
+
+       
+          let categoryObject = CreateCategoryObject(parentId,nameValue)
+          if (categoryObject == null){
+            displayStatusModal("Please fill all the attribute name and select type", false);
+            return;
+          } 
+          displayConfirmationModal("Are you sure you want to create this category?", async () => {
+            let res = await category.create(categoryObject);
+            processRequest(res);
+          });
     });
 }
 
@@ -294,7 +292,7 @@ async function prepareUpdateCategoryForm(id) {
         categoryObject['_id'] = id;
         console.log(categoryObject);
         let res = await category.update(categoryObject);
-        processRequest(res, 'Category updated successfully');
+        processRequest(res);
       }
     });
 }

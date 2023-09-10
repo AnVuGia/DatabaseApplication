@@ -59,7 +59,7 @@ async function connectDB(username, password) {
     });
 }
 
-exports.findAll = async function (req, resp) {
+exports.findAll = async function (req, res) {
 
     const query = req.body.query;
     await connectDB ('lazada_admin','password')
@@ -69,12 +69,12 @@ exports.findAll = async function (req, resp) {
       `,
       async function (err, result, fields) {
         if (err) throw err;
-        resp.send(result);
+        res.send(result);
       }
     );
 };
 
-exports.moveProduct = async function (req, resp) {
+exports.moveProduct = async function (req, res) {
   const query = req.body.query;
 
   console.log(query); 
@@ -84,9 +84,7 @@ exports.moveProduct = async function (req, resp) {
     where: {
       product_id: query.productID
     }
-  }).then(async (product) => {
-    console.log('foudn product'); 
-    console.log(product); 
+  }).then(async (product) => { 
       product = product.dataValues;
       console.log(product); 
      let volume = product.length * product.width * product.height;

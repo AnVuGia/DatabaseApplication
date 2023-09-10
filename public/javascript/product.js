@@ -73,7 +73,7 @@ function displayProduct(products) {
         'Are you sure you want to delete this product?',
         async () => {
           let res = await productHelper.deleteProduct(products[i]);
-          processRequest(res, 'Product deleted successfully');
+          processRequest(res);
         }
       );
     });
@@ -178,7 +178,7 @@ async function displayEditModal(item) {
       async () => {
         console.log(product);
         let res = await productHelper.updateProduct(product);
-        processRequest(res, 'Product updated successfully');
+        processRequest(res);
       }
     );
   });
@@ -387,6 +387,5 @@ async function gatherInformation() {
   console.log(body);
   body['seller_id'] = JSON.parse(sessionStorage.getItem('user')).seller_id;
   let res = await productHelper.filter(body);
-  console.log(res.data);
   displayProduct(res.data);
 }
