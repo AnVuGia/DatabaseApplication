@@ -12,6 +12,7 @@ const categoryRoute = require('./routes/categoryRoute');
 const productCategoryRoute = require('./routes/productCategoryRoute');
 const customerRoute = require('./routes/customerRoute');
 const ordersRoute = require('./routes/ordersRoute');
+const productWarehouseRoute = require('./routes/productWarehouseRoute');
 const db = require('./models');
 const app = express();
 const session = require('express-session');
@@ -52,6 +53,7 @@ app.use('/warehouse', warehouseRoute);
 app.use('/category', categoryRoute);
 app.use('/attribute',productCategoryRoute)
 app.use('/customer', customerRoute);
+app.use('/productWarehouse', productWarehouseRoute);
 app.use('/order', ordersRoute);
 db.sequelize.sync().then((req) => {
   const server = app.listen(port, () => {

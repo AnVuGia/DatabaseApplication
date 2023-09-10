@@ -1,0 +1,81 @@
+const { Sequelize, Op } = require('sequelize');
+const mysql = require('mysql');
+const mongoose = require('mongoose');
+const util = require('util');
+
+const ProductAttributes = require('../models/ProductAttribute');
+
+var db = {};
+var productTable;
+var productLocationTable;
+var warehouseTable;
+
+var mysqlQuery;
+var mysqlConnection;
+
+async function connectDB(username, password) {
+  const sequelize = new Sequelize('lazada_database', username, password, {
+    host: '127.0.0.1',
+    dialect: 'mysql',
+  });
+
+  db.Sequelize = Sequelize;
+  db.sequelize = sequelize;
+
+  db.products = require('../models/Products.js')(sequelize, Sequelize);
+  db.product_location = require('../models/ProductWarehouses.js')(
+    sequelize,
+    Sequelize
+  );
+  db.warehouse = require('../models/Warehouses.js')(sequelize, Sequelize);
+
+  productTable = db.products;
+  productLocationTable = db.product_location;
+  warehouseTable = db.warehouse;
+
+  // Establish connection for mysql
+  mysqlConnection = await mysql.createConnection({
+    host: '127.0.0.1',
+    dialect: 'mysql',
+    user: username,
+    password: password,
+    database: 'lazada_database',
+    multipleStatements: true,
+  });
+
+  mysqlConnection.connect(function (err) {
+    if (err) throw err;
+    console.log('Connected!');
+  });
+
+  mysqlQuery = util.promisify(mysqlConnection.query).bind(mysqlConnection);
+
+  await db.sequelize
+    .sync()
+    .then(() => {
+      console.log('Synced db.');
+    })
+    .catch((err) => {
+      console.log('Failed to sync db: ' + err.message);
+    });
+}
+
+exports.findAll = async function (req, resp) {
+
+    const query = req.body.query;
+    await connectDB('lazada_admin','password');
+
+    await mysqlConnection.query(
+      `SELECT * FROM product_warehouse_view
+      LIMIT 5
+      OFFSET ${query.offset};      
+      `,
+      async function (err, result, fields) {
+        if (err) throw err;
+        resp.send(result);
+      }
+    );
+};
+
+
+
