@@ -12,7 +12,7 @@ async function connectDB(username, password) {
     dialect: 'mysql',
   });
 
-    db.products = require("../models/Products.js")(sequelize, Sequelize);
+  db.products = require('../models/Products.js')(sequelize, Sequelize);
 
   db.products = require('../models/Product.js')(sequelize, Sequelize);
 
@@ -33,10 +33,7 @@ exports.findAll = async function (req, res) {
   console.log('find all category');
   try {
     const results = await Category.find({});
-    res.json({
-      status: true,
-      message: 'True',
-    });
+    res.json(results);
   } catch (err) {
     res.json({
       status: false,
@@ -79,8 +76,8 @@ exports.update = async function (req, resp) {
 
   const userCredential = req.session.credentials;
 
-    // await connectDB(userCredential.username, userCredential.password);
-    await connectDB('lazada_admin', 'password'); 
+  // await connectDB(userCredential.username, userCredential.password);
+  await connectDB('lazada_admin', 'password');
 
   // find all product have this category id
   const products = await productTable
