@@ -9,6 +9,8 @@ BEGIN
 
     DECLARE num_product INT;
 
+    DECLARE row_count INT DEFAULT 0;
+
     DECLARE cur CURSOR FOR SELECT warehouse_id, available_volume FROM warehouses ORDER BY available_volume DESC;  
 
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;  
@@ -47,8 +49,19 @@ BEGIN
         SET available_volume = warehouse_volume
         WHERE warehouse_id = id;
 
-        INSERT INTO ProductWarehouses(product_id, warehouse_id, product_quantity)
+        SELECT COUNT(*) INTO row_count
+        FROM ProductWarehouses
+        WHERE product_id = p_id AND warehouse_id = id;
+
+        IF row_count > 0 THEN
+            UPDATE ProductWarehouses p
+            SET p.product_quantity = p.product_quantity + num_product
+            WHERE product_id = p_id AND warehouse_id = id;
+
+        ELSE
+            INSERT INTO ProductWarehouses(product_id, warehouse_id, product_quantity)
                     VALUES(p_id, id, num_product);
+        END IF;
 
     END LOOP;  
 

@@ -66,16 +66,7 @@ exports.createInboundOrder = async (req, res) => {
   await connectDB(userCredential.username, userCredential.password);
 
   var inboundOrder = req.body.query;
-  await productTable.update(
-    {
-      unit_in_stock: inboundOrder.quantity,
-    },
-    {
-      where: {
-        product_id: inboundOrder.product_id,
-      },
-    }
-  );
+
   await productTable
     .findOne({
       where: {
@@ -116,9 +107,7 @@ exports.createInboundOrder = async (req, res) => {
               productTable
                 .update(
                   {
-                    quantity: product.quantity + inboundOrder.quantity,
-
-                    units_in_stock: product.quantity + inboundOrder.quantity,
+                    units_in_stock: product.units_in_stock + inboundOrder.quantity,
                   },
 
                   {
