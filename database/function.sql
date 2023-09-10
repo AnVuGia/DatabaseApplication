@@ -9,6 +9,8 @@ BEGIN
 
     DECLARE num_product INT;
 
+    DECLARE row_count INT DEFAULT 0;
+
     DECLARE cur CURSOR FOR SELECT warehouse_id, available_volume FROM warehouses ORDER BY available_volume DESC;  
 
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;  
@@ -47,8 +49,19 @@ BEGIN
         SET available_volume = warehouse_volume
         WHERE warehouse_id = id;
 
-        INSERT INTO ProductWarehouses(product_id, warehouse_id, product_quantity)
+        SELECT COUNT(*) INTO row_count
+        FROM ProductWarehouses
+        WHERE product_id = p_id AND warehouse_id = id;
+
+        IF row_count > 0 THEN
+            UPDATE ProductWarehouses p
+            SET p.product_quantity = p.product_quantity + num_product
+            WHERE product_id = p_id AND warehouse_id = id;
+
+        ELSE
+            INSERT INTO ProductWarehouses(product_id, warehouse_id, product_quantity)
                     VALUES(p_id, id, num_product);
+        END IF;
 
     END LOOP;  
 
@@ -134,4 +147,94 @@ BEGIN
         COMMIT;
     END IF;
 END $$
+DELIMITER ;
+
+
+
+
+
+-- Drop the procedure if it exists
+DROP PROCEDURE IF EXISTS UpdateWarehouseData;
+
+-- Create the procedure for updating warehouse-related data
+DELIMITER //
+
+CREATE PROCEDURE UpdateWarehouseData(
+  IN quantityChange INT,
+  IN productID INT
+)
+BEGIN
+  DECLARE done INT DEFAULT FALSE;
+  DECLARE warehouseID INT;
+  DECLARE quantityInWarehouse INT; -- Declare a local variable
+
+  -- Declare a cursor to fetch rows from PRODUCTWAREHOUSES
+  DECLARE cur CURSOR FOR
+    SELECT warehouse_id, product_quantity
+    FROM PRODUCTWAREHOUSES
+    WHERE product_id = productID
+    ORDER BY warehouse_id;
+
+  -- Declare handlers for exceptions
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+  -- Start a transaction
+
+
+  OPEN cur;
+
+  update_loop: LOOP
+    FETCH cur INTO warehouseID, quantityInWarehouse; -- Use the local variable
+
+    IF done THEN
+      LEAVE update_loop;
+    END IF;
+
+    IF quantityChange > quantityInWarehouse THEN
+      -- Reduce quantity in the current warehouse to 0
+      UPDATE PRODUCTWAREHOUSES
+      SET product_quantity = 0
+      WHERE product_id = productID AND warehouse_id = warehouseID;
+    ELSE
+      -- Reduce quantity in the current warehouse by quantityChange
+      UPDATE PRODUCTWAREHOUSES
+      SET product_quantity = product_quantity - quantityChange
+      WHERE product_id = productID AND warehouse_id = warehouseID;
+      LEAVE update_loop;
+    END IF;
+
+    -- Update available_volume in WAREHOUSES
+    UPDATE WAREHOUSES
+    SET available_volume = available_volume - quantityChange
+    WHERE warehouse_id = warehouseID;
+
+  END LOOP;
+
+  CLOSE cur;
+
+
+END;
+//
+
+DELIMITER ;
+
+
+
+
+
+-- Drop the trigger if it exists
+DROP TRIGGER IF EXISTS UpdateUnitOnOrderTrigger;
+
+-- Create the trigger
+DELIMITER //
+CREATE TRIGGER UpdateUnitOnOrderTrigger
+BEFORE UPDATE
+ON Products FOR EACH ROW
+BEGIN
+    IF NEW.unit_in_stock < OLD.unit_in_stock THEN
+        CALL UpdateWarehouseData(OLD.unit_in_stock - NEW.unit_in_stock, NEW.product_id);
+    END IF;
+END;
+//
+    
 DELIMITER ;

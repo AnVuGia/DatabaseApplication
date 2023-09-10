@@ -34,7 +34,6 @@ CREATE TABLE IF NOT EXISTS Products (
     height INT,
     length INT,
     price DOUBLE,
-    quantity INT,
     unit_in_stock INT,
     unit_on_order INT,
 	createdAt datetime,

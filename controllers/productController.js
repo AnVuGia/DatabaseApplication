@@ -108,9 +108,7 @@ exports.createInboundOrder = async (req, res) => {
               productTable
                 .update(
                   {
-                    quantity: product.quantity + inboundOrder.quantity,
-
-                    units_in_stock: product.quantity + inboundOrder.quantity,
+                    units_in_stock: product.units_in_stock + inboundOrder.quantity,
                   },
 
                   {
@@ -159,13 +157,10 @@ exports.create = async (req, res) => {
   // await connectDB(userCredential.username, userCredential.password);
   await connectDB('lazada_seller', 'password');
 
-
   const newObject = req.body.query;
   console.log(newObject);
   newObject['unit_in_stock'] = 0;
   newObject['unit_on_order'] = 0;
-
-  
 
   // Store attribute list seperately
   const productAttributes = newObject.attributes;
@@ -265,7 +260,7 @@ exports.getAllProductBySeller = async function (req, res) {
   console.log('Seller id: ' + seller_id);
   // await connectDB(userCredential.username, userCredential.password);
 
-  await connectDB("lazada_seller", "password");
+  await connectDB('lazada_seller', 'password');
   productTable
     .findAll({
       where: {
@@ -287,7 +282,7 @@ exports.update = async (req, res) => {
   const userCredential = req.session.credentials;
   const product_id = req.params.product_id;
   // await connectDB(userCredential.user_name, userCredential.password);
-  await connectDB("lazada_seller", "password");
+  await connectDB('lazada_seller', 'password');
   const newObj = req.body.query;
   const filterParam = {
     where: {
@@ -472,21 +467,21 @@ exports.filterProductByAttributeValue = async (req, res) => {
 };
 
 async function getAllChildrenID(categoryId) {
-    var results = [];
+  var results = [];
 
-    var categories = await Category.find({
-        parent: categoryId
-    });
+  var categories = await Category.find({
+    parent: categoryId,
+  });
 
-    categories = categories.map(i => i._id.toString());
+  categories = categories.map((i) => i._id.toString());
 
-    results.push(...categories);
+  results.push(...categories);
 
-    for (var i = 0; i < categories.length; i++) {
-        results.push(...await getAllChildrenID(categories[i]));
-    }
+  for (var i = 0; i < categories.length; i++) {
+    results.push(...(await getAllChildrenID(categories[i])));
+  }
 
-    return results;
+  return results;
 }
 
 exports.filterProductByCategory = async (req, res) => {
@@ -496,22 +491,21 @@ exports.filterProductByCategory = async (req, res) => {
   await connectDB(userCredential.user_name, userCredential.password);
 
   var cateIDs = [category_id];
-    cateIDs.push(...await getAllChildrenID(category_id));
+  cateIDs.push(...(await getAllChildrenID(category_id)));
 
-    console.log(cateIDs);
+  console.log(cateIDs);
 
-    try {
-        var products = await productTable.findAll({
-            where: {
-                category_id: {
-                    [Op.in]: cateIDs
-                }
-            }
-        });
+  try {
+    var products = await productTable.findAll({
+      where: {
+        category_id: {
+          [Op.in]: cateIDs,
+        },
+      },
+    });
 
-        res.send(products);
-    }
-    catch (err) {
-        res.status(500).json({message: err.message});
-    }
+    res.send(products);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
