@@ -257,8 +257,11 @@ function displayEditForm(list) {
 }
 function createCatInputCard(attribute) {
   const card = document.createElement('div');
+  card.style.margin = "10px 0px"
   card.classList.add('attribute-input');
-  const label = document.createElement('label');
+  card.style.display = "flex";
+  const label = document.createElement('div');
+  label.style.width = "120px";
   label.innerHTML = attribute.name;
   const input = document.createElement('input');
   input.type = attribute.type;
