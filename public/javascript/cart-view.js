@@ -62,8 +62,8 @@ function displayCart() {
     cartContainer.appendChild(cartItemDiv);
   });
 }
-proceedButton.addEventListener('click', () => {
-  onProceed();
+proceedButton.addEventListener('click', async () => {
+  await onProceed();
   window.location.href = '/checkout';
 });
 

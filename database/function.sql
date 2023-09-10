@@ -202,17 +202,23 @@ BEGIN
       WHERE product_id = productID AND warehouse_id = warehouseID;
       LEAVE update_loop;
     END IF;
-
+    -- Calculate the change in available_volume based on quantityChange and product dimensions
+    SET @volumeChange = quantityChange * productHeight * productWidth * productLength;
     -- Update available_volume in WAREHOUSES
     UPDATE WAREHOUSES
-    SET available_volume = available_volume + quantityChange * productHeight * productWidth * productLength
+    SET available_volume = available_volume +  @volumeChange
     WHERE warehouse_id = warehouseID;
 
   END LOOP;
+
   CLOSE cur;
+
+
 END;
 //
+
 DELIMITER ;
+
 
 
 -- Drop the trigger if it exists
