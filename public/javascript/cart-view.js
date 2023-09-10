@@ -36,7 +36,7 @@ function displayCart() {
                     <div class="row">
                         <div class="col-md-3">
                             <img src="${
-                              item.img ||
+                              item.image ||
                               'https://down-vn.img.susercontent.com/file/6db97a22ffdf63960cdb0fe349877cc9'
                             }" alt="${item.name}" class="img-fluid">
                         </div>

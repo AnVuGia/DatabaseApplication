@@ -8,10 +8,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     customer_id: {
       type: DataTypes.BIGINT(10),
-      allowNull: false
-    },
-    seller_id: {
-      type: DataTypes.BIGINT(10),
       allowNull: false,
     },
     product_id: {
@@ -19,6 +15,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     product_quantity: {
+      type: DataTypes.INTEGER(10),
+      allowNull: false,
+    },
+    total_price: {
       type: DataTypes.INTEGER(10),
       allowNull: false,
     },

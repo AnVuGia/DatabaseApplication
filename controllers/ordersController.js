@@ -14,50 +14,43 @@ exports.addOrder = async (req, res) => {
     isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE,
   };
   const body = req.body;
+  console.log(body);
   const orderTable = await connectDB(
     req.session.credentials,
     require('../models/Orders')
-  );
-  const productTable = await connectDB(
-    req.session.credentials,
-    require('../models/Products')
   );
 
   try {
     // Start a transaction
     await sequelize.transaction(options, async (t) => {
+      // Find the product
+      const productTable = await connectDB(
+        req.session.credentials,
+        require('../models/Products')
+      );
       const product = await productTable.findOne({
-        where: {
-          product_id: body.product_id,
-        },
-        transaction: t,
+        where: { product_id: body.product_id },
       });
-
       if (!product) {
+        throw new Error('Product not found');
         // Handle the case where the product is not found
-        await t.rollback();
-        return res.status(404).json({ error: 'Product not found' });
       }
-
-      const seller_id = product.seller_id;
-
       if (product.unit_in_stock < body.product_quantity) {
         throw new Error('Not enough product in stock');
         // Handle the case where there's not enough product in stock
       }
-
+      const total_price = product.price * body.product_quantity;
+      console.log(total_price);
       // Create a new order within the transaction
       const order = await orderTable.create(
         {
           customer_id: body.customer_id,
           product_id: body.product_id,
           product_quantity: body.product_quantity,
-          seller_id: seller_id,
+          total_price: total_price,
         },
         { transaction: t }
       );
-
-      // Commit the transaction if everything is successful
 
       // Send a success response
       return res.status(200).json(order);
