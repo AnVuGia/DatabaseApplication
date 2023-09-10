@@ -63,19 +63,11 @@ async function connectDB(username, password) {
 exports.createInboundOrder = async (req, res) => {
   const userCredential = req.session.credentials;
 
-  await connectDB(userCredential.username, userCredential.password);
+  // await connectDB(userCredential.username, userCredential.password);
+  await connectDB('lazada_seller', 'password');
 
   var inboundOrder = req.body.query;
-  await productTable.update(
-    {
-      unit_in_stock: inboundOrder.quantity,
-    },
-    {
-      where: {
-        product_id: inboundOrder.product_id,
-      },
-    }
-  );
+
   await productTable
     .findOne({
       where: {
@@ -116,9 +108,7 @@ exports.createInboundOrder = async (req, res) => {
               productTable
                 .update(
                   {
-                    quantity: product.quantity + inboundOrder.quantity,
-
-                    units_in_stock: product.quantity + inboundOrder.quantity,
+                    units_in_stock: product.units_in_stock + inboundOrder.quantity,
                   },
 
                   {

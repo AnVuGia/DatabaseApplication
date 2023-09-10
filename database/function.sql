@@ -9,6 +9,8 @@ BEGIN
 
     DECLARE num_product INT;
 
+    DECLARE row_count INT DEFAULT 0;
+
     DECLARE cur CURSOR FOR SELECT warehouse_id, available_volume FROM warehouses ORDER BY available_volume DESC;  
 
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;  
@@ -47,8 +49,19 @@ BEGIN
         SET available_volume = warehouse_volume
         WHERE warehouse_id = id;
 
-        INSERT INTO ProductWarehouses(product_id, warehouse_id, product_quantity)
+        SELECT COUNT(*) INTO row_count
+        FROM ProductWarehouses
+        WHERE product_id = p_id AND warehouse_id = id;
+
+        IF row_count > 0 THEN
+            UPDATE ProductWarehouses p
+            SET p.product_quantity = p.product_quantity + num_product
+            WHERE product_id = p_id AND warehouse_id = id;
+
+        ELSE
+            INSERT INTO ProductWarehouses(product_id, warehouse_id, product_quantity)
                     VALUES(p_id, id, num_product);
+        END IF;
 
     END LOOP;  
 
@@ -65,6 +78,80 @@ BEGIN
 
 END $$
 DELIMITER ;
+
+
+
+-- Move product procedure
+DELIMITER $$
+DROP PROCEDURE IF EXISTS move_product;
+CREATE PROCEDURE move_product(IN wid_start BIGINT, 
+                            IN productID BIGINT,
+                            IN wid_dest BIGINT, 
+                            IN volume INTEGER, 
+                            IN quantity INTEGER,
+                            OUT success BOOLEAN)
+BEGIN
+    -- Declare variables
+    DECLARE avai_volume INTEGER;
+    DECLARE avai_quantity INTEGER;
+
+    -- Get the available volume in the source warehouse
+    SELECT ProductWarehouses.product_quantity
+    INTO avai_quantity
+    FROM ProductWarehouses
+    WHERE warehouse_id = wid_start
+    AND ProductWarehouses.product_id = productID;
+
+    -- Get the available volume in the destination warehouse
+    SELECT available_volume
+    INTO avai_volume
+    FROM warehouses
+    WHERE warehouse_id = wid_dest;
+
+    IF avai_volume < volume OR avai_quantity < quantity THEN
+        -- Code to execute if the condition is true
+        SET success = false;
+    ELSE
+        -- Code to execute if the condition is false
+
+        -- Subtract available volume in the destination warehouse
+        UPDATE warehouses 
+        SET available_volume = available_volume - volume
+        WHERE warehouse_id = wid_dest;
+
+        -- Add available volume in the source warehouse
+        UPDATE warehouses 
+        SET available_volume = available_volume + volume
+        WHERE warehouse_id = wid_start;
+
+        -- Check if a row exists in ProductWarehouses for the destination
+        -- If no row exists, insert a new row
+        IF NOT EXISTS (SELECT 1 FROM ProductWarehouses WHERE product_id = productID AND warehouse_id = wid_dest) THEN
+            INSERT INTO ProductWarehouses (product_id, warehouse_id, product_quantity)
+            VALUES (productID, wid_dest, quantity);
+        ELSE
+            -- Update the quantity in the destination ProductWarehouses
+            UPDATE ProductWarehouses
+            SET product_quantity = product_quantity + quantity
+            WHERE ProductWarehouses.product_id = productID
+            AND ProductWarehouses.warehouse_id = wid_dest;
+        END IF;
+
+        -- Subtract the quantity from the source ProductWarehouses
+        UPDATE ProductWarehouses
+        SET product_quantity = product_quantity - quantity
+        WHERE ProductWarehouses.product_id = productID
+        AND ProductWarehouses.warehouse_id = wid_start;
+
+        SET success = true;
+        COMMIT;
+    END IF;
+END $$
+DELIMITER ;
+
+
+
+
 
 -- Drop the procedure if it exists
 DROP PROCEDURE IF EXISTS UpdateWarehouseData;

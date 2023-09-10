@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     customer_id: {
       type: DataTypes.BIGINT(10),
-      allowNull: false,
+      allowNull: false
     },
     seller_id: {
       type: DataTypes.BIGINT(10),
