@@ -18,10 +18,14 @@ const orderHelper = {
       console.error('Error fetching orders:', error);
       throw error;
     }
-    },
-    async AcceptOrder(order) {
-        const response = await axios.post(`${API_URL}/accept-order`, order);
-        return response;
-    },
+  },
+  async AcceptOrder(order) {
+    const response = await axios.post(`${API_URL}/accept-order`, order);
+    return response;
+  },
+  async DeleteOrder(order) {
+    const response = await axios.post(`${API_URL}/delete-order`, order);
+    return response;
+  },
 };
 export default orderHelper;

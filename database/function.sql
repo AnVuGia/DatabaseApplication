@@ -172,10 +172,11 @@ BEGIN
   DECLARE productLength INT;
   -- Declare a cursor to fetch rows from PRODUCTWAREHOUSES
   DECLARE cur CURSOR FOR
-    SELECT warehouse_id, product_quantity
-    FROM PRODUCTWAREHOUSES
-    WHERE product_id = productID
-    ORDER BY warehouse_id;
+    SELECT pw.warehouse_id, pw.product_quantity, p.height, p.width, p.length
+    FROM PRODUCTWAREHOUSES pw
+    JOIN Products p ON pw.product_id = p.product_id
+    WHERE pw.product_id = productID
+    ORDER BY pw.warehouse_id;
 
   -- Declare handlers for exceptions
   DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;

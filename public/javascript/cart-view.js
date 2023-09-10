@@ -61,10 +61,14 @@ function displayCart() {
 }
 proceedButton.addEventListener('click', () => {
   onProceed();
-  // window.location.href = '/checkout';
+  window.location.href = '/checkout';
 });
 
 async function onProceed() {
+  if (cartItems.length === 0) {
+    window.href = '/checkout';
+    return;
+  }
   for (let i = 0; i < cartItems.length; i++) {
     const order = {
       customer_id: currentUserJSON.customer_id.toString(),
