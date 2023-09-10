@@ -205,7 +205,7 @@ BEGIN
 
     -- Update available_volume in WAREHOUSES
     UPDATE WAREHOUSES
-    SET available_volume = available_volume - quantityChange * productHeight * productWidth * productLength
+    SET available_volume = available_volume + quantityChange * productHeight * productWidth * productLength
     WHERE warehouse_id = warehouseID;
 
   END LOOP;
