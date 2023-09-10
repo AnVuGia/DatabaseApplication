@@ -30,12 +30,16 @@ exports.addOrder = async (req, res) => {
       );
       const product = await productTable.findOne({
         where: { product_id: body.product_id },
+        transaction: t,
+        lock: Sequelize.Transaction.LOCK.UPDATE,
       });
       if (!product) {
+        res.status(404).json({ error: 'Product not found' });
         throw new Error('Product not found');
         // Handle the case where the product is not found
       }
       if (product.unit_in_stock < body.product_quantity) {
+        res.status(400).json({ error: 'Not enough product' });
         throw new Error('Not enough product in stock');
         // Handle the case where there's not enough product in stock
       }
@@ -203,6 +207,8 @@ exports.DeleteOrder = async (req, res) => {
   sequelize.transaction(options, async (t) => {
     const order = await orderTable.findOne({
       where: { order_id: body.order_id },
+      transaction: t,
+      lock: Sequelize.Transaction.LOCK.UPDATE,
     });
     if (!order) {
       res.status(404).json({ error: 'Order not found' });

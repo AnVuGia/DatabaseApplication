@@ -67,7 +67,7 @@ exports.createInboundOrder = async (req, res) => {
   await connectDB('lazada_seller', 'password');
 
   var inboundOrder = req.body.query;
-
+  console.log(inboundOrder);
   await productTable
     .findOne({
       where: {
@@ -75,19 +75,14 @@ exports.createInboundOrder = async (req, res) => {
       },
     })
     .then(async (product) => {
+      console.log(product);
       const product_volume = product.width * product.height * product.length;
-
       const newID = product.product_id;
-
       // Call procedure to select suitable warehouse
-
       await mysqlConnection.query(
         `CALL warehouse_selection(${newID}, ${product_volume}, ${inboundOrder.quantity}, @outParam);
-
         SELECT @outParam AS success;`,
-
         // Call back function execute after getting result from procedure
-
         async function (err, result) {
           if (err) {
             throw err;

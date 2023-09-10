@@ -1,4 +1,4 @@
-const { Sequelize } = require(".");
+const { Sequelize } = require('.');
 
 module.exports = (sequelize, DataTypes) => {
   const Products = sequelize.define('Products', {
@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     category_id: {
       type: DataTypes.STRING(24),
       allowNull: false,
-    }, 
+    },
     width: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     price: {
-      type: DataTypes.DECIMAL(10,2),
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     image: {
@@ -47,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     unit_on_order: {
       type: DataTypes.INTEGER,
-    }
+    },
   });
   return Products;
 };
