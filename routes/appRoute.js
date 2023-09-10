@@ -11,6 +11,7 @@ router.get('/seller-product', appController.getSellerProduct);
 router.get('/seller-inbound', appController.getSellerInbound);
 router.get('/admin-inventory', appController.getAdminVentory);
 router.get('/admin-category', appController.getAdminCategory);
+router.get('/admin-product', appController.getAdminProduct);
 router.get('/customers', authJwt.isCustomer, appController.getCustomers);
 router.get('/product-detail', appController.getProductDetail);
 router.get('/cart-view', appController.getCart);
