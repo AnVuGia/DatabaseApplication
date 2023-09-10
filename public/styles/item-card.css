@@ -11,6 +11,7 @@
 .img-item{
     max-width: 100%;
     width: 300px;
+    height: 400px;
 }
 .card-info__container{
     padding: 0px 5px;

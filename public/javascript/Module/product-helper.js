@@ -47,8 +47,11 @@ const product = {
   async filter(body){
     const response = await axios.post(`${API_URL}/filter-name`, {query: body});
     return response;
+  },
+  async searchFilter(body){
+    const response = await axios.post(`${API_URL}/search`, {query: body});
+    return response;
   }
-
 };
 
 export default product;

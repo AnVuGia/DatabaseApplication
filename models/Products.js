@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     image: {
-      type: DataTypes.STRING(250),
+      type: DataTypes.STRING(300),
     },
     unit_in_stock: {
       type: DataTypes.INTEGER,

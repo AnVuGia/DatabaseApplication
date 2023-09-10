@@ -1,66 +1,54 @@
 import productModule from './Module/product-helper.js';
 import category from './Module/category.js';
-
-function insertViewMoreButton(filterType) {
-  const container = document.querySelector(`.filter-block__${filterType}`);
-  const div = document.querySelector(`.${filterType}-block__addition`);
-  const elementCount = div.children.length;
-  if (elementCount > 0) {
-    const button = document.createElement('div');
-    button.textContent = 'VIEW MORE';
-    button.classList.add(`button__view-more-${filterType}`, 'view-more-button');
-    container.insertAdjacentElement('afterend', button);
-    document
-      .querySelector(`.button__view-more-${filterType}`)
-      .addEventListener('click', function () {
-        const additionalContent = document.querySelector(
-          `.filter-block__${filterType}`
-        );
-        additionalContent.classList.toggle('show-content');
-        const button = document.querySelector(
-          `.button__view-more-${filterType}`
-        );
-        if (additionalContent.classList.contains('show-content')) {
-          button.textContent = 'VIEW LESS';
-        } else {
-          button.textContent = 'VIEW MORE';
-        }
-      });
-  }
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-  insertViewMoreButton('category');
-  insertViewMoreButton('brand');
-  insertViewMoreButton('location');
-});
-
+// import { INTEGER } from 'sequelize';
+var offset = 0;
+var limit = 5;
+var reachMax = false;
+const selectCategory = document.querySelector('#select-category');
 const categoryList = document.querySelector('.category-container__list');
-categoryList.addEventListener('click', async () => {
-  const firstOrderCatList = document.querySelector(
-    '.category_container__first-order'
-  );
-  firstOrderCatList.style.display = 'block';
-  await getFirstOrderCategory();
+const searchInput = document.querySelector('#search-input');
+const selectFilter = document.querySelector('#select-filter');
+const btnSearch = document.querySelector('#search-button');
+const buttonPrice = document.querySelector('.search-price__button');
+selectCategory.addEventListener('change', () => {
+  gatherInformation();
 });
-categoryList.addEventListener('mouseleave', () => {
-  const containers = document.querySelectorAll(
-    '.category_container__first-order'
-  );
-  for (let i = 0; i < containers.length; i++) {
-    containers[i].style.display = 'none';
+selectFilter.addEventListener('change', () => {
+  if (selectFilter.value === 'price') {
+    document.querySelector('.filter-block__price').style.display = 'block';
+    return;
+  }else{
+    document.querySelector('.filter-block__price').style.display = 'none';
   }
-  const bridges = document.querySelectorAll('.container-bridge-2nd');
-  for (let i = 0; i < bridges.length; i++) {
-    bridges[i].remove();
-  }
+  offset = 0;
+  reachMax = false;
+  gatherInformation();
+});
+buttonPrice.addEventListener('click', () => {
+  offset = 0;
+  reachMax = false;
+  gatherInformation();
+});
+btnSearch.addEventListener('click', () => {
+  offset = 0;
+  reachMax = false;
+  console.log('search');
+  gatherInformation();
 });
 
-async function getAllIem() {
+
+
+
+
+async function getAllIem(body) {
   displayLoadingModel();
-  let data = await productModule.getProducts();
+  console.log(body);
+  let res = await productModule.searchFilter(body); 
+  displayItemList(res.data);
+  if (res.data.length < limit){
+    reachMax = true;
+  }
   closeLoadingModel();
-  displayItemList(data);
 }
 
 function displayItemList(itemList) {
@@ -96,41 +84,105 @@ function createItemCard(item) {
   return card;
 }
 
-async function getFirstOrderCategory() {
+async function getAllCategory() {
   let res = await category.findAll();
-
-  const firstOrderContainer = document.querySelector(
-    '.category_container__first-order'
-  );
-  console.log(firstOrderContainer.offsetWidth);
-  displayCategoryList(
-    firstOrderContainer,
-    res.data,
-    firstOrderContainer.offsetWidth,
-    0
-  );
-}
-function displayCategoryList(container, categories, offsetWidth, id) {
-  container.innerHTML = '';
-
-  for (let i = 0; i < categories.length; i++) {
-    const element = createCategoryItem(categories[i]);
-    container.appendChild(element);
-  }
+  displayCategorySelect(res.data);
 }
 
-function createCategoryItem(category) {
-  const card = document.createElement('div');
-  card.style.width = '100%';
-  card.className = 'category-1st__item category-item d-flex';
-  card.innerHTML = `
-    <p class="m-auto" style="padding-right: 8px">${category.name}</p>
-  `;
-  return card;
+function displayCategorySelect(list){
+    selectCategory.innerHTML = '';
+
+    const defaultOption = document.createElement('option');
+    defaultOption.style.width = '175px'
+    defaultOption.value = "all";
+    defaultOption.innerHTML = "Select Category";
+
+    selectCategory.appendChild(defaultOption);
+
+    for(let i = 0; i < list.length; i++){
+        selectCategory.appendChild(createCategoryCard(list[i]));
+    }
 }
+
+function createCategoryCard(item){
+  const option = document.createElement('option');
+  option.style.width = '175px'
+  option.value = item._id;
+  option.innerHTML = item.name;
+  return option;
+}
+
 const shopCartEl = document.querySelector('.fa-cart-shopping');
 shopCartEl.addEventListener('click', () => {
   window.location.href = '/cart-view';
 });
 
-getAllIem();
+
+function gatherInformation (){
+  const body = {
+      "search_string": searchInput.value,
+      "price": getPriceFilter(),
+      "category_id": selectCategory.value === "all" ? "" : selectCategory.value,
+      "sort": getSortFilter(),
+      "pagination": {
+        "offset": offset,
+        "limit": limit
+      }
+    }
+    
+  getAllIem(body);
+}
+
+function getPriceFilter(){
+    if (selectFilter.value === "price"){
+      console.log((document.querySelector('#max-price')));
+      var max = parseInt(document.querySelector('#max-price').value);
+      var min = parseInt(document.querySelector('#min-price').value);
+      max = max ? max : Number.MAX_SAFE_INTEGER;
+      min = min ? min : 0;
+
+      return {
+        "max":max ,
+        "min": min
+      }
+    }
+    return {
+      "max": Number.MAX_SAFE_INTEGER,
+      "min": 0
+    }
+}
+function getSortFilter(){
+  if (selectFilter.value === "all"){
+    return {
+      "attribute": "product_id",
+      "order": "asc"
+    }
+  }else if (selectFilter.value === "price"){
+    return {
+      "attribute": "price",
+      "order": "asc"
+    }
+  }
+  return {
+    "attribute": selectFilter.value.split('-')[0],
+    "order": selectFilter.value.split('-')[1]
+  }
+}
+gatherInformation();
+getAllCategory();
+
+document.querySelector('.fa-angle-right').addEventListener('click', () => {
+    if(reachMax){
+      return;
+    }else{
+      offset += limit;
+      gatherInformation();
+    }
+});
+document.querySelector('.fa-angle-left').addEventListener('click', () => {
+  if (offset  > 0){
+    offset -= limit;
+    reachMax = false;
+    gatherInformation();
+  }
+});
