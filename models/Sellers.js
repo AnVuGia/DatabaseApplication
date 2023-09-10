@@ -23,9 +23,5 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(50),
     },
   });
-  // Define the associations for the Sellers model
-  Seller.associate = function (models) {
-    // associations can be defined here
-  };
   return Seller;
 };

@@ -10,24 +10,24 @@ const productAttributesSchema = new Schema(
       unique: true,
     },
     attributes: [
-      {
-        name: {
-          type: String,
-          required: true,
-        },
-        value: {
-          type: String,
-        },
-        type: {
-          type: String,
-          required: true,
-        },
-      },
-    ],
-  },
-  {
-    collection: 'product_attributes',
-  }
+        {
+            "name": {
+                type: String,
+                required: true
+            },
+            "value": {
+                type: String
+            },
+            "type": {
+                type: String,
+                required: true
+            }
+        }
+    ]
+}
+, {
+    collection: "product_attributes"
+}
 );
 
 const productAttributesModel = model(

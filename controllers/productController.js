@@ -2,7 +2,7 @@ const { Sequelize, Op } = require('sequelize');
 const mysql = require('mysql');
 const mongoose = require('mongoose');
 const util = require('util');
-
+const Category = require('../models/Category');
 const ProductAttributes = require('../models/ProductAttribute');
 
 var db = {};
@@ -226,11 +226,12 @@ exports.findAll = async (req, res) => {
 // Find all data has attribute search_att contains searchStr
 exports.search = async function (req, res) {
   const userCredential = req.session.credentials;
-
-  await connectDB(userCredential.username, userCredential.password);
+  console.log(req.body);
+  // await connectDB(userCredential.username, userCredential.password);
+  await connectDB('lazada_customer', 'password');
 
   const query = req.body.query;
-
+ 
   // let searchAtt = req.body.query.search_attribute;
   const searchStr = query.search_string;
   const price = query.price;
@@ -291,11 +292,11 @@ exports.search = async function (req, res) {
       var products = result.map((i) => i.dataValues);
 
       const startId = pagination.offset * pagination.limit;
-      const lastId = startId + pagination.limit;
+      const lastId =  pagination.offset + pagination.limit;
 
       // Apply pagination
-      products = products.slice(startId, lastId);
-
+      products = products.slice( pagination.offset, lastId);
+      
       console.log(products);
       res.send(products);
     })

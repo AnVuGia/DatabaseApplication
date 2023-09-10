@@ -111,31 +111,27 @@ exports.update = async (req, res) => {
   // Delete the id attribute from update data
   delete newObject.warehouse_id;
 
-  let update = newObject;
-
   // Handle when updated volume smaller than the occupying
   const oldData = await warehouseTable.findOne(filter);
 
   // If new total volume smaller than the volume occupied by product(s)
   if (newObject.volume < oldData.volume - oldData.available_volume) {
-    res.send({
+      res.send({
       message: 'ERROR: New volume value smaller than current occupied volume.',
-    });
+      });
 
-    return;
+      return;
   }
 
-  // Deny update the available_volume
-  if (newObject.available_volume != oldData.available_volume) {
-    res.send({
-      message: 'ERROR: Cannot manually update available volume.',
-    });
-
-    return;
-  }
+  const updateParam = {
+      warehouse_name: newObject.warehouse_name,
+      address: newObject.address,
+      volume: newObject.volume,
+      available_volume: newObject.volume - (oldData.volume - oldData.available_volume)
+  };
 
   warehouseTable
-    .update(update, filter)
+    .update(updateParam, filter)
     .then((result) => {
       res.status(200).send(result);
     })

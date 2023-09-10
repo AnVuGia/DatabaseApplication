@@ -66,7 +66,11 @@ exports.getCartProducts = async (req, res) => {
   const body = req.body;
   const connection = await connect();
   const productTable = await connectDB(
-    req.session.credentials,
+    {
+      username : 'lazada_customer',
+      password : 'password'
+    },
+    // req.session.credentials,
     require('../models/Products')
   );
 

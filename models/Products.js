@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     image: {
-      type: DataTypes.STRING(250),
+      type: DataTypes.STRING(300),
     },
     unit_in_stock: {
       type: DataTypes.INTEGER,
@@ -49,20 +49,5 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
     },
   });
-  Products.associate = function (models) {
-    // associations can be defined here
-    Products.belongsTo(models.Sellers, {
-      foreignKey: 'seller_id',
-      onDelete: 'CASCADE',
-    });
-    Products.hasMany(models.Orders, {
-      foreignKey: 'product_id',
-      as: 'orders',
-    });
-    Products.hasMany(models.ProductWarehouses, {
-      foreignKey: 'product_id',
-      as: 'productWarehouse',
-    });
-  };
   return Products;
 };

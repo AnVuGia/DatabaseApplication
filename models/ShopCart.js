@@ -25,6 +25,5 @@ const shopCartSchema = new Schema(
     collection: 'shop-carts',
   }
 );
-
 const shopCartModel = model('ShopCart', shopCartSchema);
 module.exports = shopCartModel;

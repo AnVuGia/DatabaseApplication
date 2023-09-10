@@ -22,45 +22,31 @@
           <img class="navbar-brand__logo" src="/image/lazada.png" alt="Lazada Logo" />
         </a>
       </div>
-      <form style="flex: 1" class="d-flex" role="search">
-        <input style="font-size: 1.6rem; height: 45px" class="form-control me-2" type="search" placeholder="Search"
+        <div class="d-flex" style="flex: 1;">
+          <input  id = "search-input" style="font-size: 1.6rem; width: 80%;  height: 45px"  type="search" placeholder="Search"
           aria-label="Search" />
-        <button class="btn btn-outline-success" type="submit" style="font-size: 1.4rem; width: 100px">
-          Search
-        </button>
+          <button  style="width: 100px; height: 70px;" id = "search-button">Search </button>
         <div class="d-flex" style="width: 100px">
           <i class="fa-solid fa-cart-shopping fa-5x m-auto" style="color: #000000"></i>
         </div>
-      </form>
+        </div>
+        
+      
     </div>
   </nav>
   <div class="category_container d-flex">
-    <div style="width: 160px; cursor: pointer" class="d-flex category-container__list">
-      <div class="category-block__title">Categories</div>
-      <i class="fa-solid fa-chevron-down m-auto fa-2x"></i>
-      <div style="" class="container-bridge"></div>
-      <div class="category_container__first-order">
-        <div class="category-1st__item category-item d-flex">
-          <p class="m-auto" style="padding-right: 8px">Electronic Devices</p>
-          <i class="fa-solid fa-chevron-right m-auto"></i>
-        </div>
-        <div class="category-1st__item category-item d-flex">
-          <p class="m-auto" style="padding-right: 8px">Electronic Devices</p>
-          <i class="fa-solid fa-chevron-right m-auto"></i>
-        </div>
-        <div class="category-1st__item category-item d-flex">
-          <p class="m-auto" style="padding-right: 8px">Electronic Devices</p>
-          <i class="fa-solid fa-chevron-right m-auto"></i>
-        </div>
-        <div class="category-1st__item category-item d-flex">
-          <p class="m-auto" style="padding-right: 8px">Electronic Devices</p>
-          <i class="fa-solid fa-chevron-right m-auto"></i>
-        </div>
-        <div class="category-1st__item category-item d-flex">
-          <p class="m-auto" style="padding-right: 8px">Electronic Devices</p>
-          <i class="fa-solid fa-chevron-right m-auto"></i>
-        </div>
-      </div>
+    <div style="width: 160px; cursor: pointer; margin-left: 100px;" class="d-flex category-container__list">
+      
+      <select name="" id="select-category" style="padding:10px">
+        <!-- <option value="all">Filter</option>
+        <option value="">Added Time</option>
+        <option value="">Price </option>
+        <option value="">Price Increasing</option>
+        <option value="">Price Decreasing</option>
+        <option value="">Lastest Added Product</option>
+        <option value="">Newest Added Product</option> -->
+      </select>
+      
       <!-- <div class="container-bridge-2nd"></div> -->
     </div>
   </div>
@@ -68,107 +54,22 @@
   <div class="main-block__container d-flex">
     <div class="d-none d-sm-block main-block__filter-container">
       <!-- category filter -->
-      <div class="filter-block__category">
-        <div class="category-block__default">
-          <p class="fw-bold" style="font-size: 1.4rem">Category</p>
-          <p class="category-block__item">Category</p>
-          <p class="category-block__item">Category</p>
-          <p class="category-block__item">Category</p>
-          <p class="category-block__item">Category</p>
-        </div>
-        <div class="category-block__addition">
-          <p class="category-block__item">Category</p>
-          <p class="category-block__item">Category</p>
-          <p class="category-block__item">Category</p>
-          <p class="category-block__item">Category</p>
-          <p class="category-block__item">Category</p>
-        </div>
-      </div>
-      <div class="divider" style="width: 100%; margin: 10px 0px"></div>
+      <select id = "select-filter" style="width: 175px;" name="" id="">
+        <option value="all">Filter</option>
+        <option value="price">Price </option>
+        <option value="price-asc">Price Increasing</option>
+        <option value="price-desc">Price Decreasing</option>
+        <option value="createdAt-asc">Lastest Added Product</option>
+        <option value="createdAt-desc">Newest Added Product</option>
+      </select>
 
-      <div class="filter-block__brand">
-        <p class="fw-bold" style="font-size: 1.4rem">Brand</p>
-        <div class="brand-block__default">
-          <div class="filter-block__brand-item">
-            <input type="checkbox" name="" id="" />
-            <label for="">Apple</label>
-          </div>
-          <div class="filter-block__brand-item">
-            <input type="checkbox" name="" id="" />
-            <label for="">Samsung</label>
-          </div>
-          <div class="filter-block__brand-item">
-            <input type="checkbox" name="" id="" />
-            <label for="">Oppo</label>
-          </div>
-          <div class="filter-block__brand-item">
-            <input type="checkbox" name="" id="" />
-            <label for="">Apple</label>
-          </div>
-        </div>
-        <div class="brand-block__addition">
-          <div class="filter-block__brand-item">
-            <input type="checkbox" name="" id="" />
-            <label for="">Apple</label>
-          </div>
-          <div class="filter-block__brand-item">
-            <input type="checkbox" name="" id="" />
-            <label for="">Samsung</label>
-          </div>
-          <div class="filter-block__brand-item">
-            <input type="checkbox" name="" id="" />
-            <label for="">Oppo</label>
-          </div>
-        </div>
-      </div>
-
-      <div class="divider" style="width: 100%; margin: 10px 0px"></div>
-
-      <!-- location filter  -->
-      <div class="filter-block__location">
-        <p class="fw-bold" style="font-size: 1.4rem">Location</p>
-        <div class="location-block__default">
-          <div class="filter-block__brand-item">
-            <input type="checkbox" name="" id="" />
-            <label for="">Ho Chi Minh</label>
-          </div>
-          <div class="filter-block__brand-item">
-            <input type="checkbox" name="" id="" />
-            <label for="">Ha Noi</label>
-          </div>
-          <div class="filter-block__brand-item">
-            <input type="checkbox" name="" id="" />
-            <label for="">Ninh Thuan</label>
-          </div>
-          <div class="filter-block__brand-item">
-            <input type="checkbox" name="" id="" />
-            <label for="">Ca Mau</label>
-          </div>
-        </div>
-        <div class="location-block__addition">
-          <div class="filter-block__brand-item">
-            <input type="checkbox" name="" id="" />
-            <label for="">Binh Thuan</label>
-          </div>
-          <div class="filter-block__brand-item">
-            <input type="checkbox" name="" id="" />
-            <label for="">Tay Nguyen</label>
-          </div>
-          <div class="filter-block__brand-item">
-            <input type="checkbox" name="" id="" />
-            <label for="">Oppo</label>
-          </div>
-        </div>
-      </div>
-      <div class="divider" style="width: 100%; margin: 10px 0px"></div>
-
-      <div class="filter-block__price">
+      <div class="filter-block__price" style="display: none;">
         <p class="fw-bold" style="font-size: 1.4rem">Price</p>
         <div class="price-block__container d-flex w-100">
-          <input class="price-input__" type="number" name="" id="" placeholder="MIN" min="0" />
+          <input class="price-input__" type="number" name="" id="min-price" placeholder="MIN" min="0" />
           <div class="m-auto px-1" style="width: 5px; height: 1px; background-color: gray"></div>
-          <input class="price-input__ me-1" type="number" name="" id="" placeholder="MAX" />
-          <div class="d-flex search-price__button" style="">
+          <input class="price-input__ me-1" type="number" name="" id="max-price" placeholder="MAX"  />
+          <div class="d-flex search-price__button" >
             <i class="fa-solid fa-play m-auto" style="font-size: 20px; color: #ffffff"></i>
           </div>
         </div>
@@ -190,13 +91,22 @@
         </div>
       </div>
     </div>
+    
   </div>
+  <div class="d-flex">
+    <div class="pagination" style="margin: auto;">
+      <button style="margin: 0px 10px;"><i class="fa-solid fa-angle-left" style="padding: 10px; "></i></button>
+        <button style="margin: 0px 10px;"><i class="fa-solid fa-angle-right" style="padding: 10px; "></i></button>
+    </div>
+  </div>
+  
   <div id="loading-modal" class="loading-modal">
     <div class="modal-content">
         <div class="loader"></div>
         <p style="margin: auto;">Loading...</p>
     </div>
 </div>
+
 <div class="confirmation-backdrop" id="backdrop"></div>
 <div class="confirmation-modal" id="modal">
     <div class="modal-confirmation">

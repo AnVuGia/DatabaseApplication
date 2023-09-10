@@ -24,12 +24,5 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
   );
-  Warehouses.associate = function (models) {
-    // associations can be defined here
-    Warehouses.hasMany(models.ProductWarehouses, {
-      foreignKey: 'warehouse_id',
-      as: 'productWarehouse',
-    });
-  };
   return Warehouses;
 };

@@ -26,13 +26,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(50),
     },
   });
-  Customers.associate = function (models) {
-    // associations can be defined here
-    Customers.hasMany(models.Orders, {
-      foreignKey: 'customer_id',
-      as: 'orders',
-    });
-  };
   return Customers;
 };
 // Sync the model with the database (this will create the table if it doesn't exist)
