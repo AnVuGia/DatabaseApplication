@@ -146,6 +146,9 @@ exports.getAdminVentory = (req, res) => {
 exports.getAdminCategory = (req, res) => {
   res.sendFile('admin-category.html', { root: 'views/adminView' });
 };
+exports.getAdminProduct = (req, res) => {
+  res.sendFile('admin-product.html', { root: 'views/adminView' });
+};
 exports.getCustomers = (req, res) => {
   res.sendFile('customer.html', { root: 'views/customerView' });
 };

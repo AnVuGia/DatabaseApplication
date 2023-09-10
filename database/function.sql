@@ -150,9 +150,6 @@ END $$
 DELIMITER ;
 
 
-
-
-
 -- Drop the procedure if it exists
 DROP PROCEDURE IF EXISTS UpdateWarehouseData;
 
@@ -209,17 +206,10 @@ BEGIN
     WHERE warehouse_id = warehouseID;
 
   END LOOP;
-
   CLOSE cur;
-
-
 END;
 //
-
 DELIMITER ;
-
-
-
 
 
 -- Drop the trigger if it exists
@@ -238,3 +228,14 @@ END;
 //
     
 DELIMITER ;
+
+
+
+-- create product warehouse view for moving product easily
+CREATE VIEW product_warehouse_view AS
+SELECT ph.warehouse_id, w.warehouse_name, p.product_name, ph.product_quantity
+FROM productWarehouses ph
+JOIN warehouses w
+ON ph.warehouse_id = w.warehouse_id
+JOIN products p
+ON ph.product_id = p.product_id;
