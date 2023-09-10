@@ -10,6 +10,9 @@ exports.addOrder = async (req, res) => {
     password: req.session.credentials.password,
     database: 'lazada_database',
   });
+  const options = {
+    isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE,
+  };
   const body = req.body;
   const orderTable = await connectDB(
     req.session.credentials,
@@ -22,7 +25,7 @@ exports.addOrder = async (req, res) => {
 
   try {
     // Start a transaction
-    await sequelize.transaction(async (t) => {
+    await sequelize.transaction(options, async (t) => {
       const product = await productTable.findOne({
         where: {
           product_id: body.product_id,
@@ -112,6 +115,9 @@ exports.AcceptOrder = async (req, res) => {
     password: req.session.credentials.password,
     database: 'lazada_database',
   });
+  const options = {
+    isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE,
+  };
   try {
     const body = req.body;
     console.log(body);
@@ -155,7 +161,7 @@ exports.AcceptOrder = async (req, res) => {
     }
 
     // Start a transaction for updating product stock
-    sequelize.transaction(async (t) => {
+    sequelize.transaction(options, async (t) => {
       try {
         await productTable.update(
           { unit_in_stock: product.unit_in_stock - order.product_quantity },
@@ -172,7 +178,7 @@ exports.AcceptOrder = async (req, res) => {
     // Start a transaction for deleting the order
 
     try {
-      await sequelize.transaction(async (t1) => {
+      await sequelize.transaction(options, async (t1) => {
         await orderTable.destroy({
           where: { order_id: order.order_id },
           transaction: t1,
@@ -198,7 +204,10 @@ exports.DeleteOrder = async (req, res) => {
     req.session.credentials,
     require('../models/Orders')
   );
-  sequelize.transaction(async (t) => {
+  const options = {
+    isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE,
+  };
+  sequelize.transaction(options, async (t) => {
     const order = await orderTable.findOne({
       where: { order_id: body.order_id },
     });
