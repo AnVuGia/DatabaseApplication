@@ -223,9 +223,6 @@ exports.findAll = async (req, res) => {
 
 // Find all data has attribute search_att contains searchStr
 exports.search = async function (req, res) {
-  // Predefine condition with corresponding operator
-  const operators = {">": Op.gt, ">=": Op.gte, "<": Op.lt, "<=": Op.lte};
-
   const userCredential = req.session.credentials;
 
   await connectDB(userCredential.username, userCredential.password);
@@ -261,7 +258,8 @@ exports.search = async function (req, res) {
               // Search by price range
               {
                   price: {
-                      [operators[price.operator]]: price.value
+                    [Op.lte]: price.max,
+                    [Op.gte]: price.min
                   }
               }
           ]
