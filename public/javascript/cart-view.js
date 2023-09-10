@@ -25,7 +25,10 @@ window.onload = async function () {
 function displayCart() {
   const cartContainer = document.querySelector('.cart-container');
   cartContainer.innerHTML = ''; // Clear previous content
-
+  if (cartItems.length === 0) {
+    cartContainer.innerHTML = '<h3>Cart is empty</h3>';
+    return;
+  }
   cartItems.forEach((item) => {
     const cartItemDiv = document.createElement('div');
     cartItemDiv.classList.add('cart-item');
