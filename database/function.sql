@@ -247,7 +247,11 @@ DELIMITER ;
 -- create product warehouse view for moving product easily
 DROP VIEW product_warehouse_view;
 CREATE VIEW product_warehouse_view AS
-SELECT ph.warehouse_id, w.warehouse_name, p.product_name, ph.product_id, ph.product_quantity
+SELECT ph.warehouse_id, 
+        w.warehouse_name, 
+        p.product_name, 
+        ph.product_id, 
+        ph.product_quantity
 FROM productWarehouses ph
 JOIN warehouses w
 ON ph.warehouse_id = w.warehouse_id

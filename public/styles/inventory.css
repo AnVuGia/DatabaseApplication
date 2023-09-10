@@ -235,3 +235,6 @@ td button:nth-child(5):hover {
 #close-status-modal-btn :hover {
     background-color: #eeeeee;
 }
+input[type="number"] {
+    padding: 10px; /* Adjust the padding value as needed */
+}

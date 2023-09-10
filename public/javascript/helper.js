@@ -72,7 +72,6 @@ function addSideBarHtmlForAdmin() {
 <div class="user">
     <img class="user-img" src="/image/user_avatar.jpeg" alt="user avatar" width="30px">
     <div>
-        <p id="username">Iris Young</p>
         <p id="role">Admin</p>
     </div>
 </div>
@@ -103,7 +102,7 @@ function addSideBarHtmlForAdmin() {
     </li>
 
     <li>
-        <a href="#">
+        <a href="./login">
             <i class="fa-solid fa-arrow-right-from-bracket"></i>
             <span class="nav-item">Logout</span>
         </a>
@@ -132,8 +131,7 @@ function addSideBarHtmlForSeller() {
 <div class="user">
     <img class="user-img" src="/image/user_avatar.jpeg" alt="user avatar" width="30px">
     <div>
-        <p id="username">Iris Young</p>
-        <p id="role">Admin</p>
+        <p id="role">Seller</p>
     </div>
 </div>
 
@@ -155,7 +153,7 @@ function addSideBarHtmlForSeller() {
         <span class="tooltip">Product</span>
     </li>
     <li>
-        <a href="#">
+        <a href="./login">
             <i class="fa-solid fa-arrow-right-from-bracket"></i>
             <span class="nav-item">Logout</span>
         </a>

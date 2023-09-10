@@ -64,7 +64,8 @@ exports.findAll = async function (req, resp) {
     const query = req.body.query;
     await connectDB ('lazada_admin','password')
     await mysqlConnection.query(
-      `SELECT * FROM product_warehouse_view;      
+      `SELECT * FROM product_warehouse_view
+      ORDER BY warehouse_id;    
       `,
       async function (err, result, fields) {
         if (err) throw err;
