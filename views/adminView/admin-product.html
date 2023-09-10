@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product migration | Storeal</title>
+
+    <link rel="stylesheet" href="/styles/sidebar.css">
+    <link rel="stylesheet" href="/styles/modal.css">
+    <link rel="stylesheet" href="../../public/styles/productMigration.css">
+
+</head>
+
+<body>
+    <div class="root">
+        <div class="sidebar">
+        </div>
+
+        <div class="main-content">
+            <div class="table">
+                <div class="table__header">
+                    <p>Product details</p>
+                </div>
+                <div class="table__body" style="padding: 0px 10px;">
+                    <div class="toolbar">
+                        <select id="manage-product__dropdown">
+                            <option value="option1">Move Product</option>
+                            <!-- <option value="option2">Add Product</option> -->
+                        </select>
+
+                        <div class="main-product__container-header">
+                            <div>
+                                <select name="" id="" class="attribute-filter-select">
+                                    <option value="all">All</option>
+                                    <option value="name">Search By Name</option>
+                                    <option value="address">Search By Address</option>
+                                </select>
+                            </div>
+                            <input class="product-search-input" type="text" placeholder="&#xF002; Search"
+                                style="font-family:Arial, FontAwesome">
+                            <select class="sort-selector">
+                                <option value="all">All</option>
+                                <option value="asc">Volume Ascending</option>
+                                <option value="desc">Volume Decreasing</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="main-product__update">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th name="product-no" width="5%">Product ID</th>
+                                    <th name="product-name">Name</th>
+                                    <th name="product-warehouse-name" width="50%">Warehouse</th>
+                                    <th name="product-warehouse-location">Location</th>
+                                </tr>
+                            </thead>
+
+                            <tbody class="product-list">
+                                <tr>
+                                    <td name="td__id"></td>
+                                    <td name="td__name"></td>
+                                    <td name="td__warehouse-name"></td>
+                                    <td name="td__warehouse-location"></td>
+                                    <td>
+                                        <button class="edit-button"><i class="fa-solid fa-pen"></i></button>
+                                        <button class="delete-button"><i class="fa-solid fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="pagination">
+                            <!-- <div><i class="fa-solid fa-angles-left"></i></div>
+                            <div><i class="fa-solid fa-angle-left"></i></div>
+                            <div><i class="fa-solid fa-1"></i></div>
+                            <div><i class="fa-solid fa-2"></i></div>
+                            <div><i class="fa-solid fa-angle-right"></i></div>
+                            <div><i class="fa-solid fa-angles-right"></i></div> -->
+                        </div>
+                    </div>
+                    <!-- <div class="main-product__add">
+                        <h2 style="text-align: center;">Add Product</h2>
+                        <div class="modal__main-content">
+                            <div class="modal__update-item" style="margin-bottom: 10px;">
+                                <label class="product__item-info product__name">Name</label>
+                                <input class="product__input-modal product__name-input" id="Product__name--add"
+                                    type="text">
+                            </div>
+                            <div class="modal__update-item" style="margin-bottom: 10px;">
+                                <label class="product__item-info product__name">Address</label>
+                                <input class="product__input-modal product__name-input" id="Product__address--add"
+                                    type="text">
+                            </div>
+                            <div class="modal__update-item" style="margin-bottom: 10px;">
+                                <label class="product__item-info product__price">Volume</label>
+                                <input class="product__input-modal product__height-input" id="Product__volume--add"
+                                    type="number">
+                            </div>
+                        </div>
+                        <div class="modal__footer"
+                            style="display: flex; margin-top: auto;padding: 10px; justify-content: flex-end;">
+                            <button class="modal__button modal__button--save button_Product--add">Add</button>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <div id="status-modal" class="modal-status">
+                <div class="modal-status-content success">
+                    <p class="status-msg">Operation Successful</p>
+                    <button class="error-btn" id="close-status-modal-btn" id="return-btn">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        Refresh</button>
+                </div>
+            </div>
+            <div id="loading-modal" class="loading-modal">
+                <div class="modal-content">
+                    <div class="loader"></div>
+                    <p style="margin: auto;">Loading...</p>
+                </div>
+            </div>
+            <div class="backdrop" id="backdrop"></div>
+            <div class="modal" id="modal">
+                <div class="modal-content-update">
+                    <h2 style="text-align: center;">Move Product</h2>
+                    <div class="modal__main-content">
+                        <div class="modal__update-item" style="margin-bottom: 10px;">
+                            <label class="product__item-info product__old-warehouse">Old warehouse</label>
+                            <input class="product__input-modal product__old-warehouse-input" id="Product__name--update"
+                                type="text">
+                        </div>
+                        <div class="modal__update-item" style="margin-bottom: 10px;">
+                            <label class="product__item-info product__new-warehouse">New warehouse</label>
+                            <input class="product__input-modal product__new-warehouse-input" id="Product__address--update"
+                                type="text">
+                        </div>
+                        <div class="modal__update-item" style="margin-bottom: 10px;">
+                            <label class="product__item-info product__quantity">Quantity</label>
+                            <input class="product__input-modal product__quantity-input" id="Product__volume--update"
+                                type="number">
+                        </div>
+                    </div>
+                    <div class="modal__footer"
+                        style="display: flex; margin-top: auto;padding: 10px; justify-content: flex-end;">
+                        <button class="modal__button modal__button--cancel closeModalButton">Cancel</button>
+                        <button class="modal__button modal__button--save" id="submit-update-button">Save</button>
+                    </div>
+
+                </div>
+            </div>
+            <div class="confirmation-backdrop" id="backdrop"></div>
+            <div class="confirmation-modal" id="modal">
+                <div class="modal-confirmation">
+                    <h2 style="text-align: center;">Confirmation</h2>
+                    <div class="modal__main-content confirmation-message">
+                        <p>Are you sure you want to move this product?</p>
+                    </div>
+                    <div class="modal__footer"
+                        style="display: flex; margin-top: auto;padding: 10px; justify-content: flex-end;">
+                        <button class="modal__button modal__button--cancel"
+                            id="button__cancel-confirmation">Cancel</button>
+                        <button class="modal__button modal__button--save modal__button--yes"
+                            id="delete-button">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="../../public/javascript/helper.js"></script>
+</body>
+
+</html>
