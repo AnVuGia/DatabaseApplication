@@ -1,3 +1,4 @@
+use lazada_database;
 DELIMITER $$
 DROP PROCEDURE IF EXISTS warehouse_selection;
 CREATE PROCEDURE warehouse_selection(IN p_id INT, product_volume INT, product_quantity INT, OUT success BOOLEAN)
@@ -245,7 +246,7 @@ DELIMITER ;
 
 
 -- create product warehouse view for moving product easily
-DROP VIEW product_warehouse_view;
+DROP VIEW if exists product_warehouse_view;
 CREATE VIEW product_warehouse_view AS
 SELECT ph.warehouse_id, 
         w.warehouse_name, 

@@ -108,7 +108,8 @@ exports.createInboundOrder = async (req, res) => {
               productTable
                 .update(
                   {
-                    units_in_stock: product.units_in_stock + inboundOrder.quantity,
+                    unit_in_stock:
+                      product.unit_in_stock + inboundOrder.quantity,
                   },
 
                   {
@@ -239,58 +240,55 @@ exports.search = async function (req, res) {
 
   // Prepare search paramaters
   var searchParams = {
-      where: {
-          [Op.and] : [
-              // Search contained string in name and description
-              {
-                  [Op.or]: [
-                      {
-                          product_name: {
-                              [Op.like]: `%${searchStr}%`
-                          }
-                      },
-                      {
-                          product_desc: {
-                              [Op.like]: `%${searchStr}%`
-                          }
-                      }
-                  ]
+    where: {
+      [Op.and]: [
+        // Search contained string in name and description
+        {
+          [Op.or]: [
+            {
+              product_name: {
+                [Op.like]: `%${searchStr}%`,
               },
-              // Search by price range
-              {
-                  price: {
-                    [Op.lte]: price.max,
-                    [Op.gte]: price.min
-                  }
-              }
-          ]
-      },
-      order: [
-          [
-              sort.attribute, sort.order
-          ]
-      ]
+            },
+            {
+              product_desc: {
+                [Op.like]: `%${searchStr}%`,
+              },
+            },
+          ],
+        },
+        // Search by price range
+        {
+          price: {
+            [Op.lte]: price.max,
+            [Op.gte]: price.min,
+          },
+        },
+      ],
+    },
+    order: [[sort.attribute, sort.order]],
   };
 
   if (search_cate_id.length > 0) {
-      var cateIDs = [search_cate_id];
+    var cateIDs = [search_cate_id];
 
-      cateIDs.push(...await getAllChildrenID(search_cate_id));
+    cateIDs.push(...(await getAllChildrenID(search_cate_id)));
 
-      searchParams.where[Op.and].push(
-          // Filter by all category and its sub categories
-          {
-              category_id: {
-                  [Op.in]: cateIDs
-              }
-          }
-      )
+    searchParams.where[Op.and].push(
+      // Filter by all category and its sub categories
+      {
+        category_id: {
+          [Op.in]: cateIDs,
+        },
+      }
+    );
   }
 
-  productTable.findAll(searchParams)
-  .then(result => {
+  productTable
+    .findAll(searchParams)
+    .then((result) => {
       // Get all products data
-      var products = result.map(i => i.dataValues);
+      var products = result.map((i) => i.dataValues);
 
       const startId = pagination.offset * pagination.limit;
       const lastId =  pagination.offset + pagination.limit;
@@ -300,11 +298,10 @@ exports.search = async function (req, res) {
       
       console.log(products);
       res.send(products);
-  })
-  .catch(err => {
+    })
+    .catch((err) => {
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving data."
+        message: err.message || 'Some error occurred while retrieving data.',
       });
     });
 };

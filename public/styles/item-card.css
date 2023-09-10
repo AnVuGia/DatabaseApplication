@@ -1,50 +1,50 @@
-.container-list{
-    
+.container-list {
 }
 
-.card__item{
-    margin: 30px;
-    margin: 10px;
-    max-width: 300px;
-    cursor: pointer;
+.card__item {
+  margin: 30px;
+  margin: 10px;
+  max-width: 300px;
+  cursor: pointer;
+  max-height: 400px;
 }
 .img-item{
     max-width: 100%;
     width: 300px;
     height: 400px;
 }
-.card-info__container{
-    padding: 0px 5px;
-    background-color: white;
+.card-info__container {
+  padding: 0px 5px;
+  background-color: white;
 }
 
 .card-info__item-name {
-    font-size: 1.2rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 2; /* Limit to 2 lines */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    position: relative;
-  }
+  font-size: 1.2rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limit to 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  position: relative;
+}
 
-  .card-info__item-name::after {
-    content: "..."; /* Add the ellipsis */
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    background: white; /* Match the background color */
-    padding: 0 4px; /* Add some padding */
-    opacity: 0; /* Initially hidden */
-  }
-.card-info__item-name:hover{
-    text-decoration: underline;
+.card-info__item-name::after {
+  content: '...'; /* Add the ellipsis */
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: white; /* Match the background color */
+  padding: 0 4px; /* Add some padding */
+  opacity: 0; /* Initially hidden */
 }
-.card-info__price{
-    margin-top: 8px;
-    font-size: 1.4rem;
-    color: var(--orange);
+.card-info__item-name:hover {
+  text-decoration: underline;
 }
-.card-info__location{
-    margin-top: 8px;
-    font-size: 1.3rem;
+.card-info__price {
+  margin-top: 8px;
+  font-size: 1.4rem;
+  color: var(--orange);
+}
+.card-info__location {
+  margin-top: 8px;
+  font-size: 1.3rem;
 }
