@@ -24,6 +24,10 @@ const categorySchema = new Schema(
           type: Boolean,
           required: true,
         },
+        type: {
+          type: String,
+          required: true,
+        },
       },
     ],
   },

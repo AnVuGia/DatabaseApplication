@@ -90,6 +90,7 @@ function displayAllCategory(categories, isSearch = false) {
   document
     .querySelector('.add-category-same-level')
     .addEventListener('click', () => {
+      
       backdrop.style.display = 'block';
       modal.style.display = 'block';
       prepareAddCategoryForm(
@@ -152,8 +153,8 @@ function prepareAddCategoryForm(parentId) {
 
     //process if they click on add category button
     document.querySelector("#category-input-save-button").addEventListener("click", async () => {
+      console.log('create category');
         const nameValue = document.querySelector("#category-name-form-input").value.trim();
-
        
           let categoryObject = CreateCategoryObject(parentId,nameValue)
           if (categoryObject == null){
@@ -164,7 +165,8 @@ function prepareAddCategoryForm(parentId) {
             let res = await category.create(categoryObject);
             processRequest(res);
           });
-    });
+    });}
+  );
 }
 
 function inFiniteCreate(lastElement, attributeNameObject) {
@@ -249,6 +251,8 @@ function CreateCategoryObject(parentId, name) {
 }
 
 async function prepareUpdateCategoryForm(id) {
+
+  console.log('update category');
   const body = {
     search_attribute: '_id',
     search_string: id,
@@ -279,10 +283,12 @@ async function prepareUpdateCategoryForm(id) {
   if (categoryObject.attributes.length == 0) {
     inFiniteCreate(name, null);
   }
+  
   //process if they click on add category button
   document
     .querySelector('#category-input-save-button')
     .addEventListener('click', async () => {
+      console.log('update category');
       const nameValue = document
         .querySelector('#category-name-form-input')
         .value.trim();
@@ -292,6 +298,7 @@ async function prepareUpdateCategoryForm(id) {
         categoryObject['_id'] = id;
         console.log(categoryObject);
         let res = await category.update(categoryObject);
+        console.log(res);
         processRequest(res);
       }
     });

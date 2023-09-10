@@ -12,10 +12,10 @@ async function connectDB(username, password) {
     dialect: 'mysql',
   });
 
+  db.Sequelize = Sequelize;
+  db.sequelize = sequelize;
+
   db.products = require('../models/Products.js')(sequelize, Sequelize);
-
-  db.products = require('../models/Product.js')(sequelize, Sequelize);
-
   productTable = db.products;
 
   await db.sequelize
@@ -43,7 +43,7 @@ exports.findAll = async function (req, res) {
 };
 
 // Find all document in collection
-exports.search = async function (req, resp) {
+exports.search = async function (req, res) {
   let searchAtt = req.body.search_attribute;
   let searchStr = req.body.search_string;
 
@@ -53,22 +53,22 @@ exports.search = async function (req, resp) {
 
   try {
     const results = await Category.find(searchParams);
-    resp.json(results);
+    res.json(results);
   } catch (err) {
-    resp.json({
+    res.json({
       status: false,
       message: 'Some error occurred while retrieving data.',
     });
   }
 };
-exports.searchByName = async function (req, resp) {
+exports.searchByName = async function (req, res) {
   let searchValue = req.body.name;
 
   try {
     const results = await Category.find({ name: new RegExp(searchValue, 'i') });
-    resp.json(results);
+    res.json(results);
   } catch (err) {
-    resp.json({
+    res.json({
       status: false,
       message: 'Some error occurred while retrieving data.',
     });
@@ -77,133 +77,142 @@ exports.searchByName = async function (req, resp) {
 
 // Find specify doc in collection to update
 // return the un updated version of doc
-exports.update = async function (req, resp) {
-  let category = req.body;
-
-  const userCredential = req.session.credentials;
-
-  // await connectDB(userCredential.username, userCredential.password);
-  await connectDB('lazada_admin', 'password');
-
-  // find all product have this category id
-  const products = await productTable
-    .findAll({
-      where: {
-        category_id: category._id,
-      },
-    })
-    .then(async (products) => {
-      // There is no product in result
-      if (products.length < 1) {
+exports.update = async function (req, res) {
+    try {
+      let category = req.body;
+      const userCredential = req.session.credentials;
+      await connectDB('lazada_admin', 'password');
+  
+      // Find all products with this category id
+      const products = await productTable.findAll({
+        where: {
+          category_id: category._id,
+        },
+      });
+  
+      // Check if there are no products with this category id
+      if (products.length === 0) {
         let filter = {
           _id: category._id,
         };
-
+  
         // Only allow update attributes list
         let update = {
           attributes: category.attributes,
         };
-
-        try {
-          const results = await Category.findByIdAndUpdate(filter, update);
-          console.log(results);
-          resp.json(results);
-        } catch (err) {
-          resp.json({
+  
+        // Check if the category name already exists
+        const result = await Category.findOne({ name: category.name });
+  
+        if (result !== null) {
+          return res.json({
             status: false,
-            message: 'Some error occurred while retrieving data.',
+            message: 'Category name already exists',
           });
         }
-      }
-      // There are at least 1 product have
-      else {
-        resp.json({
+  
+        // Update the category
+        const updatedCategory = await Category.findByIdAndUpdate(filter, update);
+  
+        if (updatedCategory) {
+          return res.json({
+            status: true,
+            message: 'Update category successfully',
+          });
+        } else {
+          return res.json({
+            status: false,
+            message: 'Cannot update category',
+          });
+        }
+      } else {
+        return res.json({
           status: false,
-          message: 'Some error occurred while retrieving data.',
+          message: 'Already have products using this category',
         });
       }
-    })
-    .catch((err) => {
-      resp.json({
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({
         status: false,
-        message: 'Some error occurred while retrieving data.',
+        message: 'Internal server error',
       });
-    });
-};
-
+    }
+  };
+  
 // Delete by id
-exports.delete = async function (req, resp) {
+exports.delete = async function (req, res) {
   let category = req.body;
+  console.log(category);    
   const userCredential = req.session.credentials;
 
   let filter = {
     _id: category._id,
   };
 
-  try {
+  
     const result = await Category.findOne(filter);
 
     // There are children category(s)
     if (result.children.length > 0) {
-      resp.json({
+      res.json({
         status: false,
-        message: 'Some error occurred while retrieving data.',
+        message: 'Cannot delete attribute that have children',
       });
 
       return;
-    }
-
-    // There are no children category so check if there are any product use it
+    }// There are no children category so check if there are any product use it
     else {
-      await connectDB(userCredential.user_name, userCredential.password);
-
+    //   await connectDB(userCredential.user_name, userCredential.password);
+    await connectDB('lazada_admin', 'password');
       // find all product have this category id
-      const products = await productTable
+        const products = await productTable
         .findAll({
-          where: {
+            where: {
             category_id: category._id,
-          },
+            },
         })
         .then(async (products) => {
-          // There is no product in result
-          if (products.length < 1) {
+            // There is no product in result
+            if (products.length < 1) {
             // If there is parent id
             if (result.parent != null) {
-              var parent = await Category.findOne({
+                var parent = await Category.findOne({
                 _id: result.parent,
-              });
+                });
 
-              // Remove children id
-              parent.children.splice(parent.children.indexOf(category._id));
+                // Remove children id
+                parent.children.splice(parent.children.indexOf(category._id));
 
-              // Save
-              await parent.save();
+                // Save
+                await parent.save();
+                }
+
+                const results = await Category.findOneAndDelete(filter);
+                res.json({
+                    status: true,
+                    message: 'Delete category successfully',
+                    });
             }
-
-            const results = await Category.findOneAndDelete(filter);
-            resp.json(results);
-          }
-          // There are at least 1 product have
-          else {
-            resp.json({
-              status: false,
-              message: 'Some error occurred while retrieving data.',
+            // There are at least 1 product have
+            else {
+            res.json({
+                status: false,
+                message: 'There is at least 1 product using this category',
             });
-          }
+            return;
+            }
         })
         .catch((err) => {
-          resp.json({
+            console.log('206');
+            res.json({
             status: false,
             message: 'Some error occurred while retrieving data.',
-          });
+            });
         });
     }
-  } catch (err) {
-    resp.json({
-      status: false,
-      message: 'Some error occurred while retrieving data.',
-    });
-  }
+
+   
 };
 
 //CREATE NEW CATEGORY
@@ -216,7 +225,7 @@ exports.delete = async function (req, resp) {
 //     ]
 // }
 // Create new Category by passing Categroy into request body
-exports.createCategory = async function (req, resp) {
+exports.createCategory = async function (req, res) {
   console.log(req.body);
 
   const category = new Category({
@@ -252,9 +261,15 @@ exports.createCategory = async function (req, resp) {
       console.log(parent);
     }
 
-    resp.status(201).json(newCategory);
+    res.json({
+        status: true,
+        message: 'Create category successfully',
+    })
   } catch (err) {
-    resp.status(400).json({ mesage: err.message });
+    res.json({
+        status: false,
+        message: 'Create category failed',
+    })
   }
 };
 
@@ -263,13 +278,13 @@ exports.createCategory = async function (req, resp) {
 //       "search_string" : "64fc9067984ffca862fdc369"
 //     }
 //   }
-exports.getAllAttributesFromCategory = async function (req, resp) {
+exports.getAllAttributesFromCategory = async function (req, res) {
   let body = req.body.query;
 
   console.log(req.body);
   let attributes = [];
   attributes = await getAttributes(body.search_string, attributes);
-  resp.json(attributes);
+  res.json(attributes);
 };
 async function getAttributes(id, attributes) {
   let category = await Category.findById(id);

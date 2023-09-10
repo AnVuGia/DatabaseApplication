@@ -273,6 +273,7 @@ function createCatInputCard(attribute) {
     input.type = "number"
     input.min = 0;
   }
+  console.log(attribute.value);
   input.value = attribute.type == "text" ? (attribute.value ? attribute.value : "" ) : parseInt(attribute.value)
   const label2 = document.createElement('label');
   label2.innerHTML = attribute.required ? 'Required' : 'Optional';
@@ -284,8 +285,11 @@ function createCatInputCard(attribute) {
 }
 function createInputEdit(attribute) {
   const card = document.createElement('div');
-  card.classList.add('attribute-input');
-  const label = document.createElement('label');
+  card.style.margin = "10px 0px"
+  card.classList.add('attribute-input-edit');
+  card.style.display = "flex";
+  const label = document.createElement('div');
+  label.style.width = "120px";
   label.innerHTML = attribute.name;
   const input = document.createElement('input');
   input.type = attribute.type;
@@ -297,7 +301,8 @@ function createInputEdit(attribute) {
     input.type = "number"
     input.min = 0;
   }
-  input.value = attribute.type == "text" ? (attribute.value ?attribute.value : "" ) : parseInt(attribute.value)
+  console.log(attribute.value);
+  input.value = attribute.type == "text" ? (attribute.value ? attribute.value : "" ) : parseInt(attribute.value)
   const label2 = document.createElement('label');
   label2.innerHTML = attribute.required ? 'Required' : 'Optional';
 

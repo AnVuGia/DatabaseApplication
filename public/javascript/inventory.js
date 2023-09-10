@@ -118,6 +118,7 @@ function displayAll(inventoryList) {
               query: inventoryList[i],
             };
             let res = await warehouse.delete(body.user_credential, body.query);
+            
             closeLoadingModel();
             processRequest(res);
           }
@@ -225,8 +226,7 @@ async function searchInventory(searchContent) {
   };
   console.log(body);
   let res = await warehouse.search(body.user_credential, body.query);
-  processRequest(res);
-  if (res.data.status)  {
+  if (res.data)  {
     if (res.data.length < page) {
       reachMax = true;
     }
