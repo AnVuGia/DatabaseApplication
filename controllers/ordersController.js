@@ -143,7 +143,11 @@ exports.AcceptOrder = async (req, res) => {
       res.status(404).json({ error: 'Product not found' });
       return;
     }
-
+    console.log({
+      product_id: order.product_id,
+      product_quantity: order.product_quantity,
+      product_unit_in_stock: product.unit_in_stock,
+    });
     if (product.unit_in_stock < order.product_quantity) {
       console.log('Not enough product');
       res.status(400).json({ error: 'Not enough product' });
@@ -168,10 +172,10 @@ exports.AcceptOrder = async (req, res) => {
     // Start a transaction for deleting the order
 
     try {
-      await sequelize.transaction(async (t) => {
+      await sequelize.transaction(async (t1) => {
         await orderTable.destroy({
           where: { order_id: order.order_id },
-          transaction: t,
+          transaction: t1,
         });
       });
     } catch (error) {
