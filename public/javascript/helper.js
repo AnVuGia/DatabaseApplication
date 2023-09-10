@@ -78,8 +78,6 @@ function addSideBarHtmlForAdmin() {
 </div>
 
 <ul>
-
-
     <li>
         <a href="./admin-inventory">
             <i class="fa-solid fa-warehouse"></i>
@@ -87,8 +85,6 @@ function addSideBarHtmlForAdmin() {
         </a>
         <span class="tooltip">Inventory</span>
     </li>
-
-   
 
     <li>
         <a href="./admin-category">
@@ -98,6 +94,13 @@ function addSideBarHtmlForAdmin() {
         <span class="tooltip">Category</span>
     </li>
 
+    <li>
+      <a href="./admin-product">
+          <i class="fa-solid fa-boxes-stacked"></i>
+          <span class="nav-item">Product</span>
+      </a>
+      <span class="tooltip">Product</span>
+    </li>
 
     <li>
         <a href="#">

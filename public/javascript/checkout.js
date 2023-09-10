@@ -52,17 +52,31 @@ function orderRow(product, order) {
   const acceptBtn = row.querySelector('.btn-success');
   const declineBtn = row.querySelector('.btn-secondary');
   const removeBtn = row.querySelector('.btn-danger');
-  acceptBtn.addEventListener('click', () => {
-    orderHelper.AcceptOrder({
+  acceptBtn.addEventListener('click', async () => {
+    try {
+      await orderHelper.AcceptOrder({
+        order_id: order.order_id,
+        product_id: product.product_id,
+      });
+      displayStatusModal('Accept order successfully', true);
+    } catch (error) {
+      console.log(error);
+      displayStatusModal('Accept order failed', false);
+    }
+  });
+  declineBtn.addEventListener('click', async () => {
+    await orderHelper.DeleteOrder({
       order_id: order.order_id,
       product_id: product.product_id,
     });
+    displayStatusModal('Decline order successfully', true);
   });
-  declineBtn.addEventListener('click', () => {
-    
-  });
-  removeBtn.addEventListener('click', () => {
-    console.log('remove');
+  removeBtn.addEventListener('click', async () => {
+    await orderHelper.DeleteOrder({
+      order_id: order.order_id,
+      product_id: product.product_id,
+    });
+    displayStatusModal('Remove order successfully', true);
   });
   return row;
 }

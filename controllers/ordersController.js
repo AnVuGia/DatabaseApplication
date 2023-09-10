@@ -204,6 +204,7 @@ exports.DeleteOrder = async (req, res) => {
     }
     await orderTable.destroy({
       where: { order_id: order.order_id },
+      transaction: t,
     });
     res.status(200).json({ message: 'Order deleted' });
   });

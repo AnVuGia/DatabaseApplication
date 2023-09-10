@@ -150,9 +150,6 @@ END $$
 DELIMITER ;
 
 
-
-
-
 -- Drop the procedure if it exists
 DROP PROCEDURE IF EXISTS UpdateWarehouseData;
 
@@ -172,10 +169,11 @@ BEGIN
   DECLARE productLength INT;
   -- Declare a cursor to fetch rows from PRODUCTWAREHOUSES
   DECLARE cur CURSOR FOR
-    SELECT warehouse_id, product_quantity
-    FROM PRODUCTWAREHOUSES
-    WHERE product_id = productID
-    ORDER BY warehouse_id;
+    SELECT pw.warehouse_id, pw.product_quantity, p.height, p.width, p.length
+    FROM PRODUCTWAREHOUSES pw
+    JOIN Products p ON pw.product_id = p.product_id
+    WHERE pw.product_id = productID
+    ORDER BY pw.warehouse_id;
 
   -- Declare handlers for exceptions
   DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
@@ -207,21 +205,14 @@ BEGIN
 
     -- Update available_volume in WAREHOUSES
     UPDATE WAREHOUSES
-    SET available_volume = available_volume - quantityChange * productHeight * productWidth * productLength
+    SET available_volume = available_volume + quantityChange * productHeight * productWidth * productLength
     WHERE warehouse_id = warehouseID;
 
   END LOOP;
-
   CLOSE cur;
-
-
 END;
 //
-
 DELIMITER ;
-
-
-
 
 
 -- Drop the trigger if it exists
@@ -240,3 +231,14 @@ END;
 //
     
 DELIMITER ;
+
+
+
+-- create product warehouse view for moving product easily
+CREATE VIEW product_warehouse_view AS
+SELECT ph.warehouse_id, w.warehouse_name, p.product_name, ph.product_quantity
+FROM productWarehouses ph
+JOIN warehouses w
+ON ph.warehouse_id = w.warehouse_id
+JOIN products p
+ON ph.product_id = p.product_id;
