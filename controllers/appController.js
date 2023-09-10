@@ -56,6 +56,10 @@ exports.signupAccount = async (req, res) => {
 
     if (body.role === 'seller') {
       account.seller_name = body.info.name;
+      const newUser = await Table.create(account);
+      newUser.save();
+      res.status(200).json('User Created Successfully.');
+      return;
     } else {
       account.customer_name = body.info.name;
     }
