@@ -332,7 +332,8 @@ exports.update = async (req, res) => {
 exports.delete = async (req, res) => {
   const userCredential = req.session.credentials;
 
-  await connectDB(userCredential.user_name, userCredential.password);
+  // await connectDB(userCredential.user_name, userCredential.password);
+  await connectDB('lazada_seller', 'password');
   const product_id = req.params.product_id;
   // Get the delete product_id
   var newObj = req.body.query;
