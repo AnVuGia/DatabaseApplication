@@ -273,7 +273,7 @@ function createCatInputCard(attribute) {
     input.type = "number"
     input.min = 0;
   }
-  input.value = attribute.type == "text" ? (attribute.value ?attribute.value : "" ) : parseInt(attribute.value)
+  input.value = attribute.type == "text" ? (attribute.value ? attribute.value : "" ) : parseInt(attribute.value)
   const label2 = document.createElement('label');
   label2.innerHTML = attribute.required ? 'Required' : 'Optional';
 
