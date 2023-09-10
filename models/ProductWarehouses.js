@@ -17,12 +17,5 @@ module.exports = (sequelize, Sequelize) => {
     {
         timestamps: false
     });
-    ProductWarehouses.associate = function (models) {
-        // associations can be defined here
-        ProductWarehouses.belongsTo(models.Products, {
-          foreignKey: 'product_id',
-          onDelete: 'CASCADE',
-        });
-      };
     return ProductWarehouses;
 }

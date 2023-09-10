@@ -23,12 +23,5 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
   });
-  Order.associate = function (models) {
-    // associations can be defined here
-    Order.belongsTo(models.Customers, {
-      foreignKey: 'customer_id',
-      onDelete: 'CASCADE',
-    });
-  };
   return Order;
 };

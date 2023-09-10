@@ -23,7 +23,6 @@ const productAttributesSchema = new Schema({
             }
         }
     ]
-    
 }
 , {
     collection: "product_attributes"
