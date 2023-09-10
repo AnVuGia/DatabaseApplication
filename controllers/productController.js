@@ -63,7 +63,8 @@ async function connectDB(username, password) {
 exports.createInboundOrder = async (req, res) => {
   const userCredential = req.session.credentials;
 
-  await connectDB(userCredential.username, userCredential.password);
+  // await connectDB(userCredential.username, userCredential.password);
+  await connectDB('lazada_seller', 'password');
 
   var inboundOrder = req.body.query;
 
@@ -73,7 +74,6 @@ exports.createInboundOrder = async (req, res) => {
         product_id: inboundOrder.product_id,
       },
     })
-
     .then(async (product) => {
       const product_volume = product.width * product.height * product.length;
 
