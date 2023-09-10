@@ -32,7 +32,10 @@ exports.signupAccount = async (req, res) => {
     } else if (body.role === 'customer') {
       model = require('../models/Customers');
     } else {
-      return res.json('Invalid role.'); // Handle unsupported roles
+      return res.json({
+        status: false,
+        message: 'Invalid.',
+      }); // Handle unsupported roles
     }
     console.log(req.body);
     const Table = await connectDB(req.body.user_credential, model);
@@ -45,7 +48,10 @@ exports.signupAccount = async (req, res) => {
     });
 
     if (existingUser) {
-      return res.json('User already exists.');
+      return res.json({
+        status: false,
+        message: 'Invalid.',
+      });
     }
 
     const account = {
@@ -77,7 +83,11 @@ exports.signupAccount = async (req, res) => {
     await shopCart.save();
     res.status(200).json('User Created Successfully.');
   } catch (err) {
-    res.status(500).json('An error occurred during registration.');
+    console.error('in error');
+    return res.json({
+      status: false,
+      message: 'Invalid',
+    });
   }
 };
 
@@ -130,11 +140,17 @@ exports.loginAccount = async (req, res) => {
         return;
       }
       console.log('User not found');
-      res.status(500).json('Your username or password is invalid.');
+      return res.json({
+        status: false,
+        message: 'User not found.',
+      });
     }
   } catch (err) {
     console.error('in error');
-    res.json(err);
+    return res.json({
+      status: false,
+      message: 'Invalid.',
+    });
   }
 };
 

@@ -67,8 +67,8 @@ exports.getCartProducts = async (req, res) => {
   const connection = await connect();
   const productTable = await connectDB(
     {
-      username : 'lazada_customer',
-      password : 'password'
+      username: 'lazada_customer',
+      password: 'password',
     },
     // req.session.credentials,
     require('../models/Products')
@@ -132,6 +132,9 @@ exports.deleteFromCart = async (req, res) => {
     }
     res.status(200).json('Product deleted');
   } catch (err) {
-    res.status(500).json('Product not found');
+    res.json({
+      status: false,
+      message: 'Invalid',
+    });
   }
 };

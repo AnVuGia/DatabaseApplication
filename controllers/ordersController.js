@@ -34,12 +34,18 @@ exports.addOrder = async (req, res) => {
         lock: Sequelize.Transaction.LOCK.UPDATE,
       });
       if (!product) {
-        res.status(404).json({ error: 'Product not found' });
+        res.json({
+          status: false,
+          message: 'Product not found',
+        });
         throw new Error('Product not found');
         // Handle the case where the product is not found
       }
       if (product.unit_in_stock < body.product_quantity) {
-        res.status(400).json({ error: 'Not enough product' });
+        res.json({
+          status: false,
+          message: 'Not enough product',
+        });
         throw new Error('Not enough product in stock');
         // Handle the case where there's not enough product in stock
       }
@@ -129,7 +135,10 @@ exports.AcceptOrder = async (req, res) => {
     });
 
     if (!order) {
-      res.status(404).json({ error: 'Order not found' });
+      res.json({
+        status: false,
+        message: 'Order not found',
+      });
       return;
     }
 
@@ -143,7 +152,10 @@ exports.AcceptOrder = async (req, res) => {
     });
 
     if (!product) {
-      res.status(404).json({ error: 'Product not found' });
+      res.json({
+        status: false,
+        message: 'Product not found',
+      });
       return;
     }
     console.log({
@@ -153,7 +165,10 @@ exports.AcceptOrder = async (req, res) => {
     });
     if (product.unit_in_stock < order.product_quantity) {
       console.log('Not enough product');
-      res.status(400).json({ error: 'Not enough product' });
+      res.json({
+        status: false,
+        message: 'Not enough product',
+      });
       return;
     }
 
@@ -190,7 +205,10 @@ exports.AcceptOrder = async (req, res) => {
     res.status(200).json({ message: 'Order accepted' });
   } catch (error) {
     console.error('Error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.json({
+      status: false,
+      message: 'Invalid',
+    });
   }
 };
 
@@ -211,7 +229,10 @@ exports.DeleteOrder = async (req, res) => {
       lock: Sequelize.Transaction.LOCK.UPDATE,
     });
     if (!order) {
-      res.status(404).json({ error: 'Order not found' });
+      res.json({
+        status: false,
+        message: 'Order not found',
+      });
       return;
     }
     await orderTable.destroy({

@@ -209,7 +209,7 @@ BEGIN
       UPDATE PRODUCTWAREHOUSES
       SET product_quantity = product_quantity - quantityChange
       WHERE product_id = productID AND warehouse_id = warehouseID;
-      LEAVE update_loop;
+	  SET done = true;
     END IF;
     -- Calculate the change in available_volume based on quantityChange and product dimensions
     SET volumeChange = quantityChange * productHeight * productWidth * productLength;
