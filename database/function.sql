@@ -90,6 +90,13 @@ CREATE PROCEDURE move_product(IN wid_start BIGINT,
                             IN quantity INTEGER,
                             OUT success BOOLEAN)
 BEGIN
+    
+    START TRANSACTION;
+
+    -- Set the transaction isolation level to SERIALIZABLE
+    SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+
+
     -- Declare variables
     DECLARE avai_volume INTEGER;
     DECLARE avai_quantity INTEGER;
@@ -149,8 +156,8 @@ BEGIN
         END IF;
         
         SET success = true;
-        COMMIT;
     END IF;
+    COMMIT;
 END $$
 DELIMITER ;
 
