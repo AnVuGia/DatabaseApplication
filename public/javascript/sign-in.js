@@ -5,11 +5,6 @@ const passwordEl = document.querySelector('.error-password');
 const signUp = document.querySelector('#btn-sign-up');
 const submit = document.querySelector('#btn-sign-in');
 
-import {
-  getSessionCookie,
-  getCookieValue,
-  parseJSONCookie,
-} from './Module/cookieUtils.js';
 import auth from './Module/auth.js';
 const credential = {
   username: 'lazada_auth',
@@ -64,6 +59,11 @@ submit.addEventListener('click', async (event) => {
       data.info.username,
       data.info.password
     );
+    console.log(responseData);
+    if (responseData.status === false) {
+      displayStatusModal('Login failed', false);
+      return;
+    }
     displayStatusModal('Login successful', true);
     if (responseData.role === 'admins') {
       window.location.href = './admin-inventory';

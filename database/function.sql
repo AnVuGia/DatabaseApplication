@@ -172,6 +172,7 @@ BEGIN
   DECLARE productHeight INT;
   DECLARE productWidth INT;
   DECLARE productLength INT;
+  DECLARE volumeChange INT;
   -- Declare a cursor to fetch rows from PRODUCTWAREHOUSES
   DECLARE cur CURSOR FOR
     SELECT pw.warehouse_id, pw.product_quantity, p.height, p.width, p.length
@@ -205,13 +206,13 @@ BEGIN
       UPDATE PRODUCTWAREHOUSES
       SET product_quantity = product_quantity - quantityChange
       WHERE product_id = productID AND warehouse_id = warehouseID;
-      LEAVE update_loop;
+	  SET done = true;
     END IF;
     -- Calculate the change in available_volume based on quantityChange and product dimensions
-    SET @volumeChange = quantityChange * productHeight * productWidth * productLength;
+    SET volumeChange = quantityChange * productHeight * productWidth * productLength;
     -- Update available_volume in WAREHOUSES
     UPDATE WAREHOUSES
-    SET available_volume = available_volume +  @volumeChange
+    SET available_volume = available_volume +  volumeChange
     WHERE warehouse_id = warehouseID;
 
   END LOOP;
