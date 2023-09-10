@@ -8,5 +8,5 @@ router.post(
   ordersController.getOrdersByCustomerId
 );
 router.post('/accept-order', ordersController.AcceptOrder);
-
+router.post('/delete-order', ordersController.DeleteOrder);
 module.exports = router;

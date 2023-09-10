@@ -128,5 +128,9 @@ function createCategoryItem(category) {
   `;
   return card;
 }
+const shopCartEl = document.querySelector('.fa-cart-shopping');
+shopCartEl.addEventListener('click', () => {
+  window.location.href = '/cart-view';
+});
 
 getAllIem();

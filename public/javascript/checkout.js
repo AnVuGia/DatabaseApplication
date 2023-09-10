@@ -52,14 +52,19 @@ function orderRow(product, order) {
   const acceptBtn = row.querySelector('.btn-success');
   const declineBtn = row.querySelector('.btn-secondary');
   const removeBtn = row.querySelector('.btn-danger');
-  acceptBtn.addEventListener('click', () => {
-    orderHelper.AcceptOrder({
+  acceptBtn.addEventListener('click', async () => {
+    await orderHelper.AcceptOrder({
       order_id: order.order_id,
       product_id: product.product_id,
     });
+    window.location.reload();
   });
-  declineBtn.addEventListener('click', () => {
-    console.log('decline');
+  declineBtn.addEventListener('click', async () => {
+    await orderHelper.DeleteOrder({
+      order_id: order.order_id,
+      product_id: product.product_id,
+    });
+    window.location.reload();
   });
   removeBtn.addEventListener('click', () => {
     console.log('remove');
