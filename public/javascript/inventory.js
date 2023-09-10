@@ -29,12 +29,8 @@ addInventoryButton.addEventListener('click', () => {
         },
       };
       let res = await warehouse.create(body.user_credential, body.query);
+      processRequest(res);
       closeLoadingModel();
-      if (res.status == 200) {
-        displayStatusModal('Create Successfully', true);
-      } else {
-        displayStatusModal(res.data.message, false);
-      }
     }
   );
 });
@@ -88,16 +84,15 @@ async function getAllInventory() {
   };
   console.log(body);
   let res = await warehouse.findAll(body.user_credential, body.query);
-
-  if (res.status == 500) {
-    displayStatusModal(res.data.message, false);
-  } else {
+  console.log(res); 
+  if (res.data){
     if (res.data.length < page) {
       reachMax = true;
     }
     displayAll(res.data);
     await createPagination(false);
   }
+ 
 }
 function displayAll(inventoryList) {
   inventoryContainer.innerHTML = '';
@@ -124,12 +119,7 @@ function displayAll(inventoryList) {
             };
             let res = await warehouse.delete(body.user_credential, body.query);
             closeLoadingModel();
-            console.log(res);
-            if (res.message === 'Delete Warehouse successfully!') {
-              displayStatusModal(res.message, true);
-            } else {
-              displayStatusModal(res.message, false);
-            }
+            processRequest(res);
           }
         );
       });
@@ -176,11 +166,7 @@ function prepareEditInventoryModal(inventory) {
     };
     let res = await warehouse.update(body.user_credential, body.query);
     closeLoadingModel();
-    if ((res.status = 200)) {
-      displayStatusModal('Update Successfully', true);
-    } else {
-      displayStatusModal(res.data.message, false);
-    }
+    processRequest(res);
   };
 }
 
@@ -239,9 +225,8 @@ async function searchInventory(searchContent) {
   };
   console.log(body);
   let res = await warehouse.search(body.user_credential, body.query);
-  if (res.status == 500) {
-    displayStatusModal(res.data.message, false);
-  } else {
+  processRequest(res);
+  if (res.data.status)  {
     if (res.data.length < page) {
       reachMax = true;
     }

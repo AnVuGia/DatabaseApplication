@@ -34,7 +34,7 @@ function displayAllCategory(categories, isSearch = false){
       document.querySelector(`#delete-${categories[i]._id}`).addEventListener("click",() => {
           displayConfirmationModal("Are you sure you want to delete this category?", async () => {
             let res = await category.delete(categories[i]);
-            processRequest(res, "Category deleted successfully");
+            processRequest(res);
           })
       });
       document.querySelector(`#forward-${categories[i]._id}`).addEventListener("click", async () =>{   
@@ -145,7 +145,7 @@ function prepareAddCategoryForm(parentId){
           } 
           displayConfirmationModal("Are you sure you want to create this category?", async () => {
             let res = await category.create(categoryObject);
-            processRequest(res, "Category created successfully");
+            processRequest(res);
           });
     });
 }
@@ -268,7 +268,7 @@ async function prepareUpdateCategoryForm(id){
         categoryObject["_id"] = id;
         console.log(categoryObject);
         let res = await category.update(categoryObject);
-        processRequest(res, "Category updated successfully");
+        processRequest(res);
       }
     });
 

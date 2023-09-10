@@ -19,7 +19,7 @@ function displayAll(data){
         table.appendChild(row);
 
         const button = row.querySelector("button");
-        button.addEventListener("click", () => {
+        button.addEventListener("click", async () => {
             console.log("clicked");
             const moveQuantity = parseInt(row.querySelector(".first-input").value);
             const destination =  parseInt(row.querySelector(".second-input").value);
@@ -35,8 +35,9 @@ function displayAll(data){
                 "quantity" : moveQuantity,
                 "wid_dest": parseInt(destination),
             }
-            let res = pWarehouseHelper.moveProduct(body);
-            processRequest(res,res.message);
+            let res = await pWarehouseHelper.moveProduct(body);
+            console.log(res);   
+            processRequest(res);
         });    
     }
 }

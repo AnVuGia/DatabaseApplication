@@ -8,7 +8,7 @@ function connect(user, pass) {
 }
 
 // Find all document in collection
-exports.findAtribute = async function (req, resp) {
+exports.findAtribute = async function (req, res) {
 
     const product_id = req.params.product_id;
 
@@ -17,8 +17,9 @@ exports.findAtribute = async function (req, resp) {
         resp.json(data);
     })
     .catch(err => {
-        resp.status(500).send({
-            message: err.message || "Some error occurred while retrieving product attribute."
+        res.json({
+            status: false,
+            message: err.message || "Some error occurred while retrieving data"
         });
     })
 };
