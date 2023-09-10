@@ -1,3 +1,5 @@
+const { Sequelize } = require('.');
+const models = require('.');
 module.exports = (sequelize, DataTypes) => {
   const Order = sequelize.define('Orders', {
     order_id: {

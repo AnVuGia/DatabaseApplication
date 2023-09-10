@@ -76,13 +76,11 @@ BEGIN
     END IF;  
 
     CLOSE cur;  
-
 END $$
 DELIMITER ;
 
-
+-- function move product from one to another warehouse
 DELIMITER $$
-DROP PROCEDURE IF EXISTS move_product;
 CREATE PROCEDURE move_product(IN wid_start BIGINT, 
                             IN productID BIGINT,
                             IN wid_dest BIGINT, 
@@ -93,6 +91,11 @@ BEGIN
     -- Declare variables
     DECLARE avai_volume INTEGER;
     DECLARE avai_quantity INTEGER;
+
+    -- Set the transaction isolation level to SERIALIZABLE
+    SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+    
+    START TRANSACTION;
 
     -- Get the available volume in the source warehouse
     SELECT ProductWarehouses.product_quantity
@@ -149,8 +152,8 @@ BEGIN
         END IF;
         
         SET success = true;
-        COMMIT;
     END IF;
+    COMMIT;
 END $$
 DELIMITER ;
 
@@ -166,13 +169,13 @@ CREATE PROCEDURE UpdateWarehouseData(
   IN productID INT
 )
 BEGIN
-  DECLARE done INT DEFAULT FALSE;
-  DECLARE warehouseID INT;
-  DECLARE quantityInWarehouse INT; -- Declare a local variable
-  DECLARE productHeight INT;
-  DECLARE productWidth INT;
-  DECLARE productLength INT;
-  DECLARE volumeChange INT;
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE warehouseID INT;
+    DECLARE quantityInWarehouse INT; -- Declare a local variable
+    DECLARE productHeight INT;
+    DECLARE productWidth INT;
+    DECLARE productLength INT;
+    DECLARE volumeChange INT;
   -- Declare a cursor to fetch rows from PRODUCTWAREHOUSES
   DECLARE cur CURSOR FOR
     SELECT pw.warehouse_id, pw.product_quantity, p.height, p.width, p.length
@@ -218,39 +221,18 @@ BEGIN
   END LOOP;
 
   CLOSE cur;
-
-
 END;
 //
 
 DELIMITER ;
-
-
-
--- Drop the trigger if it exists
-DROP TRIGGER IF EXISTS UpdateUnitOnOrderTrigger;
-
--- Create the trigger
-DELIMITER //
-CREATE TRIGGER UpdateUnitOnOrderTrigger
-BEFORE UPDATE
-ON Products FOR EACH ROW
-BEGIN
-    IF NEW.unit_in_stock < OLD.unit_in_stock THEN
-        CALL UpdateWarehouseData(OLD.unit_in_stock - NEW.unit_in_stock, NEW.product_id);
-    END IF;
-END;
-//
-    
-DELIMITER ;
-
 
 
 -- create product warehouse view for moving product easily
-DROP VIEW if exists product_warehouse_view;
+DROP VIEW IF EXISTS product_warehouse_view;
 CREATE VIEW product_warehouse_view AS
 SELECT ph.warehouse_id, 
-        w.warehouse_name, 
+		w.warehouse_name,
+		w.available_volume, 
         p.product_name, 
         ph.product_id, 
         ph.product_quantity

@@ -88,11 +88,8 @@ exports.createInboundOrder = async (req, res) => {
             throw err;
           } else {
             // Get result from procedure
-
             warehouse_selection_result = result[1][0]['success'];
-
             console.log(warehouse_selection_result);
-
             // Check result
 
             // If all product are store successfully
@@ -113,25 +110,26 @@ exports.createInboundOrder = async (req, res) => {
                     },
                   }
                 )
-
                 .then((result) => {
-                  res.send(result ? 'Sucessfully' : 'Some error occurred.');
+                  res.json({
+                    status: result ? true : false,
+                    message: result? "Successful" : 'Some error occurred while retrieving data.',
+                  });
                 })
 
                 .catch((err) => {
-                  res.status(500).send({
-                    message:
-                      err.message ||
-                      'Some error occurred while retrieving data.',
+                  res.json({
+                    status: false,
+                    message: 'Some error occurred while retrieving data.',
                   });
                 });
             }
 
             // If all product are not able to store
             else {
-              res.send({
-                message:
-                  'All warehouses do not have enough space(s) for product.',
+              res.json({
+                status: false,
+                message: 'All warehouses do not have enough space(s) for product.',
               });
             }
           }
@@ -140,8 +138,9 @@ exports.createInboundOrder = async (req, res) => {
     })
 
     .catch((err) => {
-      res.status(500).send({
-        message: err.message || 'Cannot find product with given id.',
+      res.json({
+        status: false,
+        message: err.message || 'Some error occurred while creating order.',
       });
     });
 };
@@ -178,19 +177,23 @@ exports.create = async (req, res) => {
 
         console.log('Sucessfully store attribute of product.');
 
-        res.send({
-          message: 'Successfully create product and store its attributes.',
+        res.json({
+          status: true,
+          message: 'Successful Create Product',
         });
       } catch (err) {
-        res.status(400).json({ mesage: err.message });
-
+        
+        res.json({
+          status: false,
+          message: err.message || 'Some error occurred while creating product.',
+        });
         return;
       }
     })
     .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while creating the Product.',
+      res.json({
+        status: false,
+        message: err.message || 'Some error occurred while creating product.',
       });
     });
 };
@@ -211,7 +214,8 @@ exports.findAll = async (req, res) => {
       res.send(result);
     })
     .catch((err) => {
-      res.status(500).send({
+      res.json({
+        status: false,
         message: err.message || 'Some error occurred while retrieving data.',
       });
     });
@@ -295,7 +299,8 @@ exports.search = async function (req, res) {
       res.send(products);
     })
     .catch((err) => {
-      res.status(500).send({
+      res.json({
+        status: false,
         message: err.message || 'Some error occurred while retrieving data.',
       });
     });
@@ -321,7 +326,8 @@ exports.getAllProductBySeller = async function (req, res) {
       res.send(result);
     })
     .catch((err) => {
-      res.status(500).send({
+      res.json({
+        status: false,
         message: err.message || 'Some error occurred while retrieving data.',
       });
     });
@@ -342,17 +348,18 @@ exports.update = async (req, res) => {
 
   // Get old data
   oldObj = await productTable.findOne(filterParam).catch((err) => {
-    res.status(500).send({
+    res.json({
+      status: false,
       message: err.message || 'Some error occurred while retrieving data.',
     });
   });
 
   // Check if product existed
   if (oldObj == null) {
-    res.status(500).send({
+    res.json({
+      status: false,
       message: 'The product with provided id is not existed!',
     });
-
     return;
   }
 
@@ -369,10 +376,14 @@ exports.update = async (req, res) => {
   productTable
     .update(updateParam, filterParam)
     .then((result) => {
-      res.send(result ? 'Sucessfully' : 'Some error occurred.');
+      res.json({
+        status: result? true : false,
+        message: result? "Successful" : 'Some error occurred while retrieving data.',
+      });
     })
     .catch((err) => {
-      res.status(500).send({
+      res.json({
+        status: false,
         message: err.message || 'Some error occurred while retrieving data.',
       });
     });
@@ -390,8 +401,9 @@ exports.delete = async (req, res) => {
 
   // Check para
   if (product_id == null) {
-    res.status(500).send({
-      message: 'Missing product_id.',
+    res.json({
+      status: false,
+      message: 'The product with provided id is not existed!',
     });
 
     return;
@@ -439,9 +451,9 @@ exports.delete = async (req, res) => {
 
       console.log(`Restored the space in warehosue ${warehouse.warehouse_id}`);
     } catch (err) {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while updating warehouse volume.',
+      res.json({
+        status: false,
+        message: err.message || 'Some error occurred while retrieving data.',
       });
 
       return;
@@ -455,12 +467,10 @@ exports.delete = async (req, res) => {
         },
       });
     } catch (err) {
-      res.status(500).send({
-        message:
-          err.message ||
-          'Some error occurred while deleting in product_location table',
+      res.json({
+        status: false,
+        message: err.message ||  'Some error occurred while deleting in product_location table',
       });
-
       return;
     }
   }
@@ -469,13 +479,15 @@ exports.delete = async (req, res) => {
   productTable
     .destroy(filterParam)
     .then((result) => {
-      res.send({
-        message: 'Delete product successfully!',
+      res.json({
+        status: true,
+        message: 'Delete Product Successful',
       });
     })
     .catch((err) => {
-      res.status(500).send({
-        message: err.message || 'Some error occurred while deleting data.',
+      res.json({
+        status: false,
+        message: err.message || 'Some error occurred while deleting product.',
       });
     });
 };
@@ -513,7 +525,10 @@ exports.filterProductByAttributeValue = async (req, res) => {
 
     res.json(products);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.json({
+      status: false,
+      message: err.message || 'Some error occurred while retrieving data.',
+    });
   }
 };
 
@@ -557,6 +572,9 @@ exports.filterProductByCategory = async (req, res) => {
 
     res.send(products);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.json({
+      status: false,
+      message: err.message ||  'Some error occurred while deleting in product_location table',
+    });
   }
 };

@@ -6,7 +6,10 @@ exports.getAllProducts = function (req, res) {
       res.json(products);
     })
     .catch((err) => {
-      res.send(err);
+      res.json({
+        status: false,
+        message: err.message ||  'Some error occurred while deleting in product_location table',
+      });
     });
 };
 exports.saveProduct = function (req, res) {
@@ -16,6 +19,9 @@ exports.saveProduct = function (req, res) {
       res.json(newProduct);
     })
     .catch((err) => {
-      res.send(err);
+      res.json({
+        status: false,
+        message: err.message ||  'Some error occurred while deleting in product_location table',
+      });
     });
 };

@@ -102,15 +102,18 @@ exports.moveProduct = async function (req, resp) {
 
           console.log(result);
           if(result == 1){
-            resp.status(200).send({message: "Move product successfully"});
+            res.json({ status: true,
+              message: 'Move product successfully'});
           }else{
-            resp.status(400).send({message: "Move product failed"});
+            res.json({ status: false,
+              message: 'Move product failed'});
           }
         }
 
       });
   }).catch((err) => {
-    resp.status(400).send({message: "Move product failed"});
+    res.json({ status: false,
+      message: 'Move product failed'});
   }
 );};
 
