@@ -59,7 +59,7 @@ function orderRow(product, order) {
     });
   });
   declineBtn.addEventListener('click', () => {
-    console.log('decline');
+    
   });
   removeBtn.addEventListener('click', () => {
     console.log('remove');

@@ -80,7 +80,9 @@ BEGIN
   DECLARE done INT DEFAULT FALSE;
   DECLARE warehouseID INT;
   DECLARE quantityInWarehouse INT; -- Declare a local variable
-
+  DECLARE productHeight INT;
+  DECLARE productWidth INT;
+  DECLARE productLength INT;
   -- Declare a cursor to fetch rows from PRODUCTWAREHOUSES
   DECLARE cur CURSOR FOR
     SELECT warehouse_id, product_quantity
@@ -97,7 +99,7 @@ BEGIN
   OPEN cur;
 
   update_loop: LOOP
-    FETCH cur INTO warehouseID, quantityInWarehouse; -- Use the local variable
+    FETCH cur INTO warehouseID, quantityInWarehouse,  productHeight, productWidth, productLength; -- Use the local variable
 
     IF done THEN
       LEAVE update_loop;
@@ -118,7 +120,7 @@ BEGIN
 
     -- Update available_volume in WAREHOUSES
     UPDATE WAREHOUSES
-    SET available_volume = available_volume - quantityChange
+    SET available_volume = available_volume - quantityChange * productHeight * productWidth * productLength
     WHERE warehouse_id = warehouseID;
 
   END LOOP;

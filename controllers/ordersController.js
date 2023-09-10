@@ -1,4 +1,5 @@
 const { Sequelize } = require('sequelize');
+const { sequelize } = require('../models');
 const connectDB = require('./helperController').connectDB;
 
 exports.addOrder = async (req, res) => {
@@ -150,19 +151,20 @@ exports.AcceptOrder = async (req, res) => {
     }
 
     // Start a transaction for updating product stock
+    sequelize.transaction(async (t) => {
+      try {
+        await productTable.update(
+          { unit_in_stock: product.unit_in_stock - order.product_quantity },
+          { where: { product_id: order.product_id } },
+          { transaction: t }
+        );
+      } catch (error) {
+        // Commit the product update transaction
+        // Rollback the product update transaction on error
 
-    try {
-      await productTable.update(
-        { unit_in_stock: product.unit_in_stock - order.product_quantity },
-        { where: { product_id: order.product_id } }
-      );
-    } catch (error) {
-      // Commit the product update transaction
-      // Rollback the product update transaction on error
-
-      throw error;
-    }
-
+        throw error;
+      }
+    });
     // Start a transaction for deleting the order
 
     try {
@@ -183,4 +185,26 @@ exports.AcceptOrder = async (req, res) => {
     console.error('Error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
+};
+
+exports.DeleteOrder = async (req, res) => {
+  const body = req.body;
+  console.log(body);
+  const orderTable = await connectDB(
+    req.session.credentials,
+    require('../models/Orders')
+  );
+  sequelize.transaction(async (t) => {
+    const order = await orderTable.findOne({
+      where: { order_id: body.order_id },
+    });
+    if (!order) {
+      res.status(404).json({ error: 'Order not found' });
+      return;
+    }
+    await orderTable.destroy({
+      where: { order_id: order.order_id },
+    });
+    res.status(200).json({ message: 'Order deleted' });
+  });
 };
