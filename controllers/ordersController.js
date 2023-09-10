@@ -32,10 +32,12 @@ exports.addOrder = async (req, res) => {
         where: { product_id: body.product_id },
       });
       if (!product) {
+        res.status(404).json({ error: 'Product not found' });
         throw new Error('Product not found');
         // Handle the case where the product is not found
       }
       if (product.unit_in_stock < body.product_quantity) {
+        res.status(400).json({ error: 'Not enough product' });
         throw new Error('Not enough product in stock');
         // Handle the case where there's not enough product in stock
       }

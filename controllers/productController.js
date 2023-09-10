@@ -67,7 +67,7 @@ exports.createInboundOrder = async (req, res) => {
   await connectDB('lazada_seller', 'password');
 
   var inboundOrder = req.body.query;
-
+  console.log(inboundOrder);
   await productTable
     .findOne({
       where: {
@@ -75,6 +75,7 @@ exports.createInboundOrder = async (req, res) => {
       },
     })
     .then(async (product) => {
+      console.log(product);
       const product_volume = product.width * product.height * product.length;
 
       const newID = product.product_id;

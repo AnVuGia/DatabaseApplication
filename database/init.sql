@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS Warehouses (
     createdAt datetime,
     updatedAt datetime
 );
-CREATE TABLE IF NOT EXISTS ProductWarehouse (
+CREATE TABLE IF NOT EXISTS ProductWarehouses (
     product_warehouse_id bigint(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     product_id bigint(10) NOT NULL, 
     warehouse_id bigint(10) NOT NULL,
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS ProductWarehouse (
     createdAt datetime,
     updatedAt datetime
 );
-CREATE TABLE IF NOT EXISTS Admin (
+CREATE TABLE IF NOT EXISTS Admins (
     admin_id bigint(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(15),
     password VARCHAR(15),
