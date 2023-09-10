@@ -47,7 +47,7 @@ addProductButton.addEventListener('click', () => {
     async () => {
       console.log(product);
       let res = await productHelper.createProduct(product);
-      processRequest(res, 'Product added successfully');
+      processRequest(res);
     }
   );
 });

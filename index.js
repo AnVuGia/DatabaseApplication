@@ -19,7 +19,6 @@ const session = require('express-session');
 
 const fs = require('fs');
 const { default: mongoose } = require('mongoose');
-
 const mongodb_uri = 'mongodb://127.0.0.1:27017';
 const dbName = '/group_asm2';
 const connectString = mongodb_uri + dbName;

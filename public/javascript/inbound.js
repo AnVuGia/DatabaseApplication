@@ -12,10 +12,10 @@ document.querySelector(".inbound-button-order").addEventListener("click", () => 
             return;
         }
 
-    displayConfirmationModal("Are you sure you want to create this order?", () => {
+    displayConfirmationModal("Are you sure you want to create this order?", async () => {
         console.log(body);  
-        let res =productHelper.createInbound(body);
-        processRequest(res, "Order created successfully");
+        let res = await productHelper.createInbound(body);
+        processRequest(res);
     });
 
 });

@@ -1,3 +1,5 @@
+const { Sequelize } = require('.');
+const models = require('.');
 //This is a test model for the User table
 module.exports = (sequelize, DataTypes) => {
   const Warehouses = sequelize.define(

@@ -216,10 +216,10 @@ function displayStatusModal(msg, success) {
 
 }
 
-function processRequest(res, msg) {
-  if (res.status == 500) {
-    displayStatusModal(res.data.message, false);
+function processRequest(res) {
+  if (res.data.status) {
+    displayStatusModal(res.data.message, true);
   } else {
-    displayStatusModal(msg, true);
+    displayStatusModal(res.data.message, false);
   }
 }

@@ -1,10 +1,10 @@
 -- Create User and Role
-CREATE USER 'lazada_admin'@'localhost'  IDENTIFIED WITH 'mysql_native_password' BY 'password';
-CREATE USER 'lazada_customer'@'localhost' IDENTIFIED WITH 'mysql_native_password' BY 'password';
-CREATE USER 'lazada_seller'@'localhost' IDENTIFIED WITH 'mysql_native_password' BY 'password';
-CREATE USER 'lazada_guest'@'localhost' IDENTIFIED WITH 'mysql_native_password'BY 'password';
-CREATE USER 'lazada_auth'@'localhost' IDENTIFIED WITH 'mysql_native_password' BY 'password';
-CREATE ROLE 'customer','seller','auth','guest';
+CREATE USER IF NOT EXISTS 'lazada_admin'@'localhost'  IDENTIFIED WITH 'mysql_native_password' BY 'password';
+CREATE USER IF NOT EXISTS 'lazada_customer'@'localhost' IDENTIFIED WITH 'mysql_native_password' BY 'password';
+CREATE USER IF NOT EXISTS 'lazada_seller'@'localhost' IDENTIFIED WITH 'mysql_native_password' BY 'password';
+CREATE USER IF NOT EXISTS 'lazada_guest'@'localhost' IDENTIFIED WITH 'mysql_native_password'BY 'password';
+CREATE USER IF NOT EXISTS 'lazada_auth'@'localhost' IDENTIFIED WITH 'mysql_native_password' BY 'password';
+CREATE ROLE IF NOT EXISTS 'customer','seller','auth','guest';
 
 
 -- Grant Permission for Role
@@ -16,7 +16,7 @@ GRANT SELECT, INSERT ON lazada_database.Warehouses TO 'seller';
 GRANT SELECT, UPDATE ON lazada_database.Products TO 'customer';
 GRANT SELECT, INSERT, DELETE ON lazada_database.Orders TO 'customer';
 GRANT SELECT ON lazada_database.Warehouses TO 'customer';
-GRANT SELECT, UPDATE ON lazada_database.ProductWarehouses TO 'customer';
+GRANT SELECT, UPDATE, DELETE ON lazada_database.ProductWarehouses TO 'customer';
 
 GRANT SELECT ON lazada_database.Customers TO 'auth';
 GRANT SELECT ON lazada_database.Admins TO 'auth';
@@ -42,5 +42,3 @@ SET DEFAULT ROLE ALL TO
 'lazada_guest'@'localhost';
 
 
-
-FLUSH PRIVILEGES;

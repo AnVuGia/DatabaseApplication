@@ -2,8 +2,9 @@ const { Sequelize, Op } = require('sequelize');
 const { connectDB } = require('./helperController');
 // Create and Save a new Tutorial
 exports.create = async (req, res) => {
-  const body = req.body;
 
+  const body = req.body;
+  console.log(body);  
   warehouseTable = await connectDB(
     body.user_credential,
     require('../models/Warehouses.js')
@@ -15,12 +16,15 @@ exports.create = async (req, res) => {
   warehouseTable
     .create(req.body.query)
     .then((result) => {
-      res.status(200).send(result);
+      res.json({
+        status: true,
+        message: 'Create Warehouse successfully!',
+      });
     })
     .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message || 'Some error occurred while creating the Tutorial.',
+      res.json({
+        status: false,
+        message: err.message || 'Some error occurred while creating data.',
       });
     });
 };
@@ -43,7 +47,8 @@ exports.findAll = async (req, res) => {
       res.send(result);
     })
     .catch((err) => {
-      res.status(500).send({
+      res.json({
+        status: false,
         message: err.message || 'Some error occurred while retrieving data.',
       });
     });
@@ -85,8 +90,9 @@ exports.search = async function (req, res) {
       res.send(result);
     })
     .catch((err) => {
-      res.status(500).send({
-        message: err.message || 'Some error occurred while retrieving data.',
+      res.json({
+        status: false,
+        message: err.message ||  'Some error occurred while retrieving data.',
       });
     });
 };
@@ -116,10 +122,11 @@ exports.update = async (req, res) => {
 
   // If new total volume smaller than the volume occupied by product(s)
   if (newObject.volume < oldData.volume - oldData.available_volume) {
-      res.send({
-      message: 'ERROR: New volume value smaller than current occupied volume.',
+     
+      res.json({
+        status: false,
+        message: err.message ||  'ERROR: New volume value smaller than current occupied volume.',
       });
-
       return;
   }
 
@@ -162,10 +169,10 @@ exports.delete = async (req, res) => {
     .then((warehouse) => {
       // Cannot find the warehouse by id
       if (warehouse == null) {
-        res.status(500).send({
-          message: "Can't find warehouse with specified id.",
+        res.json({
+          status: false,
+          message: err.message || "Can't find warehouse with specified id.",
         });
-
         return;
       }
 
@@ -178,27 +185,30 @@ exports.delete = async (req, res) => {
             where: filterParam,
           })
           .then((result) => {
-            res.send({
-              message: 'Delete Warehouse successfully!',
+            res.json({
+              status: false,
+              message: err.message || 'Delete successfully!',
             });
           })
           .catch((err) => {
-            res.status(500).send({
-              message:
-                err.message || 'Some error occurred while deleting data.',
+            res.json({
+              status: false,
+              message: err.message || 'Some error occurred while deleting data',
             });
           });
       }
       // If available_volume < volume
       else {
-        res.status(400).send({
-          message: 'Delete failed. There are product(s) in the Warehouse!',
+        res.json({
+          status: false,
+          message: err.message || 'Warehouse is not empty.',
         });
       }
     })
     .catch((err) => {
-      res.status(500).send({
-        message: err.message || 'Some error occurred while finding data',
+      res.json({
+        status: false,
+        message: err.message || 'Some error occurred while deleting data',
       });
     });
 };

@@ -15,7 +15,7 @@ async function connectDB(username, password) {
     db.Sequelize = Sequelize;
     db.sequelize = sequelize;
 
-    db.products = require("../models/Product.js")(sequelize, Sequelize);
+    db.products = require("../models/Products.js")(sequelize, Sequelize);
 
     productTable = db.products;
 
@@ -80,7 +80,8 @@ exports.update = async function (req, resp) {
 
     const userCredential = req.session.credentials;
 
-    await connectDB(userCredential.username, userCredential.password);
+    // await connectDB(userCredential.username, userCredential.password);
+    await connectDB('lazada_admin', 'password'); 
 
     // find all product have this category id
     const products = await productTable.findAll({

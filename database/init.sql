@@ -1,11 +1,12 @@
 CREATE USER IF NOT EXISTS 'user-lazada'@'localhost' identified with mysql_native_password by '12345';
 GRANT ALL PRIVILEGES ON *.* TO 'user-lazada'@'localhost';
 FLUSH PRIVILEGES;
+DROP DATABASE IF EXISTS `lazada_database`;
 CREATE DATABASE IF NOT EXISTS `lazada_database`;
 USE `lazada_database`;
 
 CREATE TABLE IF NOT EXISTS Products (
-    product_id BIGINT NOT NULL,
+    product_id BIGINT NOT NULL AUTO_INCREMENT,
     product_name VARCHAR(200) NOT NULL,
     product_desc VARCHAR(350),
     seller_id BIGINT NOT NULL,
