@@ -223,30 +223,89 @@ exports.findAll = async (req, res) => {
 
 // Find all data has attribute search_att contains searchStr
 exports.search = async function (req, res) {
+  // Predefine condition with corresponding operator
+  const operators = {">": Op.gt, ">=": Op.gte, "<": Op.lt, "<=": Op.lte};
+
   const userCredential = req.session.credentials;
 
   await connectDB(userCredential.username, userCredential.password);
 
-  let searchAtt = req.body.query.search_attribute;
-  let searchStr = req.body.query.search_string;
+  const query = req.body.query;
 
-  var searchParams = {};
+  // let searchAtt = req.body.query.search_attribute;
+  const searchStr = query.search_string;
+  const price = query.price;
+  const search_cate_id = query.category_id;
+  const sort = query.sort;
+  const pagination = query.pagination;
 
-  searchParams[searchAtt] = {
-    [Op.like]: '%' + searchStr + '%',
+  // Prepare search paramaters
+  var searchParams = {
+      where: {
+          [Op.and] : [
+              // Search contained string in name and description
+              {
+                  [Op.or]: [
+                      {
+                          product_name: {
+                              [Op.like]: `%${searchStr}%`
+                          }
+                      },
+                      {
+                          product_desc: {
+                              [Op.like]: `%${searchStr}%`
+                          }
+                      }
+                  ]
+              },
+              // Search by price range
+              {
+                  price: {
+                      [operators[price.operator]]: price.value
+                  }
+              }
+          ]
+      },
+      order: [
+          [
+              sort.attribute, sort.order
+          ]
+      ]
   };
 
-  productTable
-    .findAll({
-      limit: 10,
-      where: searchParams,
-    })
-    .then((result) => {
-      res.send(result);
-    })
-    .catch((err) => {
+  if (search_cate_id.length > 0) {
+      var cateIDs = [search_cate_id];
+
+      cateIDs.push(...await getAllChildrenID(search_cate_id));
+
+      searchParams.where[Op.and].push(
+          // Filter by all category and its sub categories
+          {
+              category_id: {
+                  [Op.in]: cateIDs
+              }
+          }
+      )
+  }
+
+  productTable.findAll(searchParams)
+  .then(result => {
+      // Get all products data
+      var products = result.map(i => i.dataValues);
+
+      const startId = pagination.offset * pagination.limit;
+      const lastId = startId + pagination.limit;
+
+      // Apply pagination
+      products = products.slice(startId, lastId);
+      
+      console.log(products);
+      res.send(products);
+  })
+  .catch(err => {
       res.status(500).send({
-        message: err.message || 'Some error occurred while retrieving data.',
+        message:
+          err.message || "Some error occurred while retrieving data."
       });
     });
 };
