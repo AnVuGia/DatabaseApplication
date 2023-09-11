@@ -296,6 +296,13 @@ async function prepareUpdateCategoryForm(id) {
 
       if (nameValue.length > 0) {
         let categoryObject = CreateCategoryObject(category.parent, nameValue);
+        if (categoryObject == null) {
+          displayStatusModal(
+            'Please fill all the attribute name and select type',
+            false
+          );
+          return;
+        }
         categoryObject['_id'] = id;
         console.log(categoryObject);
         let res = await category.update(categoryObject);

@@ -358,6 +358,7 @@ function getAttributeValue(className){
       value: attributes[i].children[1].value,
       type: attributes[i].children[1].type,
     }
+    console.log(attribute);
     attributeList.push(attribute);
   }
   return attributeList;
