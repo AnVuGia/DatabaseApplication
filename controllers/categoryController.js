@@ -88,8 +88,17 @@ exports.update = async function (req, res) {
         where: {
           category_id: category._id,
         },
-      });
-  
+        });
+        if (products !== null) {
+            // Check if the category name already exists
+           const result = await Category.findOne({ name: category.name });
+           if (result && result._id != category._id) {
+               return res.json({
+                   status: false,
+                   message: 'Category name already exists',
+               });
+           }
+       }
       // Check if there are no products with this category id
       if (products.length === 0) {
         let filter = {
@@ -100,9 +109,6 @@ exports.update = async function (req, res) {
         let update = {
           attributes: category.attributes,
         };
-  
-        // Check if the category name already exists
-        const result = await Category.findOne({ name: category.name });
   
        
   
@@ -130,7 +136,7 @@ exports.update = async function (req, res) {
       console.error(err);
       return res.json({
         status: false,
-        message: 'Category already exist',
+        message: 'Internal server error',
       });
     }
   };
