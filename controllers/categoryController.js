@@ -11,11 +11,9 @@ async function connectDB(username, password) {
     host: '127.0.0.1',
     dialect: 'mysql',
   });
-
+  db.Sequelize = Sequelize;
+  db.sequelize = sequelize;
   db.products = require('../models/Products.js')(sequelize, Sequelize);
-
-  db.products = require('../models/Product.js')(sequelize, Sequelize);
-
   productTable = db.products;
 
   await db.sequelize
@@ -252,9 +250,12 @@ exports.createCategory = async function (req, resp) {
       console.log(parent);
     }
 
-    resp.status(201).json(newCategory);
+    resp.json(newCategory);
   } catch (err) {
-    resp.status(400).json({ mesage: err.message });
+    resp.json({
+      status: false,
+      message: 'Some error occurred while retrieving data.',
+    });
   }
 };
 

@@ -36,7 +36,8 @@ function displayAllCategory(categories, isSearch = false) {
           async () => {
             let res = await category.delete(categories[i]);
             processRequest(res);
-          })
+          }
+        );
       });
     document
       .querySelector(`#forward-${categories[i]._id}`)
@@ -150,20 +151,30 @@ function prepareAddCategoryForm(parentId) {
         .querySelector('#category-name-form-input')
         .value.trim();
 
-    //process if they click on add category button
-    document.querySelector("#category-input-save-button").addEventListener("click", async () => {
-        const nameValue = document.querySelector("#category-name-form-input").value.trim();
+      //process if they click on add category button
+      document
+        .querySelector('#category-input-save-button')
+        .addEventListener('click', async () => {
+          const nameValue = document
+            .querySelector('#category-name-form-input')
+            .value.trim();
 
-       
-          let categoryObject = CreateCategoryObject(parentId,nameValue)
-          if (categoryObject == null){
-            displayStatusModal("Please fill all the attribute name and select type", false);
+          let categoryObject = CreateCategoryObject(parentId, nameValue);
+          if (categoryObject == null) {
+            displayStatusModal(
+              'Please fill all the attribute name and select type',
+              false
+            );
             return;
-          } 
-          displayConfirmationModal("Are you sure you want to create this category?", async () => {
-            let res = await category.create(categoryObject);
-            processRequest(res);
-          });
+          }
+          displayConfirmationModal(
+            'Are you sure you want to create this category?',
+            async () => {
+              let res = await category.create(categoryObject);
+              processRequest(res);
+            }
+          );
+        });
     });
 }
 
@@ -296,6 +307,7 @@ async function prepareUpdateCategoryForm(id) {
       }
     });
 }
+
 const searchNameInput = document.querySelector('.category-searcg-input');
 searchNameInput.addEventListener('input', async () => {
   if (searchNameInput.value.length == 0) {

@@ -176,55 +176,69 @@ BEGIN
     DECLARE productWidth INT;
     DECLARE productLength INT;
     DECLARE volumeChange INT;
-  -- Declare a cursor to fetch rows from PRODUCTWAREHOUSES
-  DECLARE cur CURSOR FOR
-    SELECT pw.warehouse_id, pw.product_quantity, p.height, p.width, p.length
-    FROM PRODUCTWAREHOUSES pw
-    JOIN Products p ON pw.product_id = p.product_id
-    WHERE pw.product_id = productID
-    ORDER BY pw.warehouse_id;
+	    -- Declare a cursor to fetch rows from PRODUCTWAREHOUSES
+    DECLARE cur CURSOR FOR
+        SELECT pw.warehouse_id, pw.product_quantity, p.height, p.width, p.length
+        FROM PRODUCTWAREHOUSES pw
+        JOIN Products p ON pw.product_id = p.product_id
+        WHERE pw.product_id = productID
+        ORDER BY pw.warehouse_id;
+        
+    -- Declare handlers for exceptions
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        -- An error occurred, rollback the transaction
+        ROLLBACK;
+    END;
 
-  -- Declare handlers for exceptions
-  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+	    -- Set the transaction isolation level to SERIALIZABLE
+    SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+    
+    START TRANSACTION;
+    OPEN cur;
 
-  -- Start a transaction
+    update_loop: LOOP
+        FETCH cur INTO warehouseID, quantityInWarehouse,  productHeight, productWidth, productLength; -- Use the local variable
 
+        IF done THEN
+            LEAVE update_loop;
+        END IF;
 
-  OPEN cur;
+        IF quantityChange > quantityInWarehouse THEN
+            -- Reduce quantity in the current warehouse to 0
+            UPDATE PRODUCTWAREHOUSES
+            SET product_quantity = 0
+            WHERE product_id = productID AND warehouse_id = warehouseID;
+        ELSE
+            -- Reduce quantity in the current warehouse by quantityChange
+            UPDATE PRODUCTWAREHOUSES
+            SET product_quantity = product_quantity - quantityChange
+            WHERE product_id = productID AND warehouse_id = warehouseID;
+        END IF;
+        
+        -- Calculate the change in available_volume based on quantityChange and product dimensions
+        SET volumeChange = quantityChange * productHeight * productWidth * productLength;
+        
+        -- Update available_volume in WAREHOUSES
+        UPDATE WAREHOUSES
+        SET available_volume = available_volume + volumeChange
+        WHERE warehouse_id = warehouseID;
 
-  update_loop: LOOP
-    FETCH cur INTO warehouseID, quantityInWarehouse,  productHeight, productWidth, productLength; -- Use the local variable
+    END LOOP;
 
-    IF done THEN
-      LEAVE update_loop;
-    END IF;
+    CLOSE cur;
 
-    IF quantityChange > quantityInWarehouse THEN
-      -- Reduce quantity in the current warehouse to 0
-      UPDATE PRODUCTWAREHOUSES
-      SET product_quantity = 0
-      WHERE product_id = productID AND warehouse_id = warehouseID;
-    ELSE
-      -- Reduce quantity in the current warehouse by quantityChange
-      UPDATE PRODUCTWAREHOUSES
-      SET product_quantity = product_quantity - quantityChange
-      WHERE product_id = productID AND warehouse_id = warehouseID;
-	  SET done = true;
-    END IF;
-    -- Calculate the change in available_volume based on quantityChange and product dimensions
-    SET volumeChange = quantityChange * productHeight * productWidth * productLength;
-    -- Update available_volume in WAREHOUSES
-    UPDATE WAREHOUSES
-    SET available_volume = available_volume +  volumeChange
-    WHERE warehouse_id = warehouseID;
-
-  END LOOP;
-
-  CLOSE cur;
+    -- Commit the transaction if all updates were successful
+    COMMIT;
+    
+    -- Rollback the transaction if there was an error (handled by EXIT HANDLER)
+    
 END;
 //
 
 DELIMITER ;
+
 
 
 -- create product warehouse view for moving product easily

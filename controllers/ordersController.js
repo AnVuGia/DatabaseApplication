@@ -68,9 +68,6 @@ exports.addOrder = async (req, res) => {
   } catch (error) {
     // Handle any errors that occur during the transaction
     console.error('Transaction error:', error);
-    return res
-      .status(500)
-      .json({ error: 'An error occurred during the transaction' });
   }
 };
 
@@ -109,6 +106,7 @@ exports.getOrdersByCustomerId = async (req, res) => {
     orders: order,
   });
 };
+
 exports.AcceptOrder = async (req, res) => {
   // Connect to the MySQL database
   const sequelize = new Sequelize({
