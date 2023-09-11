@@ -14,7 +14,7 @@ exports.findAtribute = async function (req, res) {
 
     Attribute.find({product_id: product_id})
     .then(data => {
-        resp.json(data);
+        res.json(data);
     })
     .catch(err => {
         res.json({
