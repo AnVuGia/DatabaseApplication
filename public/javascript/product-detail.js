@@ -13,6 +13,7 @@ const product = JSON.parse(sessionStorage.getItem('product'));
 const currentUser = sessionStorage.getItem('user');
 const currentUserJSON = JSON.parse(currentUser);
 import cartHelp from './Module/cart-helper.js';
+import orderHelper from './Module/order-helper.js';
 window.onload = function () {
   productTitle.innerHTML = `<h1> ${product.product_name} </h1>`;
   productPrice.innerHTML = `<h1> ${product.price}$</h1>`;
@@ -36,4 +37,26 @@ AddToCartButton.addEventListener('click', async () => {
   await cartHelp.addToCart(cart);
   console.log(cart);
   window.location.href = 'cart-view';
+});
+BuyNowButton.addEventListener('click', async () => {
+  const currentUser = sessionStorage.getItem('user');
+  const currentUserJSON = JSON.parse(currentUser);
+  const value = parseInt(productQuantity.value);
+  console.log(value);
+  const cart = {
+    customer_id: `${currentUserJSON.customer_id}`,
+    product_id: product.product_id,
+    product_quantity: value,
+  };
+
+  try {
+    const res = await orderHelper.addOrder(cart);
+    console.log(res.data);
+    if (res.data.status === false) {
+      displayStatusModal(res.data.message, false);
+      return;
+    }
+    console.log(cart);
+    window.location.href = 'checkout';
+  } catch (error) {}
 });
