@@ -125,7 +125,7 @@ exports.update = async (req, res) => {
      
       res.json({
         status: false,
-        message: err.message ||  'ERROR: New volume value smaller than current occupied volume.',
+        message:  'ERROR: New volume value smaller than current occupied volume.',
       });
       return;
   }
@@ -140,11 +140,15 @@ exports.update = async (req, res) => {
   warehouseTable
     .update(updateParam, filter)
     .then((result) => {
-      res.status(200).send(result);
+      res.json({
+        status: true,
+        message: 'Update successfully!',
+      });
     })
     .catch((err) => {
-      res.status(500).send({
-        message: err.message || 'Some error occurred while updating data.',
+      res.json({
+        status: false,
+        message: err.message || 'Some error occurred while updating data',
       });
     });
 };
@@ -201,8 +205,9 @@ exports.delete = async (req, res) => {
       else {
         res.json({
           status: false,
-          message: err.message || 'Warehouse is not empty.',
+          message:  'Warehouse is not empty.',
         });
+        return;
       }
     })
     .catch((err) => {

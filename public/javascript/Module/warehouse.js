@@ -35,7 +35,7 @@ const warehouse = {
             user_credential: user_credential,
             query: query
         }); 
-        return response.data;
+        return response;
     },
     
 };
