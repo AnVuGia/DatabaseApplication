@@ -80,6 +80,7 @@ exports.searchByName = async function (req, res) {
 exports.update = async function (req, res) {
   try {
     let category = req.body;
+    console.log(category);
     const userCredential = req.session.credentials;
     await connectDB(userCredential.username, userCredential.password);
 
@@ -97,7 +98,7 @@ exports.update = async function (req, res) {
         _id: category._id,
       };
 
-      // Only allow update attributes list
+      // 
       let update = {
         name: category.name,
         attributes: category.attributes,
@@ -105,9 +106,10 @@ exports.update = async function (req, res) {
 
       // Check if the category name already exists
       const result = await Category.findOne({ name: category.name });
-
+      
       if (result !== null) {
-        if (result._id !== category._id){
+        if (result._id.toString() !== category._id){
+            console.log(result);
             return res.json({
                 status: false,
                 message: 'Category name already exists',
