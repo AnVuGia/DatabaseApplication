@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS Products (
     width INT,
     length INT,
     height INT,
-    price INT,
+    price BIGINT,
     image VARCHAR(350),
     unit_in_stock INT,
     unit_on_order INT,
