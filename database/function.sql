@@ -255,3 +255,20 @@ JOIN warehouses w
 ON ph.warehouse_id = w.warehouse_id
 JOIN products p
 ON ph.product_id = p.product_id;
+
+-- Drop the trigger if it exists
+DROP TRIGGER IF EXISTS UpdateUnitOnOrderTrigger;
+
+-- Create the trigger
+DELIMITER //
+CREATE TRIGGER UpdateUnitOnOrderTrigger
+BEFORE UPDATE
+ON Products FOR EACH ROW
+BEGIN
+    IF NEW.unit_in_stock < OLD.unit_in_stock THEN
+        CALL UpdateWarehouseData(OLD.unit_in_stock - NEW.unit_in_stock, NEW.product_id);
+    END IF;
+END;
+//
+    
+DELIMITER ;
