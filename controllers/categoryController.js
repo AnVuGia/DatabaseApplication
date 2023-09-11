@@ -104,12 +104,7 @@ exports.update = async function (req, res) {
         // Check if the category name already exists
         const result = await Category.findOne({ name: category.name });
   
-        if (result !== null) {
-          return res.json({
-            status: false,
-            message: 'Category name already exists',
-          });
-        }
+       
   
         // Update the category
         const updatedCategory = await Category.findByIdAndUpdate(filter, update);
@@ -133,9 +128,9 @@ exports.update = async function (req, res) {
       }
     } catch (err) {
       console.error(err);
-      return res.status(500).json({
+      return res.json({
         status: false,
-        message: 'Internal server error',
+        message: 'Category already exist',
       });
     }
   };

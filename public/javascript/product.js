@@ -146,6 +146,7 @@ async function displayEditModal(item) {
   // console.log(selecteAtributeForUpdate)
 
   let data = await attribute.find(item.product_id);
+  console.log(data);
   formEdit.innerHTML = '';
   const attributes = data[0].attributes;
 
@@ -373,10 +374,8 @@ filterSelect.addEventListener('change', async () => {
 });
 async function gatherInformation() {
   const body = {};
-  if (searchInput.value.length > 0) {
-    body['search'] = {
-      search_string: searchInput.value,
-    };
+  body['search'] = {
+    search_string: searchInput.value,
   }
   if (filterSelect.value !== 'all') {
     if (filterSelect.value == 'nameasc') {
@@ -388,9 +387,12 @@ async function gatherInformation() {
     } else if (filterSelect.value == 'pricedcr') {
       body['order'] = ['price', 'DESC'];
     }
+  }else{
+    body['order'] = ['product_id', 'asc'];
   }
   console.log(body);
   body['seller_id'] = JSON.parse(sessionStorage.getItem('user')).seller_id;
   let res = await productHelper.filter(body);
+  console.log(res);
   displayProduct(res.data);
 }

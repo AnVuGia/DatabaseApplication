@@ -578,3 +578,35 @@ exports.filterProductByCategory = async (req, res) => {
     });
   }
 };
+
+exports.filter = async (req, res) => {
+  try {
+    // Establish a database connection
+    await connectDB('lazada_seller', 'password');
+    
+
+    const query = req.body.query;
+    const searchStr = query.search.search_string;
+    console.log(searchStr);
+    // Use async/await with Sequelize's findAll method to query the database
+    const result = await productTable.findAll({
+      where: {
+        product_name: {
+          [Op.like]: `%${searchStr}%`,
+        },
+        seller_id: query.seller_id,
+      },
+      order: [[query.order]],
+    });
+    var products = result.map((i) => i.dataValues);
+    // Send the query results as a JSON response
+    res.json(products);
+  } catch (err) {
+    // Handle errors
+    console.error(err);
+    res.json({
+      status: false,
+      message: err.message || 'Some error occurred while retrieving data.',
+    });
+  }
+};
