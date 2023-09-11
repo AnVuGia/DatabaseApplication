@@ -33,17 +33,16 @@ Require user already install Node.js and MySQL server on the running machine
 
 ### Installation
 
-1. Clone the repository
-2. Change to the project directory
-3. Install dependencies
-4. run the init.sql file in the database folder in MySqlWorkBench
-5. npm start to run the server for sequelize to generate the tables
-6. run the function.sql file in the database folder in MySqlWorkBench
-7. run the auth.sql file in the database folder in MysqlWorkBench
-8. run the index.sql file in the database folder in MysqlWorkBench
-9. go to localhost:3000
-10. Admin username: admin123 password: password123
-11. For testing purpose in a new device, it is recomend to go from order admin -> seller -> customer
+1. Open the project with visual studio
+2. Install dependencies
+3. run the init.sql file in the database folder in MySqlWorkBench
+4. npm start to run the server for sequelize to generate the tables
+5. run the function.sql file in the database folder in MySqlWorkBench
+6. run the auth.sql file in the database folder in MysqlWorkBench
+7. run the index.sql file in the database folder in MysqlWorkBench
+8. go to localhost:3000
+9. Admin username: admin123 password: password123
+10. For testing purpose in a new device, it is recomend to go from order admin -> seller -> customer
 
 ### Error Handling
 
@@ -53,9 +52,9 @@ Require user already install Node.js and MySQL server on the running machine
 
 ## Contributing
 
-1. s3926888 - Vu Gia An
-2. s3870730 - Thieu Tran Tri Thuc
-3. s3878270 - Dinh Gia Huu Phuoc
-4. s3799602 - Lai Nghiep Tri
+1. s3926888 - Vu Gia An                5
+2. s3870730 - Thieu Tran Tri Thuc      5 
+3. s3878270 - Dinh Gia Huu Phuoc       5 
+4. s3799602 - Lai Nghiep Tri           5
 
 ## Acknowledgments
