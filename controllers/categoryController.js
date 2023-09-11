@@ -78,7 +78,6 @@ exports.searchByName = async function (req, res) {
 // Find specify doc in collection to update
 // return the un updated version of doc
 exports.update = async function (req, res) {
-
   try {
     let category = req.body;
     const userCredential = req.session.credentials;
@@ -120,14 +119,12 @@ exports.update = async function (req, res) {
           status: true,
           message: 'Update category successfully',
         });
-
       } else {
         return res.json({
           status: false,
           message: 'Cannot update category',
         });
       }
-
     } else {
       return res.json({
         status: false,
