@@ -15,12 +15,13 @@
   </head>
   <body>
     <div class="container order-container"></div>
-
+    <button id = "back-to-menu">Back to menu</button>
     <div id="status-modal" class="modal-status">
       <div class="modal-status-content success">
         <p class="status-msg">Operation Successful</p>
         <button class="error-btn" id="close-status-modal-btn">Close</button>
       </div>
+     
     </div>
     <!-- Add Bootstrap JS and Popper.js scripts -->
     <script
@@ -38,6 +39,12 @@
       integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
       crossorigin="anonymous"
     ></script>
+    <script>
+        const back = document.getElementById("back-to-menu");
+        back.addEventListener("click", () => {
+            window.location.href = "/customers";
+        })
+    </script>
     <script src="/javascript/helper.js"></script>
     <script type="module" src="/javascript/checkout.js"></script>
   </body>

@@ -110,7 +110,9 @@ exports.createInboundOrder = async (req, res) => {
                     },
                   }
                 )
+                
                 .then((result) => {
+                 
                   res.json({
                     status: result ? true : false,
                     message: result
@@ -339,6 +341,7 @@ exports.getAllProductBySeller = async function (req, res) {
 exports.update = async (req, res) => {
   const userCredential = req.session.credentials;
   const product_id = req.params.product_id;
+  console.log(req.body);
   await connectDB(userCredential.username, userCredential.password);
   // await connectDB('lazada_seller', 'password');
   const newObj = req.body.query;
@@ -377,7 +380,17 @@ exports.update = async (req, res) => {
   // Update information
   productTable
     .update(updateParam, filterParam)
-    .then((result) => {
+    .then(async (result) => {
+      await ProductAttributes.findOneAndUpdate(
+        {
+          product_id: req.params.product_id
+
+        },
+        {
+          attributes: req.body.query.attributes
+        }
+
+      );
       res.json({
         status: result ? true : false,
         message: result

@@ -1,7 +1,6 @@
 use lazada_database;
 DELIMITER $$
-DROP PROCEDURE IF EXISTS warehouse_selection;
-CREATE PROCEDURE warehouse_selection(IN p_id INT, product_volume INT, product_quantity INT, OUT success BOOLEAN)
+CREATE PROCEDURE warehouse_selection (IN p_id INT, product_volume INT, product_quantity INT, OUT success BOOLEAN)
 BEGIN  
     DECLARE id INT; 
     DECLARE warehouse_volume INT;  
@@ -159,10 +158,8 @@ DELIMITER ;
 
 
 -- Drop the procedure if it exists
-DROP PROCEDURE IF EXISTS UpdateWarehouseData;
 DELIMITER //
-
-CREATE PROCEDURE UpdateWarehouseData(
+CREATE PROCEDURE  UpdateWarehouseData(
   IN quantityChange INT,
   IN productID INT
 )
@@ -234,7 +231,6 @@ DELIMITER ;
 
 
 -- create product warehouse view for moving product easily
-DROP VIEW IF EXISTS product_warehouse_view;
 CREATE VIEW product_warehouse_view AS
 SELECT ph.warehouse_id, 
 		w.warehouse_name,
@@ -249,8 +245,6 @@ JOIN products p
 ON ph.product_id = p.product_id;
 
 -- Drop the trigger if it exists
-DROP TRIGGER IF EXISTS UpdateUnitOnOrderTrigger;
-
 -- Create the trigger
 DELIMITER //
 CREATE TRIGGER UpdateUnitOnOrderTrigger
@@ -262,5 +256,4 @@ BEGIN
     END IF;
 END;
 //
-    
 DELIMITER ;

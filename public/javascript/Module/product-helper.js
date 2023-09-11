@@ -22,9 +22,10 @@ const product = {
       `${API_URL}/update/${product.product_id}`,
       {
         query: product,
+
       }
     );
-    return response.data;
+    return response;
   },
   async deleteProduct(product) {
     const response = await axios.post(

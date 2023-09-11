@@ -344,7 +344,7 @@ function createProductForUpdate() {
 }
 function getAttributeValue(className){
   console.log(className);
-  const attributes = document.querySelectorAll('.attribute-input');
+  const attributes = document.querySelectorAll(className);
   const attributeList = [];
   for (let i = 0; i < attributes.length; i++) {
     if (

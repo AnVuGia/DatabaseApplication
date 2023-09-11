@@ -10,6 +10,10 @@ const searchInput = document.querySelector('#search-input');
 const selectFilter = document.querySelector('#select-filter');
 const btnSearch = document.querySelector('#search-button');
 const buttonPrice = document.querySelector('.search-price__button');
+const checkoutButton = document.querySelector('#checkout');
+checkoutButton.addEventListener('click', () => {
+  window.location.href = '/checkout';
+});
 selectCategory.addEventListener('change', () => {
   gatherInformation();
 });
