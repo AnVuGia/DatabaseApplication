@@ -4,43 +4,49 @@ const seller_credentials =
   require('../../config/credentials').seller_credentials;
 const customer_credentials =
   require('../../config/credentials').customer_credentials;
-
+const e = require('express');
+const appController = require('../appController');
 function isAdmin(req, res, next) {
   if (req.session.credentials.username === admin_credentials.username) {
     next();
     return;
+  } else {
+    appController.getLogin(req, res);
   }
-  res.status(403).send({
-    message: 'Require Admin Role!',
-  });
 }
 function isSeller(req, res, next) {
   if (req.session.credentials.username === seller_credentials.username) {
     next();
     return;
+  } else {
+    appController.getLogin(req, res);
   }
-  res.status(403).send({
-    message: 'Require Seller Role!',
-  });
 }
 function isCustomer(req, res, next) {
   if (req.session.credentials.username === customer_credentials.username) {
     next();
     return;
+  } else {
+    appController.getLogin(req, res);
   }
-  res.status(403).send({
-    message: 'Require Customer Role!',
-  });
 }
 function isGuest(req, res, next) {
   req.session.credentials = guest_credentials;
   next();
   return;
 }
+function isUser(req, res, next) {
+  if (req.session.credentials) {
+    next();
+    return;
+  }
+  appController.getLogin(req, res);
+}
 const authJwt = {
   isAdmin,
   isSeller,
   isCustomer,
   isGuest,
+  isUser,
 };
 module.exports = authJwt;
