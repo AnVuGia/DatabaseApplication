@@ -60,60 +60,57 @@ async function connectDB(username, password) {
 }
 
 exports.findAll = async function (req, res) {
-
-    const query = req.body.query;
-    await connectDB ('lazada_admin','password')
-    await mysqlConnection.query(
-      `SELECT * FROM product_warehouse_view
+  const query = req.body.query;
+  await connectDB('lazada_admin', 'password');
+  await mysqlConnection.query(
+    `SELECT * FROM product_warehouse_view
       ORDER BY warehouse_id;    
       `,
-      async function (err, result, fields) {
-        if (err) throw err;
-        res.send(result);
-      }
-    );
+    async function (err, result, fields) {
+      if (err) throw err;
+      res.send(result);
+    }
+  );
 };
 
 exports.moveProduct = async function (req, res) {
   const query = req.body.query;
 
-  console.log(query); 
-  await connectDB ('lazada_admin','password')
+  console.log(query);
+  await connectDB('lazada_admin', 'password');
   console.log('after connect');
-  productTable.findOne({
-    where: {
-      product_id: query.productID
-    }
-  }).then(async (product) => { 
+  productTable
+    .findOne({
+      where: {
+        product_id: query.productID,
+      },
+    })
+    .then(async (product) => {
       product = product.dataValues;
-      console.log(product); 
-     let volume = product.length * product.width * product.height;
-     let totalVolum = volume * query.quantity;
+      console.log(product);
+      let volume = product.length * product.width * product.height;
+      let totalVolum = volume * query.quantity;
 
-     await mysqlConnection.query(
-      `CALL move_product(${query.wid_start},${query.productID},${query.wid_dest},${totalVolum},${query.quantity},@outParam);
+      await mysqlConnection.query(
+        `CALL move_product(${query.wid_start},${query.productID},${query.wid_dest},${totalVolum},${query.quantity},@outParam);
         SELECT @outParam as success;
-      `, async function (err, result) {
-        if (err) throw err;
-        else{
-          result = result[1][0]['success'];
+      `,
+        async function (err, result) {
+          if (err) throw err;
+          else {
+            result = result[1][0]['success'];
 
-          console.log(result);
-          if(result == 1){
-            res.json({ status: true,
-              message: 'Move product successfully'});
-          }else{
-            res.json({ status: false,
-              message: 'Move product failed'});
+            console.log(result);
+            if (result == 1) {
+              res.json({ status: true, message: 'Move product successfully' });
+            } else {
+              res.json({ status: false, message: 'Move product failed' });
+            }
           }
         }
-
-      });
-  }).catch((err) => {
-    res.json({ status: false,
-      message: 'Move product failed'});
-  }
-);};
-
-
-
+      );
+    })
+    .catch((err) => {
+      res.json({ status: false, message: 'Move product failed' });
+    });
+};

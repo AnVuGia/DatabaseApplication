@@ -160,8 +160,6 @@ DELIMITER ;
 
 -- Drop the procedure if it exists
 DROP PROCEDURE IF EXISTS UpdateWarehouseData;
-
--- Create the procedure for updating warehouse-related data
 DELIMITER //
 
 CREATE PROCEDURE UpdateWarehouseData(
@@ -188,14 +186,10 @@ BEGIN
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
-        -- An error occurred, rollback the transaction
-        ROLLBACK;
+
     END;
 
-	    -- Set the transaction isolation level to SERIALIZABLE
-    SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
-    
-    START TRANSACTION;
+
     OPEN cur;
 
     update_loop: LOOP
@@ -229,8 +223,6 @@ BEGIN
 
     CLOSE cur;
 
-    -- Commit the transaction if all updates were successful
-    COMMIT;
     
     -- Rollback the transaction if there was an error (handled by EXIT HANDLER)
     
