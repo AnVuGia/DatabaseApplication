@@ -161,6 +161,7 @@ exports.getSellerProduct = (req, res) => {
   res.sendFile('seller-product.html', { root: 'views/sellerView' });
 };
 exports.getAdminVentory = (req, res) => {
+  req.session.credentials = admin_credentials;
   res.sendFile('admin-inventory.html', { root: 'views/adminView' });
 };
 exports.getAdminCategory = (req, res) => {

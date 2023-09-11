@@ -41,4 +41,6 @@ SET DEFAULT ROLE ALL TO
 'lazada_auth'@'localhost',
 'lazada_guest'@'localhost';
 
+FLUSH PRIVILEGES;
+
 

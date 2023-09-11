@@ -78,142 +78,141 @@ exports.searchByName = async function (req, res) {
 // Find specify doc in collection to update
 // return the un updated version of doc
 exports.update = async function (req, res) {
-    try {
-      let category = req.body;
-      const userCredential = req.session.credentials;
-      await connectDB('lazada_admin', 'password');
-  
-      // Find all products with this category id
-      const products = await productTable.findAll({
-        where: {
-          category_id: category._id,
-        },
+
+  try {
+    let category = req.body;
+    const userCredential = req.session.credentials;
+    await connectDB(userCredential.username, userCredential.password);
+
+    // Find all products with this category id
+    const products = await productTable.findAll({
+      where: {
+        category_id: category._id,
+      },
+    });
+
+    // Check if there are no products with this category id
+    if (products.length === 0) {
+      let filter = {
+        _id: category._id,
+      };
+
+      // Only allow update attributes list
+      let update = {
+        attributes: category.attributes,
+      };
+
+      // Check if the category name already exists
+      const result = await Category.findOne({ name: category.name });
+
+      if (result !== null) {
+        return res.json({
+          status: false,
+          message: 'Category name already exists',
         });
-        if (products !== null) {
-            // Check if the category name already exists
-           const result = await Category.findOne({ name: category.name });
-           if (result && result._id != category._id) {
-               return res.json({
-                   status: false,
-                   message: 'Category name already exists',
-               });
-           }
-       }
-      // Check if there are no products with this category id
-      if (products.length === 0) {
-        let filter = {
-          _id: category._id,
-        };
-  
-        // Only allow update attributes list
-        let update = {
-          attributes: category.attributes,
-        };
-  
-       
-  
-        // Update the category
-        const updatedCategory = await Category.findByIdAndUpdate(filter, update);
-  
-        if (updatedCategory) {
-          return res.json({
-            status: true,
-            message: 'Update category successfully',
-          });
-        } else {
-          return res.json({
-            status: false,
-            message: 'Cannot update category',
-          });
-        }
+      }
+
+      // Update the category
+      const updatedCategory = await Category.findByIdAndUpdate(filter, update);
+
+      if (updatedCategory) {
+        return res.json({
+          status: true,
+          message: 'Update category successfully',
+        });
+
       } else {
         return res.json({
           status: false,
-          message: 'Already have products using this category',
+          message: 'Cannot update category',
         });
       }
-    } catch (err) {
-      console.error(err);
+
+    } else {
       return res.json({
         status: false,
-        message: 'Internal server error',
+        message: 'Already have products using this category',
       });
     }
-  };
-  
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      status: false,
+      message: 'Internal server error',
+    });
+  }
+};
+
 // Delete by id
 exports.delete = async function (req, res) {
   let category = req.body;
-  console.log(category);    
+  console.log(category);
   const userCredential = req.session.credentials;
 
   let filter = {
     _id: category._id,
   };
 
-  
-    const result = await Category.findOne(filter);
+  const result = await Category.findOne(filter);
 
-    // There are children category(s)
-    if (result.children.length > 0) {
-      res.json({
-        status: false,
-        message: 'Cannot delete attribute that have children',
-      });
+  // There are children category(s)
+  if (result.children.length > 0) {
+    res.json({
+      status: false,
+      message: 'Cannot delete attribute that have children',
+    });
 
-      return;
-    }// There are no children category so check if there are any product use it
-    else {
-    //   await connectDB(userCredential.user_name, userCredential.password);
-    await connectDB('lazada_admin', 'password');
-      // find all product have this category id
-        const products = await productTable
-        .findAll({
-            where: {
-            category_id: category._id,
-            },
-        })
-        .then(async (products) => {
-            // There is no product in result
-            if (products.length < 1) {
-            // If there is parent id
-            if (result.parent != null) {
-                var parent = await Category.findOne({
-                _id: result.parent,
-                });
-
-                // Remove children id
-                parent.children.splice(parent.children.indexOf(category._id));
-
-                // Save
-                await parent.save();
-                }
-
-                const results = await Category.findOneAndDelete(filter);
-                res.json({
-                    status: true,
-                    message: 'Delete category successfully',
-                    });
-            }
-            // There are at least 1 product have
-            else {
-            res.json({
-                status: false,
-                message: 'There is at least 1 product using this category',
+    return;
+  } // There are no children category so check if there are any product use it
+  else {
+    await connectDB(userCredential.username, userCredential.password);
+    // await connectDB('lazada_admin', 'password');
+    // find all product have this category id
+    const products = await productTable
+      .findAll({
+        where: {
+          category_id: category._id,
+        },
+      })
+      .then(async (products) => {
+        // There is no product in result
+        if (products.length < 1) {
+          // If there is parent id
+          if (result.parent != null) {
+            var parent = await Category.findOne({
+              _id: result.parent,
             });
-            return;
-            }
-        })
-        .catch((err) => {
-            console.log('206');
-            res.json({
+
+            // Remove children id
+            parent.children.splice(parent.children.indexOf(category._id));
+
+            // Save
+            await parent.save();
+          }
+
+          const results = await Category.findOneAndDelete(filter);
+          res.json({
+            status: true,
+            message: 'Delete category successfully',
+          });
+        }
+        // There are at least 1 product have
+        else {
+          res.json({
             status: false,
-            message: 'Some error occurred while retrieving data.',
-            });
+            message: 'There is at least 1 product using this category',
+          });
+          return;
+        }
+      })
+      .catch((err) => {
+        console.log('206');
+        res.json({
+          status: false,
+          message: 'Some error occurred while retrieving data.',
         });
-    }
-
-   
+      });
+  }
 };
 
 //CREATE NEW CATEGORY
@@ -263,14 +262,14 @@ exports.createCategory = async function (req, res) {
     }
 
     res.json({
-        status: true,
-        message: 'Create category successfully',
-    })
+      status: true,
+      message: 'Create category successfully',
+    });
   } catch (err) {
     res.json({
-        status: false,
-        message: 'Create category failed',
-    })
+      status: false,
+      message: 'Create category failed',
+    });
   }
 };
 

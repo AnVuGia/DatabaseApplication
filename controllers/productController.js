@@ -63,8 +63,8 @@ async function connectDB(username, password) {
 exports.createInboundOrder = async (req, res) => {
   const userCredential = req.session.credentials;
 
-  // await connectDB(userCredential.username, userCredential.password);
-  await connectDB('lazada_seller', 'password');
+  await connectDB(userCredential.username, userCredential.password);
+  // await connectDB('lazada_seller', 'password');
 
   var inboundOrder = req.body.query;
   console.log(inboundOrder);
@@ -113,7 +113,9 @@ exports.createInboundOrder = async (req, res) => {
                 .then((result) => {
                   res.json({
                     status: result ? true : false,
-                    message: result? "Successful" : 'Some error occurred while retrieving data.',
+                    message: result
+                      ? 'Successful'
+                      : 'Some error occurred while retrieving data.',
                   });
                 })
 
@@ -129,7 +131,8 @@ exports.createInboundOrder = async (req, res) => {
             else {
               res.json({
                 status: false,
-                message: 'All warehouses do not have enough space(s) for product.',
+                message:
+                  'All warehouses do not have enough space(s) for product.',
               });
             }
           }
@@ -149,8 +152,8 @@ exports.createInboundOrder = async (req, res) => {
 exports.create = async (req, res) => {
   const userCredential = req.session.credentials;
 
-  // await connectDB(userCredential.username, userCredential.password);
-  await connectDB('lazada_seller', 'password');
+  await connectDB(userCredential.username, userCredential.password);
+  // await connectDB('lazada_seller', 'password');
 
   const newObject = req.body.query;
   console.log(newObject);
@@ -182,7 +185,6 @@ exports.create = async (req, res) => {
           message: 'Successful Create Product',
         });
       } catch (err) {
-        
         res.json({
           status: false,
           message: err.message || 'Some error occurred while creating product.',
@@ -200,13 +202,13 @@ exports.create = async (req, res) => {
 
 // Retrieve all Tutorials from the database.
 exports.findAll = async (req, res) => {
-  // const userCredential = req.session.credentials;
+  const userCredential = req.session.credentials;
   // console.log(req.body)
   // const userCredential = req.body.user_credentials;
 
-  // await connectDB(userCredential.username, userCredential.password);
+  await connectDB(userCredential.username, userCredential.password);
 
-  await connectDB('lazada_customer', 'password');
+  // await connectDB('lazada_customer', 'password');
 
   productTable
     .findAll()
@@ -225,11 +227,11 @@ exports.findAll = async (req, res) => {
 exports.search = async function (req, res) {
   const userCredential = req.session.credentials;
   console.log(req.body);
-  // await connectDB(userCredential.username, userCredential.password);
-  await connectDB('lazada_customer', 'password');
+  await connectDB(userCredential.username, userCredential.password);
+  // await connectDB('lazada_customer', 'password');
 
   const query = req.body.query;
- 
+
   // let searchAtt = req.body.query.search_attribute;
   const searchStr = query.search_string;
   const price = query.price;
@@ -290,11 +292,11 @@ exports.search = async function (req, res) {
       var products = result.map((i) => i.dataValues);
 
       const startId = pagination.offset * pagination.limit;
-      const lastId =  pagination.offset + pagination.limit;
+      const lastId = pagination.offset + pagination.limit;
 
       // Apply pagination
-      products = products.slice( pagination.offset, lastId);
-      
+      products = products.slice(pagination.offset, lastId);
+
       console.log(products);
       res.send(products);
     })
@@ -313,9 +315,9 @@ exports.getAllProductBySeller = async function (req, res) {
   console.log('request body: ');
   console.log(req.body);
   console.log('Seller id: ' + seller_id);
-  // await connectDB(userCredential.username, userCredential.password);
+  await connectDB(userCredential.username, userCredential.password);
 
-  await connectDB('lazada_seller', 'password');
+  // await connectDB('lazada_seller', 'password');
   productTable
     .findAll({
       where: {
@@ -337,8 +339,8 @@ exports.getAllProductBySeller = async function (req, res) {
 exports.update = async (req, res) => {
   const userCredential = req.session.credentials;
   const product_id = req.params.product_id;
-  // await connectDB(userCredential.user_name, userCredential.password);
-  await connectDB('lazada_seller', 'password');
+  await connectDB(userCredential.username, userCredential.password);
+  // await connectDB('lazada_seller', 'password');
   const newObj = req.body.query;
   const filterParam = {
     where: {
@@ -377,8 +379,10 @@ exports.update = async (req, res) => {
     .update(updateParam, filterParam)
     .then((result) => {
       res.json({
-        status: result? true : false,
-        message: result? "Successful" : 'Some error occurred while retrieving data.',
+        status: result ? true : false,
+        message: result
+          ? 'Successful'
+          : 'Some error occurred while retrieving data.',
       });
     })
     .catch((err) => {
@@ -393,8 +397,8 @@ exports.update = async (req, res) => {
 exports.delete = async (req, res) => {
   const userCredential = req.session.credentials;
 
-  // await connectDB(userCredential.user_name, userCredential.password);
-  await connectDB('lazada_seller', 'password');
+  await connectDB(userCredential.username, userCredential.password);
+  // await connectDB('lazada_seller', 'password');
   const product_id = req.params.product_id;
   // Get the delete product_id
   var newObj = req.body.query;
@@ -469,7 +473,9 @@ exports.delete = async (req, res) => {
     } catch (err) {
       res.json({
         status: false,
-        message: err.message ||  'Some error occurred while deleting in product_location table',
+        message:
+          err.message ||
+          'Some error occurred while deleting in product_location table',
       });
       return;
     }
@@ -509,7 +515,7 @@ exports.filterProductByAttributeValue = async (req, res) => {
     for (var i = 0; i < results.length; i++) {
       const userCredential = req.session.credentials;
 
-      await connectDB(userCredential.user_name, userCredential.password);
+      await connectDB(userCredential.username, userCredential.password);
 
       var product = await productTable.findOne({
         where: {
@@ -554,7 +560,7 @@ exports.filterProductByCategory = async (req, res) => {
   const category_id = req.body.category_id;
   const userCredential = req.session.credentials;
 
-  await connectDB(userCredential.user_name, userCredential.password);
+  await connectDB(userCredential.username, userCredential.password);
 
   var cateIDs = [category_id];
   cateIDs.push(...(await getAllChildrenID(category_id)));
@@ -574,7 +580,9 @@ exports.filterProductByCategory = async (req, res) => {
   } catch (err) {
     res.json({
       status: false,
-      message: err.message ||  'Some error occurred while deleting in product_location table',
+      message:
+        err.message ||
+        'Some error occurred while deleting in product_location table',
     });
   }
 };

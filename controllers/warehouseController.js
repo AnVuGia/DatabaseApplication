@@ -2,11 +2,11 @@ const { Sequelize, Op } = require('sequelize');
 const { connectDB } = require('./helperController');
 // Create and Save a new Tutorial
 exports.create = async (req, res) => {
-
+  const userCredential = req.session.credentials;
   const body = req.body;
-  console.log(body);  
+  console.log(body);
   warehouseTable = await connectDB(
-    body.user_credential,
+    userCredential,
     require('../models/Warehouses.js')
   );
 
@@ -31,11 +31,11 @@ exports.create = async (req, res) => {
 
 // Retrieve all Tutorials from the database.
 exports.findAll = async (req, res) => {
-  const userCredential = req.body.user_credential;
+  const userCredential = req.session.credentials;
   const body = req.body;
   console.log(body);
   warehouseTable = await connectDB(
-    body.user_credential,
+    userCredential,
     require('../models/Warehouses.js')
   );
   warehouseTable
@@ -57,8 +57,9 @@ exports.findAll = async (req, res) => {
 // Find all data has attribute search_att contains searchStr
 exports.search = async function (req, res) {
   const body = req.body;
+  userCredential = req.session.credentials;
   warehouseTable = await connectDB(
-    body.user_credential,
+    userCredential,
     require('../models/Warehouses.js')
   );
 
@@ -92,7 +93,7 @@ exports.search = async function (req, res) {
     .catch((err) => {
       res.json({
         status: false,
-        message: err.message ||  'Some error occurred while retrieving data.',
+        message: err.message || 'Some error occurred while retrieving data.',
       });
     });
 };
@@ -101,8 +102,10 @@ exports.search = async function (req, res) {
 exports.update = async (req, res) => {
   const body = req.body;
   console.log(body);
+  const userCredential = req.session.credentials;
+
   warehouseTable = await connectDB(
-    body.user_credential,
+    userCredential,
     require('../models/Warehouses.js')
   );
 
@@ -122,19 +125,19 @@ exports.update = async (req, res) => {
 
   // If new total volume smaller than the volume occupied by product(s)
   if (newObject.volume < oldData.volume - oldData.available_volume) {
-     
-      res.json({
-        status: false,
-        message:  'ERROR: New volume value smaller than current occupied volume.',
-      });
-      return;
+    res.json({
+      status: false,
+      message: 'ERROR: New volume value smaller than current occupied volume.',
+    });
+    return;
   }
 
   const updateParam = {
-      warehouse_name: newObject.warehouse_name,
-      address: newObject.address,
-      volume: newObject.volume,
-      available_volume: newObject.volume - (oldData.volume - oldData.available_volume)
+    warehouse_name: newObject.warehouse_name,
+    address: newObject.address,
+    volume: newObject.volume,
+    available_volume:
+      newObject.volume - (oldData.volume - oldData.available_volume),
   };
 
   warehouseTable
@@ -149,6 +152,7 @@ exports.update = async (req, res) => {
       res.json({
         status: false,
         message: err.message || 'Some error occurred while updating data',
+        userCredential,
       });
     });
 };
@@ -156,9 +160,9 @@ exports.update = async (req, res) => {
 // Delete a Tutorial with the specified id in the request
 exports.delete = async (req, res) => {
   const body = req.body;
-
+  const userCredential = req.session.credentials;
   warehouseTable = await connectDB(
-    body.user_credential,
+    userCredential,
     require('../models/Warehouses.js')
   );
 
@@ -205,7 +209,7 @@ exports.delete = async (req, res) => {
       else {
         res.json({
           status: false,
-          message:  'Warehouse is not empty.',
+          message: 'Warehouse is not empty.',
         });
         return;
       }
