@@ -9,6 +9,7 @@
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="/styles/modal.css" />
     <style>
       /* Custom CSS styles go here */
       body {
@@ -63,10 +64,20 @@
         </div>
       </div>
     </div>
+    <div id="status-modal" class="modal-status">
+      <div class="modal-status-content success">
+        <p class="status-msg">Operation Successful</p>
+        <button class="error-btn" id="close-status-modal-btn" id="return-btn">
+          <i class="fa-solid fa-rotate-right"></i>
+          Refresh
+        </button>
+      </div>
+    </div>
     <!-- Add Bootstrap JS and jQuery links here -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/javascript/helper.js"></script>
     <script type="module" src="/javascript/cart-view.js"></script>
   </body>
 </html>

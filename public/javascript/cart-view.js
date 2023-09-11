@@ -64,7 +64,6 @@ function displayCart() {
 }
 proceedButton.addEventListener('click', async () => {
   await onProceed();
-  window.location.href = '/checkout';
 });
 
 async function onProceed() {
@@ -80,7 +79,13 @@ async function onProceed() {
     };
     console.log(order);
     try {
-      await orderHelper.addOrder(order);
+      const res = await orderHelper.addOrder(order);
+      const data = res.data;
+      console.log(data);
+      if (data.status == false) {
+        displayStatusModal(`${data.message} for ${cartItems[i].product_name}`);
+        return;
+      }
       await cartHelper.removeFromCart({
         customer_id: currentUserJSON.customer_id.toString(),
         product_id: cartItems[i].product_id,
@@ -89,4 +94,5 @@ async function onProceed() {
       console.log(error);
     }
   }
+  window.location.href = '/checkout';
 }

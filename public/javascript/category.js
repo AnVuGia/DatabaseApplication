@@ -36,7 +36,8 @@ function displayAllCategory(categories, isSearch = false) {
           async () => {
             let res = await category.delete(categories[i]);
             processRequest(res);
-          })
+          }
+        );
       });
     document
       .querySelector(`#forward-${categories[i]._id}`)
@@ -303,6 +304,7 @@ async function prepareUpdateCategoryForm(id) {
       }
     });
 }
+
 const searchNameInput = document.querySelector('.category-searcg-input');
 searchNameInput.addEventListener('input', async () => {
   if (searchNameInput.value.length == 0) {

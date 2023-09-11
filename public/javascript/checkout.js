@@ -9,6 +9,10 @@ window.onload = async function () {
   const ordersData = await orderHelper.getOrdersByCustomerId(
     currentUserJSON.customer_id
   );
+  if (ordersData.orders.length === 0) {
+    orderContainer.innerHTML = '<h3>No order yet</h3>';
+    return;
+  }
   console.log(ordersData);
   ordersList.push(...ordersData.orders);
   console.log(ordersList);
