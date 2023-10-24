@@ -110,9 +110,8 @@ exports.createInboundOrder = async (req, res) => {
                     },
                   }
                 )
-                
+
                 .then((result) => {
-                 
                   res.json({
                     status: result ? true : false,
                     message: result
@@ -202,15 +201,12 @@ exports.create = async (req, res) => {
     });
 };
 
-// Retrieve all Tutorials from the database.
 exports.findAll = async (req, res) => {
-  const userCredential = req.session.credentials;
-  // console.log(req.body)
-  // const userCredential = req.body.user_credentials;
-
+  const userCredential = {
+    username: 'lazada_customer',
+    password: 'password',
+  };
   await connectDB(userCredential.username, userCredential.password);
-
-  // await connectDB('lazada_customer', 'password');
 
   productTable
     .findAll()
@@ -298,7 +294,6 @@ exports.search = async function (req, res) {
 
       // Apply pagination
       products = products.slice(pagination.offset, lastId);
-
       console.log(products);
       res.send(products);
     })
@@ -339,7 +334,10 @@ exports.getAllProductBySeller = async function (req, res) {
 
 // Update a Product by the id in the request
 exports.update = async (req, res) => {
-  const userCredential = req.session.credentials;
+  const userCredential = {
+    username: 'lazada_seller',
+    password: 'password',
+  };
   const product_id = req.params.product_id;
   console.log(req.body);
   await connectDB(userCredential.username, userCredential.password);
@@ -383,13 +381,11 @@ exports.update = async (req, res) => {
     .then(async (result) => {
       await ProductAttributes.findOneAndUpdate(
         {
-          product_id: req.params.product_id
-
+          product_id: req.params.product_id,
         },
         {
-          attributes: req.body.query.attributes
+          attributes: req.body.query.attributes,
         }
-
       );
       res.json({
         status: result ? true : false,
@@ -604,7 +600,6 @@ exports.filter = async (req, res) => {
   try {
     // Establish a database connection
     await connectDB('lazada_seller', 'password');
-    
 
     const query = req.body.query;
     const searchStr = query.search.search_string;

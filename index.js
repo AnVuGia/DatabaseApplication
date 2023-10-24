@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const path = require('path');
 const cors = require('cors');
-const port = 3000;
+const port = 3001;
 
 const appRoute = require('./routes/appRoute');
 const productRoute = require('./routes/productRoute');
@@ -16,7 +16,10 @@ const productWarehouseRoute = require('./routes/productWarehouseRoute');
 const db = require('./models');
 const app = express();
 const session = require('express-session');
-
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  credentials: true,
+};
 const fs = require('fs');
 const { default: mongoose } = require('mongoose');
 const mongodb_uri = 'mongodb://127.0.0.1:27017';
@@ -32,7 +35,7 @@ mongodb.once('open', () => console.log('Connected to Database'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use(cors(corsOptions));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   session({
@@ -50,7 +53,7 @@ app.use('/', appRoute);
 app.use('/product', productRoute);
 app.use('/warehouse', warehouseRoute);
 app.use('/category', categoryRoute);
-app.use('/attribute',productCategoryRoute)
+app.use('/attribute', productCategoryRoute);
 app.use('/customer', customerRoute);
 app.use('/productWarehouse', productWarehouseRoute);
 app.use('/order', ordersRoute);
